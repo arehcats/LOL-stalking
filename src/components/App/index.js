@@ -1,11 +1,38 @@
+import LoginRegister from './components/LoginRegister/LoginRegister';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  withRouter
+} from "react-router-dom";
+import React from 'react';
+import { withAuthentication } from './components/Session';
 
+const App = () => (
+  <Router>
+    {/* <Header /> */}
+    <ScrollToTop />
+    <Switch>
+      <Route exact strict path="/" component={LoginRegister} />
+      <Redirect to="/" />
+    </Switch>
+    {/* <Footer /> */}
+  </Router>
+)
 
-function App() {
-    return (
-        <div className="App">
-            sdfsd
-        </div>
-    );
+class ScrollToTopRoute extends React.Component {
+	componentDidUpdate(prevProps) {
+		if (this.props.location !== prevProps.location) {
+			window.scrollTo(0, 0);
+		}
+	}
+
+	render() {
+		return <React.Fragment />
+	}
 }
 
-export default App;
+const ScrollToTop = withRouter(ScrollToTopRoute)
+
+export default withAuthentication(App);
