@@ -12,6 +12,7 @@ const SignInPage = () => (
       <h1>Logowanie</h1>
     </span>
     <SignInForm />
+    <SignInFacebook />
   </div>
 );
 
@@ -77,6 +78,77 @@ class SignInFormBase extends Component {
   }
 }
 
+const ERROR_CODE_ACCOUNT_EXISTS =
+  'auth/account-exists-with-different-credential';
+
+const ERROR_MSG_ACCOUNT_EXISTS = `
+  An account with an E-Mail address to
+  this social account already exists. Try to login from
+  this account instead and associate your social accounts on
+  your personal account page.
+`;
+class SignInFacebookBase extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { error: null };
+  }
+  async componentDidMount() {
+    console.log("dd");
+    const cors = "https://cors-anywhere.herokuapp.com/"
+    const url = "https://eun1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/0TsBN6urzvch-gPGzsP25Nk-IIQ9b06lLtUVH7d4FuCJGKY?api_key=RGAPI-d1fbb703-f90c-46c7-99e3-991f5cabb914"
+    const response = await fetch(cors + url)
+    console.log(response)
+    const json = await response.json()
+    console.log(json)
+  }
+
+
+  onSubmit = event => {
+    this.props.firebase
+      .doSignInWithFacebook()
+      .then(socialAuthUser => {
+        // Create a user in your Firebase Realtime Database too
+        return this.props.firebase.user(socialAuthUser.user.uid).set({
+          username: socialAuthUser.additionalUserInfo.profile.name,
+          email: socialAuthUser.additionalUserInfo.profile.email,
+          roles: [],
+        });
+      })
+      .then(() => {
+        this.setState({ error: null });
+        // this.props.history.push(ROUTES.HOME);
+      })
+      .catch(error => {
+        if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
+          error.message = ERROR_MSG_ACCOUNT_EXISTS;
+        }
+
+        this.setState({ error });
+      });
+
+    event.preventDefault();
+  };
+
+  render() {
+    const { error } = this.state;
+
+    return (
+      <form onSubmit={this.onSubmit}>
+        <button type="submit">Sign In with Facebook</button>
+
+        {error && <p>{error.message}</p>}
+      </form>
+    );
+  }
+}
+
+
+const SignInFacebook = compose(
+  withRouter,
+  withFirebase,
+)(SignInFacebookBase);
+
 const SignInForm = compose(
   withRouter,
   withFirebase,
@@ -84,6 +156,6 @@ const SignInForm = compose(
 
 export default SignInPage;
 
-export { SignInForm };
+export { SignInForm, SignInFacebook };
 
 

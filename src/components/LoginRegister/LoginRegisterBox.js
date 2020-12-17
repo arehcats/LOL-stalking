@@ -1,7 +1,6 @@
 import React from "react"
 import SignInForm from "./Login"
 import SignUpPage from "./Register"
-import '../../css/LoginRegister.css'
 class LoginRegisterBox extends React.Component {
 
     constructor(props) {

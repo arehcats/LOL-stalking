@@ -1,4 +1,4 @@
-import LoginRegister from './components/LoginRegister/LoginRegister';
+import LoginRegister from '../LoginRegister/LoginRegister';
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,7 +7,7 @@ import {
   withRouter
 } from "react-router-dom";
 import React from 'react';
-import { withAuthentication } from './components/Session';
+import { withAuthentication } from '../Session/';
 
 const App = () => (
   <Router>
