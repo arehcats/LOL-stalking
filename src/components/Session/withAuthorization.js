@@ -7,20 +7,25 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const withAuthorization = condition => Component => {
     class WithAuthorization extends React.Component {
-        // componentDidMount() {
-        //     this.listener = this.props.firebase.auth.onAuthStateChanged(
-        //         authUser => {
-        //             if (!condition(authUser)) {
-        //                 if (this.props.history.location.pathname === "/") {
-        //                     this.props.history.push('/MojeSlowka');
-        //                 }
-        //                 else {
-        //                     this.props.history.push('/');
-        //                 }
-        //             }
-        //         },
-        //     );
-        // }
+        componentDidMount() {
+            this.listener = this.props.firebase.auth.onAuthStateChanged(
+                authUser => {
+                    if (!condition(authUser)) {
+                        console.log("unloged");
+                        // this.props.history.push('/login');
+
+                        if (this.props.history.location.pathname === "/login") {
+                             this.props.history.push('/');
+                            console.log("1");
+                        }
+                        else {
+                            console.log("2");
+                            this.props.history.push('/login');
+                        }
+                    }
+                },
+            );
+        }
         componentWillUnmount() {
             this.listener();
         }
