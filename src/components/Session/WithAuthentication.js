@@ -1,43 +1,52 @@
 import React from 'react';
-import AuthUserContext from './context';
 import { withFirebase } from '../Firebase';
-
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 
 const withAuthentication = Component => {
     class WithAuthentication extends React.Component {
         constructor(props) {
             super(props);
-
-            this.state = {
-                authUser: null,
-            };
-        }
-
-        componentDidMount() {
+       
+            this.props.onSetAuthUser(
+              JSON.parse(localStorage.getItem('authUser')),
+            );
+          }
+       
+          componentDidMount() {
             this.listener = this.props.firebase.auth.onAuthStateChanged(
-                authUser => {
-                    console.log(authUser);
-                    authUser
-                        ? this.setState({ authUser })
-                        : this.setState({ authUser: null });
-                },
+              authUser => {
+                localStorage.setItem('authUser', JSON.stringify(authUser));
+                this.props.onSetAuthUser(authUser);
+              },
+              () => {
+                localStorage.removeItem('authUser');
+                this.props.onSetAuthUser(null);
+              },
             );
-        }
-
-        componentWillUnmount() {
+          }
+       
+          componentWillUnmount() {
             this.listener();
+          }
+       
+          render() {
+            return <Component {...this.props} />;
+          }
         }
 
-        render() {
-            return (
-                <AuthUserContext.Provider value={this.state.authUser}>
-                    <Component {...this.props} />
-                </AuthUserContext.Provider>
-            );
-        }
-    }
-
-    return withFirebase(WithAuthentication);
-};
+    const mapDispatchToProps = dispatch => ({
+        onSetAuthUser: authUser =>
+          dispatch({ type: 'AUTH_USER_SET', authUser }),
+      });
+     
+      return compose(
+        withFirebase,
+        connect(
+          null,
+          mapDispatchToProps,
+        ),
+      )(WithAuthentication);
+    };
 
 export default withAuthentication;

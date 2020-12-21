@@ -2,8 +2,8 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
-import AuthUserContext from './context';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { connect } from 'react-redux';
 
 const withAuthorization = condition => Component => {
     class WithAuthorization extends React.Component {
@@ -30,21 +30,20 @@ const withAuthorization = condition => Component => {
             this.listener();
         }
         render() {
-            return (
-                <AuthUserContext.Consumer>
-                    {authUser =>
-                        condition(authUser) 
-                        ? <Component {...this.props} /> 
-                        : <div id="beforeRender"><CircularProgress /></div>
-                    }
-                </AuthUserContext.Consumer>
-                );
+                return condition(this.props.authUser) ? (
+                    <Component {...this.props} />
+                  ) : <div id="beforeRender"><CircularProgress /></div>;
         }
     }
+
+    const mapStateToProps = state => ({
+        authUser: state.sessionState.authUser,
+      });
 
     return compose(
         withRouter,
         withFirebase,
+        connect(mapStateToProps),
     )(WithAuthorization);
 };
 
