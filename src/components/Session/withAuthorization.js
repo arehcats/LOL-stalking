@@ -16,10 +16,8 @@ const withAuthorization = condition => Component => {
 
                         if (this.props.history.location.pathname === "/login") {
                              this.props.history.push('/');
-                            console.log("1");
                         }
                         else {
-                            console.log("2");
                             this.props.history.push('/login');
                         }
                     }

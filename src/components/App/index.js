@@ -1,5 +1,4 @@
 import LoginRegister from '../LoginRegister/LoginRegister';
-import Content from '../Content/index';
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,19 +8,21 @@ import {
 } from "react-router-dom";
 import React from 'react';
 import { withAuthentication } from '../Session/';
-import SignOutButton from '../SignOut/SignOut';
+import Header from '../Header/Header'
+import Footer from '../Footer/Footer'
+import '../../css/App.css'
+import SearchUserInput from '../SearchUserInput'
 
 const App = () => (
   <Router>
-    {/* <Header /> */}
-    <SignOutButton />
+    <Header />
     <ScrollToTop />
     <Switch>
-      <Route exact strict path="/" component={Content} />
+      <Route exact strict path="/" component={SearchUserInput} />
       <Route exact strict path="/login" component={LoginRegister} />
       <Redirect to="/" />
     </Switch>
-    {/* <Footer /> */}
+    <Footer />
   </Router>
 )
 

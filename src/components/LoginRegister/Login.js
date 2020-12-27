@@ -93,15 +93,15 @@ class SignInFacebookBase extends Component {
 
     this.state = { error: null };
   }
-  // async componentDidMount() {
-  //   console.log("dd");
-  //   const cors = "https://cors-anywhere.herokuapp.com/"
-  //   const url = "https://eun1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/0TsBN6urzvch-gPGzsP25Nk-IIQ9b06lLtUVH7d4FuCJGKY?api_key=RGAPI-d1fbb703-f90c-46c7-99e3-991f5cabb914"
-  //   const response = await fetch(cors + url)
-  //   console.log(response)
-  //   const json = await response.json()
-  //   console.log(json)
-  // }
+  async componentDidMount() {
+    console.log("dd");
+    const cors = "https://cors-anywhere.herokuapp.com/"
+    const url = "https://eun1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/0TsBN6urzvch-gPGzsP25Nk-IIQ9b06lLtUVH7d4FuCJGKY?api_key=RGAPI-b35d1385-4639-4b53-8642-37f57399a24f"
+    const response = await fetch(cors + url)
+    console.log(response)
+    const json = await response.json()
+    console.log(json)
+  }
 
 
   onSubmit = event => {

@@ -7,13 +7,6 @@ function Content() {
         <div>
             CONTENTCONTENTCONTENT
             CONTENTCONTENTCONTENT
-            CONTENTCONTENTCONTENT
-            CONTENTCONTENTCONTENT
-            CONTENTCONTENTCONTENT
-            CONTENTCONTENTCONTENT
-            CONTENTCONTENTCONTENT
-            CONTENTCONTENTCONTENT
-            
         </div>
     );
 }
