@@ -12,6 +12,7 @@ import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
 import '../../css/App.css'
 import SearchUserInput from '../SearchUserInput'
+import SummonerInfo from '../SummonerInfo'
 
 const App = () => (
   <Router>
@@ -19,6 +20,7 @@ const App = () => (
     <ScrollToTop />
     <Switch>
       <Route exact strict path="/" component={SearchUserInput} />
+      <Route exact strict path="/:SummonerName" component={SummonerInfo} />
       <Route exact strict path="/login" component={LoginRegister} />
       <Redirect to="/" />
     </Switch>

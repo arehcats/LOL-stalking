@@ -1,3 +1,44 @@
 #SearchUserInputContent{
-    height: calc(100vh - 120px);
+    /* height: calc(100vh - 120px); */
+    margin-bottom: 270px;
+    /* background-image: url("../components/SearchUserInput/background.jpg"); */
+}
+#SearchUserContainer{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+#inputTitle{
+    margin-top: 15px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#loupe{
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 100px auto 0 auto;
+}
+#SearchInput{
+    margin: 20px auto 0 auto;
+}
+#SearchInputNickname{
+    width: 400px;
+    margin: 0 auto 0 auto;
+}
+#SearchInputNickname > div{
+    width: 400px;
+    margin: 0 auto 0 auto;
+}
+#submitSearch{
+    padding-top: 15px;
+    width: 200px;
+    margin: 0 auto 0 auto;
+}
+#submitSearch > button{
+    width: 200px;
+    margin: 0 auto 0 auto;
 }
