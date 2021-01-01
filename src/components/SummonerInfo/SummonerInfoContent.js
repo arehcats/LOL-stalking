@@ -1,6 +1,7 @@
 import React from 'react';
-import '../../css/SearchUserInput.css'
+import '../../css/SummonerInfo.css'
 import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 
 class SearchUserInputContent extends React.Component {
@@ -10,6 +11,8 @@ class SearchUserInputContent extends React.Component {
             SummonerName: this.props.match.params.SummonerName,
             isLodaing: true,
             status: false,
+            soloRank: "",
+            flexRank: "",
         };
     };
     async componentDidMount() {
@@ -28,21 +31,27 @@ class SearchUserInputContent extends React.Component {
             return
         }
         const jsonSummonerByName = await responseSummonerByName.json()
-        console.log(jsonSummonerByName);
+        // console.log(jsonSummonerByName);
 
-        // fetch data by summuner puuid
-        const SummonerByPuuid = "https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/ICBh4vDzTpCsul7tb12tCuXOQhI5kSSvn7sM8Vn684wo1GgaMsU-kVIA0fohlzhz3Bdyo4hECApo4A?api_key=RGAPI-00836aab-fa09-48e2-8182-b17e5d36b3e2"
 
-        const responseSummonerByPuuid = await fetch(cors + SummonerByPuuid)
-
-        if (responseSummonerByPuuid.status !== 200) {
+        // fetch summoner rank by summoner id
+        const SummonerID = jsonSummonerByName.id
+        const SummonerRank = region + "/lol/league/v4/entries/by-summoner/" + SummonerID + RiotApiKey
+        const responseSummonerRank = await fetch(cors + SummonerRank)
+        if (responseSummonerRank.status !== 200) {
             this.setState({
-                status: responseSummonerByPuuid.status
+                status: responseSummonerRank.status
             })
             return
         }
-        const jsonSummonerByPuuid = await responseSummonerByPuuid.json()
-        console.log(jsonSummonerByPuuid);
+        const jsonSummonerRank = await responseSummonerRank.json()
+        console.log(jsonSummonerRank);
+        this.setState({
+            flexRank: jsonSummonerRank[0],
+            soloRank: jsonSummonerRank[1],
+
+        })
+
 
 
 
@@ -60,13 +69,48 @@ class SearchUserInputContent extends React.Component {
                 {this.state.isLodaing ? <Loading status={this.state.status} />
                     :
                     <div>
-                        <div>
-                            last ranks
-                        </div>
-                        <div>
+                        <div id="topBannerBasicInfo">
                             ikona lvl i znajdz aktywne gry, odnów dane, nick, ranking serwerowy
                         </div>
+                        <div id="allOderInfo">
+                            <div id="leftContainer">
+                                <div className="rankSummoner">
+                                    <div>
+                                        <img src={'/assets/images/rank-icons/' + this.state.soloRank.tier + '.png'}
+                                            alt={this.state.soloRank.tier} />
+                                    </div>
+                                    <div className="soloQandFlexStats">
+                                        <span>SoloQ rank</span>
+                                        <span>{this.state.soloRank.tier} {this.state.soloRank.rank}</span>
+                                        <span>{this.state.soloRank.leaguePoints} lp</span>
+                                        <span>{this.state.soloRank.wins} W {this.state.soloRank.losses} L</span>
+                                        <span>Wina ratio {Math.round(100*(this.state.soloRank.wins / (this.state.soloRank.losses + this.state.soloRank.wins)))}%</span>
+                                    </div>
+                                </div>
+                                <div className="rankSummoner">
+                                    <div>
+                                        <img src={'/assets/images/rank-icons/' + this.state.flexRank.tier + '.png'}
+                                            alt={this.state.soloRank.tier} />
+                                    </div>
+                                    <div className="soloQandFlexStats">
+                                        <span>Flex 5 vs 5 rank</span>
+                                        <span>{this.state.flexRank.tier} {this.state.flexRank.rank}</span>
+                                        <span>{this.state.soloRank.leaguePoints} LP</span>
+                                        <span>{this.state.flexRank.wins}W {this.state.flexRank.losses}L</span>
+                                        <span>Wina ratio {Math.round(100*(this.state.flexRank.wins / (this.state.flexRank.losses + this.state.flexRank.wins)))}%</span>
 
+
+
+                                    </div>
+                                </div>
+                                <div id="championsStatistic">
+                                    champions statistic
+                                </div>
+                            </div>
+                            <div id="rightConteiner">
+                                f
+                            </div>
+                        </div>
                     </div>
                 }
             </div>
