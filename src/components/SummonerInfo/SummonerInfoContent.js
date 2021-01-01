@@ -1,7 +1,8 @@
 import React from 'react';
 import '../../css/SummonerInfo.css'
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import Button from '@material-ui/core/Button'
+import ChampionsStatistic from './championsStatistic'
 
 
 class SearchUserInputContent extends React.Component {
@@ -11,6 +12,7 @@ class SearchUserInputContent extends React.Component {
             SummonerName: this.props.match.params.SummonerName,
             isLodaing: true,
             status: false,
+            basicInfoSummoner: "",
             soloRank: "",
             flexRank: "",
         };
@@ -31,8 +33,10 @@ class SearchUserInputContent extends React.Component {
             return
         }
         const jsonSummonerByName = await responseSummonerByName.json()
-        // console.log(jsonSummonerByName);
-
+        console.log(jsonSummonerByName);
+        this.setState({
+            basicInfoSummoner: jsonSummonerByName,
+        })
 
         // fetch summoner rank by summoner id
         const SummonerID = jsonSummonerByName.id
@@ -45,11 +49,10 @@ class SearchUserInputContent extends React.Component {
             return
         }
         const jsonSummonerRank = await responseSummonerRank.json()
-        console.log(jsonSummonerRank);
+        // console.log(jsonSummonerRank);
         this.setState({
             flexRank: jsonSummonerRank[0],
             soloRank: jsonSummonerRank[1],
-
         })
 
 
@@ -70,7 +73,23 @@ class SearchUserInputContent extends React.Component {
                     :
                     <div>
                         <div id="topBannerBasicInfo">
-                            ikona lvl i znajdz aktywne gry, odnów dane, nick, ranking serwerowy
+                            <div id="summIcon">
+                                <img src={'/assets/images/profileicon/' + this.state.basicInfoSummoner.profileIconId + '.png'}
+                                    alt={"Summoner icon"} />
+                                <div>
+                                    {this.state.basicInfoSummoner.summonerLevel}
+                                </div>
+                            </div>
+                            <div id="summNick">
+                                <div>
+                                    {this.state.basicInfoSummoner.name}
+                                </div>
+                                <div>
+                                    <Button id="LiveGame" type="submit" variant="outlined" color="primary">
+                                        Live game
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                         <div id="allOderInfo">
                             <div id="leftContainer">
@@ -84,7 +103,7 @@ class SearchUserInputContent extends React.Component {
                                         <span>{this.state.soloRank.tier} {this.state.soloRank.rank}</span>
                                         <span>{this.state.soloRank.leaguePoints} lp</span>
                                         <span>{this.state.soloRank.wins} W {this.state.soloRank.losses} L</span>
-                                        <span>Wina ratio {Math.round(100*(this.state.soloRank.wins / (this.state.soloRank.losses + this.state.soloRank.wins)))}%</span>
+                                        <span>Wina ratio {Math.round(100 * (this.state.soloRank.wins / (this.state.soloRank.losses + this.state.soloRank.wins)))}%</span>
                                     </div>
                                 </div>
                                 <div className="rankSummoner">
@@ -97,14 +116,11 @@ class SearchUserInputContent extends React.Component {
                                         <span>{this.state.flexRank.tier} {this.state.flexRank.rank}</span>
                                         <span>{this.state.soloRank.leaguePoints} LP</span>
                                         <span>{this.state.flexRank.wins}W {this.state.flexRank.losses}L</span>
-                                        <span>Wina ratio {Math.round(100*(this.state.flexRank.wins / (this.state.flexRank.losses + this.state.flexRank.wins)))}%</span>
-
-
-
+                                        <span>Wina ratio {Math.round(100 * (this.state.flexRank.wins / (this.state.flexRank.losses + this.state.flexRank.wins)))}%</span>
                                     </div>
                                 </div>
-                                <div id="championsStatistic">
-                                    champions statistic
+                                <div id="championsStats">
+                                    <ChampionsStatistic basicInfoSummoner={this.state.basicInfoSummoner} />
                                 </div>
                             </div>
                             <div id="rightConteiner">
