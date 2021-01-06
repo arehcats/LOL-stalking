@@ -12,39 +12,51 @@ class SearchUserInputContent extends React.Component {
             SummonerName: this.props.match.params.SummonerName,
             isLodaing: true,
             status: false,
+            errorMessage: "",
             basicInfoSummoner: "",
             soloRank: "",
             flexRank: "",
+            championsPlayedFlex: [],
+            championsPlayedSolo: [],
+            championsPlayedAram: [],
+            isFetchError: false,
         };
+        // this.fetchListGame = this.fetchListGame.bind(this)
     };
     async componentDidMount() {
         const SummonerName = this.state.SummonerName
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
+        const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
         const region = "https://eun1.api.riotgames.com"
         const cors = "https://cors-anywhere.herokuapp.com/"
+        // const cors = "https://yacdn.org/proxy/"
 
         // fetch data by summuner name
         const SummonerByName = region + "/lol/summoner/v4/summoners/by-name/" + SummonerName + RiotApiKey
         const responseSummonerByName = await fetch(cors + SummonerByName)
         if (responseSummonerByName.status !== 200) {
             this.setState({
-                status: responseSummonerByName.status
+                status: responseSummonerByName.status,
+                errorMessage: responseSummonerByName.statusText
             })
             return
         }
         const jsonSummonerByName = await responseSummonerByName.json()
         console.log(jsonSummonerByName);
+        // console.log(jsonSummonerByName);
         this.setState({
             basicInfoSummoner: jsonSummonerByName,
         })
 
-        // fetch summoner rank by summoner id
+
+        // // fetch summoner rank by summoner id
         const SummonerID = jsonSummonerByName.id
         const SummonerRank = region + "/lol/league/v4/entries/by-summoner/" + SummonerID + RiotApiKey
         const responseSummonerRank = await fetch(cors + SummonerRank)
         if (responseSummonerRank.status !== 200) {
             this.setState({
-                status: responseSummonerRank.status
+                status: responseSummonerRank.status,
+                errorMessage: responseSummonerByName.statusText
             })
             return
         }
@@ -55,21 +67,81 @@ class SearchUserInputContent extends React.Component {
             soloRank: jsonSummonerRank[1],
         })
 
+        ////////////// fetch games by account ID ///////////////////////////////
+
+        let championsPlayedFlex = []
+        let championsPlayedSolo = []
+        let championsPlayedAram = []
+
+        championsPlayedFlex = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 440)
+        championsPlayedSolo = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 420)
+        championsPlayedAram = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 450)
 
 
-
-
+        if (this.state.isFetchError) return
 
         this.setState({
-            isLodaing: false
+            championsPlayedFlex: championsPlayedFlex,
+            championsPlayedSolo: championsPlayedSolo,
+            championsPlayedAram: championsPlayedAram,
+        }, () => {
+            this.setState({
+                isLodaing: false,
+            })
         })
 
+    }
+
+    async fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, gameID) {
+        let beginIndex = 0
+        let endIndex = 100
+        let totalGames = 0
+        let fetchedGames = []
+
+        do {
+            const games = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId +
+                "?queue=" + gameID + "&beginTime=1605060000000&endIndex=" + endIndex + "&beginIndex=" + beginIndex + RiotApiKeySecond
+            const responsegames = await fetch(cors + games)
+            if (responsegames.status !== 200) {
+                this.setState({
+                    status: responsegames.status,
+                    errorMessage: responsegames.statusText,
+                    isFetchError: true,
+                })
+                return
+            }
+            const jsongames = await responsegames.json()
+
+            totalGames = jsongames.totalGames
+            fetchedGames.push(...jsongames.matches)
+            beginIndex = beginIndex + 100
+            endIndex = endIndex + 100
+
+        } while (fetchedGames.length !== totalGames);
+
+        let championsPlayed = {}
+        let championsArray = []
+        fetchedGames.forEach((val, i) => {
+            championsArray.push(val.champion)
+        })
+
+        championsArray.forEach((x) => {
+
+            championsPlayed[x] = (championsPlayed[x] || 0) + 1;
+        });
+
+
+        let entries = Object.entries(championsPlayed);
+
+        let sorted = entries.sort((a, b) => b[1] - a[1]);
+
+        return sorted
     }
 
     render() {
         return (
             <div>
-                {this.state.isLodaing ? <Loading status={this.state.status} />
+                {this.state.isLodaing ? <Loading status={this.state.status} errorMessage={this.state.errorMessage} />
                     :
                     <div>
                         <div id="topBannerBasicInfo">
@@ -120,7 +192,11 @@ class SearchUserInputContent extends React.Component {
                                     </div>
                                 </div>
                                 <div id="championsStats">
-                                    <ChampionsStatistic basicInfoSummoner={this.state.basicInfoSummoner} />
+                                    <ChampionsStatistic basicInfoSummoner={this.state.basicInfoSummoner}
+                                        championsPlayedFlex={this.state.championsPlayedFlex}
+                                        championsPlayedSolo={this.state.championsPlayedSolo}
+                                        championsPlayedAram={this.state.championsPlayedAram}
+                                    />
                                 </div>
                             </div>
                             <div id="rightConteiner">
@@ -134,22 +210,18 @@ class SearchUserInputContent extends React.Component {
     }
 }
 
-const Loading = ({ status }) => {
-    console.log(status);
+const Loading = ({ status, errorMessage }) => {
     if (status === false) {
         return <div align="center"><CircularProgress /></div>
     }
-    if (status === 404) {
-        console.log("ell");
-        return <div>User not found</div>
+    else if (status === 404) {
+        return <div>User not found... {errorMessage}</div>
     }
     else {
-        return <div>Ups... something went wrong</div>
+        return <div>Ups something went wrong... {errorMessage}</div>
     }
 
 }
-
-// let loading = <div align="center"><CircularProgress /></div>
 
 
 

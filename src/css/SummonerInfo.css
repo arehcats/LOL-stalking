@@ -97,3 +97,59 @@
     box-shadow: 0px 0px 5px 0px rgb(194, 230, 247);
 
 }
+
+
+/* /////////////////////      GAME STATS     ////////////////////// */
+
+#statsSelectGameType{
+    display: flex;
+    height: 50px;
+    /* font-size: 13px; */
+}
+#statsSelectGameType > div{
+    /* background-color: turquoise; */
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+#statsSelectGameType > div > button{
+    width: 100%;
+}
+
+.stats {
+    background-color: rgb(159, 241, 233);
+    border-color: rgb(31, 30, 28);
+}
+.statsSelected > button{
+    border-bottom: none;
+    background-color: rgb(196, 243, 241);
+    pointer-events: none;
+}
+
+.statsListing > div {
+    display: flex;
+    margin: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgb(185, 206, 216);
+}
+
+.statsListing > div > img{
+    width: 50px;
+}
+.statsListingInside{
+    margin-left: 13px;
+}
+
+#stats{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.boldStats{
+    font-weight: 700;
+    color: rgb(11, 113, 197);
+}
+.fontSizeStats{
+    font-size: 15px;
+    color: rgb(85, 85, 87);
+}
