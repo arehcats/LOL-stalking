@@ -15,6 +15,7 @@ class ChampionsStatistic extends React.Component {
             dictionaryChampsID: [],
             setClass: ["statsSelected", "stats", "stats"],
             statsComponents: [],
+            displayNumber: 6,
         };
 
     };
@@ -80,7 +81,8 @@ class ChampionsStatistic extends React.Component {
                                     onClick={() => {
                                         this.changeClass(0)
                                         this.setState({
-                                            stats: 0
+                                            stats: 0,
+                                            displayNumber: 6,
                                         })
                                     }}
                                 >
@@ -92,7 +94,8 @@ class ChampionsStatistic extends React.Component {
                                     onClick={() => {
                                         this.changeClass(1)
                                         this.setState({
-                                            stats: 1
+                                            stats: 1,
+                                            displayNumber: 6,
                                         })
                                     }}
                                 >
@@ -104,7 +107,8 @@ class ChampionsStatistic extends React.Component {
                                     onClick={() => {
                                         this.changeClass(2)
                                         this.setState({
-                                            stats: 2
+                                            stats: 2,
+                                            displayNumber: 6,
                                         })
                                     }}
                                 >
@@ -113,10 +117,17 @@ class ChampionsStatistic extends React.Component {
                             </div>
                         </div>
                         <div>
-                            <Stats stats={this.state.stats} statsComponents={this.state.statsComponents} />
+                            <Stats stats={this.state.stats}
+                                statsComponents={this.state.statsComponents} displayNumber={this.state.displayNumber} />
                         </div>
-                        <div id="stats">
-                            Show more
+                        <div id="stats" onClick={() => {
+                            this.setState((prevState) => ({
+                                displayNumber: prevState.displayNumber + 8
+                            }));
+                        }}>
+                            <Button id="showMore" type="submit" variant="outlined" color="primary">
+                                Show more
+                                </Button>
                         </div>
                     </div>
                 }
@@ -125,23 +136,32 @@ class ChampionsStatistic extends React.Component {
     }
 }
 
-const Stats = ({ stats, statsComponents }) => {
-    console.log(statsComponents[1]);
-
+const Stats = ({ stats, statsComponents, displayNumber }) => {
     if (stats === 0) {
-
+        if (statsComponents[0].length === 0) return <div className="gamesNotFound" >You haven't play this game mode in preseason</div>
         return <div className="statsListing" >
-            {statsComponents[0]}
+            {statsComponents[0].map((val, i) => {
+                if (i > displayNumber) return null
+                return val
+            })}
         </div>
     }
     else if (stats === 1) {
+        if (statsComponents[1].length === 0) return <div className="gamesNotFound">You haven't play this game mode in preseason</div>
         return <div className="statsListing" >
-            {statsComponents[1]}
+            {statsComponents[1].map((val, i) => {
+                if (i > displayNumber) return null
+                return val
+            })}
         </div>
     }
     else {
+        if (statsComponents[2].length === 0) return <div className="gamesNotFound">You haven't play this game mode in preseason</div>
         return <div className="statsListing" >
-            {statsComponents[2]}
+            {statsComponents[2].map((val, i) => {
+                if (i > displayNumber) return null
+                return val
+            })}
         </div>
     }
 
@@ -150,7 +170,6 @@ const Stats = ({ stats, statsComponents }) => {
 const StatsComponent = (championsPlayed, dictionaryChampsID) => {
     let elemtns = []
     console.log("run");
-
     championsPlayed.forEach((val, i) => {
         dictionaryChampsID.forEach((val2, i2) => {
             if (val2[0] === val[0]) {

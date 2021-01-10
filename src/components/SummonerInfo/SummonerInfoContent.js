@@ -61,7 +61,10 @@ class SearchUserInputContent extends React.Component {
             return
         }
         const jsonSummonerRank = await responseSummonerRank.json()
-        // console.log(jsonSummonerRank);
+        console.log(jsonSummonerRank);
+        if (jsonSummonerRank[0] === undefined) jsonSummonerRank[0] = false
+        if (jsonSummonerRank[1] === undefined) jsonSummonerRank[1] = false
+        console.log(jsonSummonerRank[0]);
         this.setState({
             flexRank: jsonSummonerRank[0],
             soloRank: jsonSummonerRank[1],
@@ -76,7 +79,6 @@ class SearchUserInputContent extends React.Component {
         championsPlayedFlex = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 440)
         championsPlayedSolo = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 420)
         championsPlayedAram = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 450)
-
 
         if (this.state.isFetchError) return
 
@@ -102,16 +104,19 @@ class SearchUserInputContent extends React.Component {
             const games = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId +
                 "?queue=" + gameID + "&beginTime=1605060000000&endIndex=" + endIndex + "&beginIndex=" + beginIndex + RiotApiKeySecond
             const responsegames = await fetch(cors + games)
-            if (responsegames.status !== 200) {
+            if (responsegames.status === 404) {
+
+                return []
+            }
+            else if (responsegames.status !== 200) {
                 this.setState({
                     status: responsegames.status,
                     errorMessage: responsegames.statusText,
                     isFetchError: true,
                 })
-                return
+                return responsegames.statusText
             }
             const jsongames = await responsegames.json()
-
             totalGames = jsongames.totalGames
             fetchedGames.push(...jsongames.matches)
             beginIndex = beginIndex + 100
@@ -165,32 +170,52 @@ class SearchUserInputContent extends React.Component {
                         </div>
                         <div id="allOderInfo">
                             <div id="leftContainer">
-                                <div className="rankSummoner">
-                                    <div>
-                                        <img src={'/assets/images/rank-icons/' + this.state.soloRank.tier + '.png'}
+                                {this.state.soloRank ?
+                                    <div className="rankSummoner">
+                                        <div>
+                                            <img src={'/assets/images/rank-icons/' + this.state.soloRank.tier + '.png'}
+                                                alt={this.state.soloRank.tier} />
+                                        </div>
+                                        <div className="soloQandFlexStats">
+                                            <span>SoloQ rank</span>
+                                            <span>{this.state.soloRank.tier} {this.state.soloRank.rank}</span>
+                                            <span>{this.state.soloRank.leaguePoints} lp</span>
+                                            <span>{this.state.soloRank.wins} W {this.state.soloRank.losses} L</span>
+                                            <span>Wina ratio {Math.round(100 * (this.state.soloRank.wins / (this.state.soloRank.losses + this.state.soloRank.wins)))}%</span>
+                                        </div>
+                                    </div>
+
+                                    :
+                                    <div className="unranked">
+                                        SoloQ
+                                        <img src={'/assets/images/rank-icons/provisional.png'}
                                             alt={this.state.soloRank.tier} />
+                                        <b>Unranked</b>
                                     </div>
-                                    <div className="soloQandFlexStats">
-                                        <span>SoloQ rank</span>
-                                        <span>{this.state.soloRank.tier} {this.state.soloRank.rank}</span>
-                                        <span>{this.state.soloRank.leaguePoints} lp</span>
-                                        <span>{this.state.soloRank.wins} W {this.state.soloRank.losses} L</span>
-                                        <span>Wina ratio {Math.round(100 * (this.state.soloRank.wins / (this.state.soloRank.losses + this.state.soloRank.wins)))}%</span>
+                                }
+
+                                {this.state.soloRank ?
+                                    <div className="rankSummoner">
+                                        <div>
+                                            <img src={'/assets/images/rank-icons/' + this.state.flexRank.tier + '.png'}
+                                                alt={this.state.soloRank.tier} />
+                                        </div>
+                                        <div className="soloQandFlexStats">
+                                            <span>Flex 5 vs 5 rank</span>
+                                            <span>{this.state.flexRank.tier} {this.state.flexRank.rank}</span>
+                                            <span>{this.state.flexRank.leaguePoints} LP</span>
+                                            <span>{this.state.flexRank.wins}W {this.state.flexRank.losses}L</span>
+                                            <span>Wina ratio {Math.round(100 * (this.state.flexRank.wins / (this.state.flexRank.losses + this.state.flexRank.wins)))}%</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="rankSummoner">
-                                    <div>
-                                        <img src={'/assets/images/rank-icons/' + this.state.flexRank.tier + '.png'}
+                                    :
+                                    <div className="unranked">
+                                        Flex
+                                            <img src={'/assets/images/rank-icons/provisional.png'}
                                             alt={this.state.soloRank.tier} />
+                                        <b>Unranked</b>
                                     </div>
-                                    <div className="soloQandFlexStats">
-                                        <span>Flex 5 vs 5 rank</span>
-                                        <span>{this.state.flexRank.tier} {this.state.flexRank.rank}</span>
-                                        <span>{this.state.soloRank.leaguePoints} LP</span>
-                                        <span>{this.state.flexRank.wins}W {this.state.flexRank.losses}L</span>
-                                        <span>Wina ratio {Math.round(100 * (this.state.flexRank.wins / (this.state.flexRank.losses + this.state.flexRank.wins)))}%</span>
-                                    </div>
-                                </div>
+                                }
                                 <div id="championsStats">
                                     <ChampionsStatistic basicInfoSummoner={this.state.basicInfoSummoner}
                                         championsPlayedFlex={this.state.championsPlayedFlex}

@@ -39,7 +39,7 @@
     width: 300px;
 }
 
-.rankSummoner{
+.rankSummoner {
     height: 140px;
     border: 2px solid rgb(194, 230, 247);
     box-shadow: 0px 0px 5px 0px rgb(194, 230, 247);
@@ -50,14 +50,27 @@
     width: 40%;
     height: 100%;
     display: flex;
-
-
 }
 .rankSummoner > div > img {
     width: 95px;
     display: block;
     margin: auto;
 }
+.unranked{
+    height: 140px;
+    border: 2px solid rgb(194, 230, 247);
+    box-shadow: 0px 0px 5px 0px rgb(194, 230, 247);
+    margin-bottom: 10px;
+    text-align: center;
+}
+.unranked > img {
+    width: 90px;
+    display: block;
+    margin: 0px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .soloQandFlexStats > span{
     display: block;
     color: rgb(92, 91, 91);
@@ -97,6 +110,7 @@
     box-shadow: 0px 0px 5px 0px rgb(194, 230, 247);
 
 }
+
 
 
 /* /////////////////////      GAME STATS     ////////////////////// */
@@ -152,4 +166,13 @@
 .fontSizeStats{
     font-size: 15px;
     color: rgb(85, 85, 87);
+}
+#showMore{
+    background-color: rgb(159, 241, 233);
+}
+.gamesNotFound{
+    display: flex;
+    margin: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgb(185, 206, 216);
 }
