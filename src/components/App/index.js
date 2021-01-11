@@ -1,4 +1,3 @@
-import LoginRegister from '../LoginRegister/LoginRegister';
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,6 +5,7 @@ import {
   Redirect,
   withRouter
 } from "react-router-dom";
+import LoginRegister from '../LoginRegister/LoginRegister';
 import React from 'react';
 import { withAuthentication } from '../Session/';
 import Header from '../Header/Header'
@@ -13,10 +13,12 @@ import Footer from '../Footer/Footer'
 import '../../css/App.css'
 import SearchUserInput from '../SearchUserInput'
 import SummonerInfo from '../SummonerInfo'
+import ChooseSummoner from '../ChooseSummoner/ChooseSummoner'
 
 const App = () => (
   <Router>
     <Header />
+    <ChooseSummoner />
     <ScrollToTop />
     <Switch>
       <Route exact strict path="/" component={SearchUserInput} />

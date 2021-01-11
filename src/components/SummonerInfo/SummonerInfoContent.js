@@ -18,11 +18,43 @@ class SearchUserInputContent extends React.Component {
         };
         // this.fetchListGame = this.fetchListGame.bind(this)
     };
-    async componentDidMount() {
+    componentDidMount() {
+
+        let getStorage = JSON.parse(localStorage.getItem(this.state.SummonerName))
+
+        if (getStorage === null) { } // check if storage exist
+        else if (getStorage.length === 5) { // if exist check if has all needed information
+            console.log(getStorage);
+
+            this.props.setBasicInfoSummoner(getStorage[0]);
+
+            // if (getStorage[1][0] === false) jsonSummonerRank[0] = false
+            if (getStorage[1][0].queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(getStorage[1][0]);
+            else this.props.setFlexRank(getStorage[1][0]);
+            // if (jsonSummonerRank[1] === undefined) jsonSummonerRank[1] = false
+            if (getStorage[1][1].queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(getStorage[1][1]);
+            else this.props.setFlexRank(getStorage[1][1]);
+
+
+            this.props.setChampionsPlayedFlex(getStorage[2])
+            this.props.setChampionsPlayedSolo(getStorage[3])
+            this.props.setChampionsPlayedAram(getStorage[4])
+
+            this.setState({
+                isLodaing: false,
+            })
+            return
+        }
+
+        this.fetchAllDataOnMount()
+
+    }
+
+    async fetchAllDataOnMount() {
         const SummonerName = this.state.SummonerName
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
-        const region = "https://euw1.api.riotgames.com"
+        const region = "https://eun1.api.riotgames.com"
         const cors = "https://cors-anywhere.herokuapp.com/"
         // const cors = "https://yacdn.org/proxy/"
 
@@ -67,9 +99,9 @@ class SearchUserInputContent extends React.Component {
         let championsPlayedSolo = []
         let championsPlayedAram = []
 
-        // championsPlayedFlex = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 440)
+        championsPlayedFlex = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 440)
         championsPlayedSolo = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 420)
-        // championsPlayedAram = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 450)
+        championsPlayedAram = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 450)
 
         if (this.state.isFetchError) return
 
@@ -77,13 +109,22 @@ class SearchUserInputContent extends React.Component {
         this.props.setChampionsPlayedSolo(championsPlayedSolo)
         this.props.setChampionsPlayedAram(championsPlayedAram)
 
-        console.log(this.props);
 
+        let StorageData = []
+        StorageData.push(jsonSummonerByName)
+        StorageData.push(jsonSummonerRank)
+        StorageData.push(championsPlayedFlex)
+        StorageData.push(championsPlayedSolo)
+        StorageData.push(championsPlayedAram)
+
+        localStorage.setItem(SummonerName, JSON.stringify(StorageData));
+        let getStorage2 = JSON.parse(localStorage.getItem(SummonerName))
+        console.log(getStorage2);
+        console.log("fetched all");
 
         this.setState({
             isLodaing: false,
         })
-
     }
 
     async fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, gameID) {
@@ -154,8 +195,19 @@ class SearchUserInputContent extends React.Component {
                                     {this.props.basicInfoSummoner.name}
                                 </div>
                                 <div>
+                                    <Button id="LiveGame" type="submit" variant="outlined" color="primary"
+                                        onClick={() => {
+                                            // localStorage.setItem(this.state.SummonerName, JSON.stringify("Refreshed"));
+                                            this.setState({
+                                                isLodaing: true,
+                                            })
+                                            this.fetchAllDataOnMount();
+                                        }}
+                                    >
+                                        Refresh
+                                    </Button>
                                     <Button id="LiveGame" type="submit" variant="outlined" color="primary">
-                                        Live game
+                                        Live game to do
                                     </Button>
                                 </div>
                             </div>
