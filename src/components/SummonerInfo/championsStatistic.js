@@ -2,7 +2,8 @@ import React from 'react';
 import '../../css/SummonerInfo.css'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button'
-
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 
 
 class ChampionsStatistic extends React.Component {
@@ -169,7 +170,6 @@ const Stats = ({ stats, statsComponents, displayNumber }) => {
 
 const StatsComponent = (championsPlayed, dictionaryChampsID) => {
     let elemtns = []
-    console.log("run");
     championsPlayed.forEach((val, i) => {
         dictionaryChampsID.forEach((val2, i2) => {
             if (val2[0] === val[0]) {
@@ -206,7 +206,14 @@ const Loading = ({ status }) => {
     }
 }
 
+const mapStateToProps = state => ({
+    basicInfoSummoner: state.summonerInfoState.basicInfoSummoner,
+    championsPlayedFlex: state.summonerInfoState.championsPlayedFlex,
+    championsPlayedSolo: state.summonerInfoState.championsPlayedSolo,
+    championsPlayedAram: state.summonerInfoState.championsPlayedAram,
+});
 
-
-export default ChampionsStatistic;
-
+export default compose(
+    // withFirebase,
+    connect(mapStateToProps),
+)(ChampionsStatistic);

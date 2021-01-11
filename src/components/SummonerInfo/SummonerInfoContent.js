@@ -3,7 +3,8 @@ import '../../css/SummonerInfo.css'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button'
 import ChampionsStatistic from './championsStatistic'
-
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 
 class SearchUserInputContent extends React.Component {
     constructor(props) {
@@ -13,12 +14,6 @@ class SearchUserInputContent extends React.Component {
             isLodaing: true,
             status: false,
             errorMessage: "",
-            basicInfoSummoner: "",
-            soloRank: "",
-            flexRank: "",
-            championsPlayedFlex: [],
-            championsPlayedSolo: [],
-            championsPlayedAram: [],
             isFetchError: false,
         };
         // this.fetchListGame = this.fetchListGame.bind(this)
@@ -27,7 +22,7 @@ class SearchUserInputContent extends React.Component {
         const SummonerName = this.state.SummonerName
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
-        const region = "https://eun1.api.riotgames.com"
+        const region = "https://euw1.api.riotgames.com"
         const cors = "https://cors-anywhere.herokuapp.com/"
         // const cors = "https://yacdn.org/proxy/"
 
@@ -42,14 +37,10 @@ class SearchUserInputContent extends React.Component {
             return
         }
         const jsonSummonerByName = await responseSummonerByName.json()
-        console.log(jsonSummonerByName);
-        // console.log(jsonSummonerByName);
-        this.setState({
-            basicInfoSummoner: jsonSummonerByName,
-        })
 
+        this.props.setBasicInfoSummoner(jsonSummonerByName);
 
-        // // fetch summoner rank by summoner id
+        // fetch summoner rank by summoner id
         const SummonerID = jsonSummonerByName.id
         const SummonerRank = region + "/lol/league/v4/entries/by-summoner/" + SummonerID + RiotApiKey
         const responseSummonerRank = await fetch(cors + SummonerRank)
@@ -61,14 +52,14 @@ class SearchUserInputContent extends React.Component {
             return
         }
         const jsonSummonerRank = await responseSummonerRank.json()
-        console.log(jsonSummonerRank);
+
         if (jsonSummonerRank[0] === undefined) jsonSummonerRank[0] = false
+        else if (jsonSummonerRank[0].queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(jsonSummonerRank[0]);
+        else this.props.setFlexRank(jsonSummonerRank[0]);
         if (jsonSummonerRank[1] === undefined) jsonSummonerRank[1] = false
-        console.log(jsonSummonerRank[0]);
-        this.setState({
-            flexRank: jsonSummonerRank[0],
-            soloRank: jsonSummonerRank[1],
-        })
+        else if (jsonSummonerRank[1].queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(jsonSummonerRank[1]);
+        else this.props.setFlexRank(jsonSummonerRank[1]);
+
 
         ////////////// fetch games by account ID ///////////////////////////////
 
@@ -76,20 +67,21 @@ class SearchUserInputContent extends React.Component {
         let championsPlayedSolo = []
         let championsPlayedAram = []
 
-        championsPlayedFlex = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 440)
+        // championsPlayedFlex = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 440)
         championsPlayedSolo = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 420)
-        championsPlayedAram = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 450)
+        // championsPlayedAram = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 450)
 
         if (this.state.isFetchError) return
 
+        this.props.setChampionsPlayedFlex(championsPlayedFlex)
+        this.props.setChampionsPlayedSolo(championsPlayedSolo)
+        this.props.setChampionsPlayedAram(championsPlayedAram)
+
+        console.log(this.props);
+
+
         this.setState({
-            championsPlayedFlex: championsPlayedFlex,
-            championsPlayedSolo: championsPlayedSolo,
-            championsPlayedAram: championsPlayedAram,
-        }, () => {
-            this.setState({
-                isLodaing: false,
-            })
+            isLodaing: false,
         })
 
     }
@@ -151,15 +143,15 @@ class SearchUserInputContent extends React.Component {
                     <div>
                         <div id="topBannerBasicInfo">
                             <div id="summIcon">
-                                <img src={'/assets/images/profileicon/' + this.state.basicInfoSummoner.profileIconId + '.png'}
+                                <img src={'/assets/images/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
                                     alt={"Summoner icon"} />
                                 <div>
-                                    {this.state.basicInfoSummoner.summonerLevel}
+                                    {this.props.basicInfoSummoner.summonerLevel}
                                 </div>
                             </div>
                             <div id="summNick">
                                 <div>
-                                    {this.state.basicInfoSummoner.name}
+                                    {this.props.basicInfoSummoner.name}
                                 </div>
                                 <div>
                                     <Button id="LiveGame" type="submit" variant="outlined" color="primary">
@@ -170,18 +162,18 @@ class SearchUserInputContent extends React.Component {
                         </div>
                         <div id="allOderInfo">
                             <div id="leftContainer">
-                                {this.state.soloRank ?
+                                {this.props.soloRank ?
                                     <div className="rankSummoner">
                                         <div>
-                                            <img src={'/assets/images/rank-icons/' + this.state.soloRank.tier + '.png'}
-                                                alt={this.state.soloRank.tier} />
+                                            <img src={'/assets/images/rank-icons/' + this.props.soloRank.tier + '.png'}
+                                                alt={this.props.soloRank.tier} />
                                         </div>
                                         <div className="soloQandFlexStats">
                                             <span>SoloQ rank</span>
-                                            <span>{this.state.soloRank.tier} {this.state.soloRank.rank}</span>
-                                            <span>{this.state.soloRank.leaguePoints} lp</span>
-                                            <span>{this.state.soloRank.wins} W {this.state.soloRank.losses} L</span>
-                                            <span>Wina ratio {Math.round(100 * (this.state.soloRank.wins / (this.state.soloRank.losses + this.state.soloRank.wins)))}%</span>
+                                            <span>{this.props.soloRank.tier} {this.props.soloRank.rank}</span>
+                                            <span>{this.props.soloRank.leaguePoints} lp</span>
+                                            <span>{this.props.soloRank.wins} W {this.props.soloRank.losses} L</span>
+                                            <span>Wina ratio {Math.round(100 * (this.props.soloRank.wins / (this.props.soloRank.losses + this.props.soloRank.wins)))}%</span>
                                         </div>
                                     </div>
 
@@ -189,39 +181,35 @@ class SearchUserInputContent extends React.Component {
                                     <div className="unranked">
                                         SoloQ
                                         <img src={'/assets/images/rank-icons/provisional.png'}
-                                            alt={this.state.soloRank.tier} />
+                                            alt="provisional" />
                                         <b>Unranked</b>
                                     </div>
                                 }
 
-                                {this.state.soloRank ?
+                                {this.props.flexRank ?
                                     <div className="rankSummoner">
                                         <div>
-                                            <img src={'/assets/images/rank-icons/' + this.state.flexRank.tier + '.png'}
-                                                alt={this.state.soloRank.tier} />
+                                            <img src={'/assets/images/rank-icons/' + this.props.flexRank.tier + '.png'}
+                                                alt={this.props.flexRank.tier} />
                                         </div>
                                         <div className="soloQandFlexStats">
                                             <span>Flex 5 vs 5 rank</span>
-                                            <span>{this.state.flexRank.tier} {this.state.flexRank.rank}</span>
-                                            <span>{this.state.flexRank.leaguePoints} LP</span>
-                                            <span>{this.state.flexRank.wins}W {this.state.flexRank.losses}L</span>
-                                            <span>Wina ratio {Math.round(100 * (this.state.flexRank.wins / (this.state.flexRank.losses + this.state.flexRank.wins)))}%</span>
+                                            <span>{this.props.flexRank.tier} {this.props.flexRank.rank}</span>
+                                            <span>{this.props.flexRank.leaguePoints} LP</span>
+                                            <span>{this.props.flexRank.wins}W {this.props.flexRank.losses}L</span>
+                                            <span>Wina ratio {Math.round(100 * (this.props.flexRank.wins / (this.props.flexRank.losses + this.props.flexRank.wins)))}%</span>
                                         </div>
                                     </div>
                                     :
                                     <div className="unranked">
                                         Flex
                                             <img src={'/assets/images/rank-icons/provisional.png'}
-                                            alt={this.state.soloRank.tier} />
+                                            alt="provisional" />
                                         <b>Unranked</b>
                                     </div>
                                 }
                                 <div id="championsStats">
-                                    <ChampionsStatistic basicInfoSummoner={this.state.basicInfoSummoner}
-                                        championsPlayedFlex={this.state.championsPlayedFlex}
-                                        championsPlayedSolo={this.state.championsPlayedSolo}
-                                        championsPlayedAram={this.state.championsPlayedAram}
-                                    />
+                                    <ChampionsStatistic />
                                 </div>
                             </div>
                             <div id="rightConteiner">
@@ -247,8 +235,38 @@ const Loading = ({ status, errorMessage }) => {
     }
 
 }
+const mapDispatchToProps = dispatch => ({
+    setBasicInfoSummoner: jsonSummonerByName =>
+        dispatch({ type: 'BASIC_INFO_SUMMOONER_SET', jsonSummonerByName }),
+    setFlexRank: flexRank =>
+        dispatch({ type: 'FLEX_RANK_SET', flexRank }),
+    setSoloRank: soloRank =>
+        dispatch({ type: 'SOLO_RANK_SET', soloRank }),
+    setChampionsPlayedFlex: championsPlayedFlex =>
+        dispatch({ type: 'PLAYED_FLEX_SET', championsPlayedFlex }),
+    setChampionsPlayedSolo: championsPlayedSolo =>
+        dispatch({ type: 'PLAYED_SOLO_SET', championsPlayedSolo }),
+    setChampionsPlayedAram: championsPlayedAram =>
+        dispatch({ type: 'PLAYED_ARAM_SET', championsPlayedAram }),
 
+});
 
+const mapStateToProps = state => ({
+    basicInfoSummoner: state.summonerInfoState.basicInfoSummoner,
+    flexRank: state.summonerInfoState.flexRank,
+    soloRank: state.summonerInfoState.soloRank,
+    championsPlayedFlex: state.summonerInfoState.championsPlayedFlex,
+    championsPlayedSolo: state.summonerInfoState.championsPlayedSolo,
+    championsPlayedAram: state.summonerInfoState.championsPlayedAram,
 
-export default SearchUserInputContent;
+});
+
+export default compose(
+    // withFirebase,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+    ),
+)(SearchUserInputContent);
+
 
