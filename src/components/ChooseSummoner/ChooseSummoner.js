@@ -1,12 +1,27 @@
 import React from 'react';
+import '../../css/ChooseSummoner.css'
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom'
+import { compose } from 'recompose';
+import ChooseSummonerAuth from './ChooseSummonerAuth'
+import ChooseSummonerNonAuth from './ChooseSummonerNonAuth'
 
-function ChooseSummoner() {
+const ChooseSummoner = ({ authUser }) => {
     return (
-        <div>
-            sdfsd
-        </div>
-    );
+        <React.Fragment>
+            { authUser ? <ChooseSummonerAuth /> : <div></div>}
+            <ChooseSummonerNonAuth />
+        </React.Fragment>
+
+    )
 }
 
 
-export default ChooseSummoner;
+const mapStateToProps = state => ({
+    authUser: state.sessionState.authUser,
+});
+
+export default compose(
+    withRouter,
+    connect(mapStateToProps),
+)(ChooseSummoner);

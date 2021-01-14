@@ -31,6 +31,11 @@ class SignUpFormBase extends Component {
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
+      .then(()=>{
+        this.props.firebase.usersSummonersRef(this.props.firebase.currentUser()).update({
+          0: 0
+      })
+      })
       .catch(error => {
         this.setState({ error });
       });

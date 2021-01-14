@@ -42,3 +42,6 @@
     width: 200px;
     margin: 0 auto 0 auto;
 }
+#findButton{
+    background-color: rgb(159, 241, 233);
+}

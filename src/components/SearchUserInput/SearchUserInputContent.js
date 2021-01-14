@@ -19,7 +19,7 @@ class SearchUserInputContent extends React.Component {
     onSubmit = event => {
         const { nickname } = this.state;
         const { history } = this.props;
-        history.push("/" + nickname)
+        history.push("/eune/" + nickname)
 
         event.preventDefault();
     };
@@ -32,7 +32,7 @@ class SearchUserInputContent extends React.Component {
     render() {
         const { nickname, error } = this.state;
 
-        const isInvalid = nickname === ''
+        const isInvalid = nickname === '' || nickname.length < 3
 
         return (
             <div id="SearchUserInputContent">
@@ -54,7 +54,7 @@ class SearchUserInputContent extends React.Component {
                             />
                         </div>
                         <div id="submitSearch">
-                            <Button disabled={isInvalid} type="submit" variant="outlined" color="primary">
+                            <Button id="findButton" disabled={isInvalid} type="submit" variant="outlined" color="primary">
                                 Stalk!
                             </Button>
                         </div>

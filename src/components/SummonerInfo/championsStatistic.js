@@ -170,6 +170,7 @@ const Stats = ({ stats, statsComponents, displayNumber }) => {
 
 const StatsComponent = (championsPlayed, dictionaryChampsID) => {
     let elemtns = []
+
     championsPlayed.forEach((val, i) => {
         dictionaryChampsID.forEach((val2, i2) => {
             if (val2[0] === val[0]) {

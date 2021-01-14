@@ -22,8 +22,8 @@ const App = () => (
     <ScrollToTop />
     <Switch>
       <Route exact strict path="/" component={SearchUserInput} />
-      <Route exact strict path="/:SummonerName" component={SummonerInfo} />
       <Route exact strict path="/login" component={LoginRegister} />
+      <Route exact strict path="/eune/:SummonerName" component={(props) => <SummonerInfo {...props} key={window.location.pathname}/>}/>
       <Redirect to="/" />
     </Switch>
     <Footer />

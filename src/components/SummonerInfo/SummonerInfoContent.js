@@ -17,14 +17,26 @@ class SearchUserInputContent extends React.Component {
             isFetchError: false,
         };
         // this.fetchListGame = this.fetchListGame.bind(this)
+        this._isMounted = false;
+
     };
     componentDidMount() {
+        this._isMounted = true;
+
+        this.props.setBasicInfoSummoner()
+        this.props.setSoloRank()
+        this.props.setSoloRank()
+        this.props.setChampionsPlayedFlex()
+        this.props.setChampionsPlayedSolo()
+        this.props.setChampionsPlayedAram()
+
+        this.props.addNewSummoner(this.state.SummonerName)
+        
 
         let getStorage = JSON.parse(localStorage.getItem(this.state.SummonerName))
 
         if (getStorage === null) { } // check if storage exist
         else if (getStorage.length === 5) { // if exist check if has all needed information
-            console.log(getStorage);
 
             this.props.setBasicInfoSummoner(getStorage[0]);
 
@@ -34,7 +46,6 @@ class SearchUserInputContent extends React.Component {
             // if (jsonSummonerRank[1] === undefined) jsonSummonerRank[1] = false
             if (getStorage[1][1].queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(getStorage[1][1]);
             else this.props.setFlexRank(getStorage[1][1]);
-
 
             this.props.setChampionsPlayedFlex(getStorage[2])
             this.props.setChampionsPlayedSolo(getStorage[3])
@@ -50,6 +61,10 @@ class SearchUserInputContent extends React.Component {
 
     }
 
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     async fetchAllDataOnMount() {
         const SummonerName = this.state.SummonerName
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
@@ -61,6 +76,8 @@ class SearchUserInputContent extends React.Component {
         // fetch data by summuner name
         const SummonerByName = region + "/lol/summoner/v4/summoners/by-name/" + SummonerName + RiotApiKey
         const responseSummonerByName = await fetch(cors + SummonerByName)
+        if (!this._isMounted) return
+
         if (responseSummonerByName.status !== 200) {
             this.setState({
                 status: responseSummonerByName.status,
@@ -76,6 +93,8 @@ class SearchUserInputContent extends React.Component {
         const SummonerID = jsonSummonerByName.id
         const SummonerRank = region + "/lol/league/v4/entries/by-summoner/" + SummonerID + RiotApiKey
         const responseSummonerRank = await fetch(cors + SummonerRank)
+        if (!this._isMounted) return
+
         if (responseSummonerRank.status !== 200) {
             this.setState({
                 status: responseSummonerRank.status,
@@ -103,12 +122,16 @@ class SearchUserInputContent extends React.Component {
         championsPlayedSolo = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 420)
         championsPlayedAram = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 450)
 
-        if (this.state.isFetchError) return
 
+        if (this.state.isFetchError) return
+        if (championsPlayedFlex === null) championsPlayedFlex = []
+        if (championsPlayedSolo === null) championsPlayedFlex = []
+        if (championsPlayedAram === null) championsPlayedFlex = []
+
+        
         this.props.setChampionsPlayedFlex(championsPlayedFlex)
         this.props.setChampionsPlayedSolo(championsPlayedSolo)
         this.props.setChampionsPlayedAram(championsPlayedAram)
-
 
         let StorageData = []
         StorageData.push(jsonSummonerByName)
@@ -118,9 +141,6 @@ class SearchUserInputContent extends React.Component {
         StorageData.push(championsPlayedAram)
 
         localStorage.setItem(SummonerName, JSON.stringify(StorageData));
-        let getStorage2 = JSON.parse(localStorage.getItem(SummonerName))
-        console.log(getStorage2);
-        console.log("fetched all");
 
         this.setState({
             isLodaing: false,
@@ -142,12 +162,14 @@ class SearchUserInputContent extends React.Component {
                 return []
             }
             else if (responsegames.status !== 200) {
+                if (!this._isMounted) return
+
                 this.setState({
                     status: responsegames.status,
                     errorMessage: responsegames.statusText,
                     isFetchError: true,
                 })
-                return responsegames.statusText
+                return []
             }
             const jsongames = await responsegames.json()
             totalGames = jsongames.totalGames
@@ -225,7 +247,7 @@ class SearchUserInputContent extends React.Component {
                                             <span>{this.props.soloRank.tier} {this.props.soloRank.rank}</span>
                                             <span>{this.props.soloRank.leaguePoints} lp</span>
                                             <span>{this.props.soloRank.wins} W {this.props.soloRank.losses} L</span>
-                                            <span>Wina ratio {Math.round(100 * (this.props.soloRank.wins / (this.props.soloRank.losses + this.props.soloRank.wins)))}%</span>
+                                            <span>Wina ratio <b>{Math.round(100 * (this.props.soloRank.wins / (this.props.soloRank.losses + this.props.soloRank.wins)))}%</b></span>
                                         </div>
                                     </div>
 
@@ -249,7 +271,7 @@ class SearchUserInputContent extends React.Component {
                                             <span>{this.props.flexRank.tier} {this.props.flexRank.rank}</span>
                                             <span>{this.props.flexRank.leaguePoints} LP</span>
                                             <span>{this.props.flexRank.wins}W {this.props.flexRank.losses}L</span>
-                                            <span>Wina ratio {Math.round(100 * (this.props.flexRank.wins / (this.props.flexRank.losses + this.props.flexRank.wins)))}%</span>
+                                            <span>Wina ratio <b>{Math.round(100 * (this.props.flexRank.wins / (this.props.flexRank.losses + this.props.flexRank.wins)))}%</b></span>
                                         </div>
                                     </div>
                                     :
@@ -300,6 +322,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: 'PLAYED_SOLO_SET', championsPlayedSolo }),
     setChampionsPlayedAram: championsPlayedAram =>
         dispatch({ type: 'PLAYED_ARAM_SET', championsPlayedAram }),
+    addNewSummoner: newSummoner =>
+        dispatch({ type: "ADD_SUMMONER_SET", newSummoner }),
 
 });
 
