@@ -26,7 +26,7 @@ class SearchUserInputContent extends React.Component {
 
         this.props.setBasicInfoSummoner()
         this.props.setSoloRank()
-        this.props.setSoloRank()
+        this.props.setFlexRank()
         this.props.setChampionsPlayedFlex()
         this.props.setChampionsPlayedSolo()
         this.props.setChampionsPlayedAram()
