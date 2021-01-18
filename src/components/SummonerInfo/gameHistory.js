@@ -140,7 +140,7 @@ class GameHistory extends React.Component {
                             console.log(allGameInfo);
                             console.log(allGameInfo[0]);
                             console.log(allGameInfo[0].teams[0]);
-                            
+
                             if (allGameInfo[0].teams[0].teamId === allGameInfo[1][1]) {
                                 if (allGameInfo[0].teams[0].win === "Fail"){
                                 }
@@ -196,7 +196,7 @@ class GameHistory extends React.Component {
                                             if (i > 4) return []
                                             else {
                                                 return <div className="playerList" key={i}>
-                                                    <img src={'/assets/images/champions/'
+                                                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
                                                         + champions[allGameInfo[0].participants[i].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}
@@ -209,7 +209,7 @@ class GameHistory extends React.Component {
                                             if (i < 5) return []
                                             else {
                                                 return <div className="playerList" key={i}>
-                                                    <img src={'/assets/images/champions/'
+                                                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
                                                         + champions[allGameInfo[0].participants[i].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}
