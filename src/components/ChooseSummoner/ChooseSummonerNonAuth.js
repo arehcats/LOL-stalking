@@ -25,11 +25,7 @@ class ChooseSummonerNonAuth extends Component {
 
     render() {
         return (
-            <div className='chooseSummoner' 
-            onClick={() => {
-                console.log(this.props.summoners);
-            }}
-            >
+            <div className='chooseSummoner' >
                 <div>
                     History:
                 </div>
@@ -48,18 +44,18 @@ class ChooseSummonerNonAuth extends Component {
                                     this.addSummoner(value)
                                 }}
                             />
-                            :
-                            false
+                                :
+                                false
                             }
-                            
+
                         </React.Fragment>
                     )
                 })
-                :
-                <div>
-                    
-                </div>
-            }
+                    :
+                    <div>
+
+                    </div>
+                }
                 <NavLink className="newSummoner" to="/" style={{ textDecoration: 'none' }}>
                     <div className={this.state.setClass[1]}>
                         <Button type="submit" variant="outlined" color="primary">

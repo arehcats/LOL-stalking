@@ -25,7 +25,6 @@ function applyAddSummoner(state, action) {
 }
 
 function applyDeleteSummoner(state, action) {
-    console.log(action.newSummoner);
 
     let currentArray = state.summoners
     let index = currentArray.indexOf(action.newSummoner);

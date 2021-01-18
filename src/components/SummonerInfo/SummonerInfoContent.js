@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button'
 import ChampionsStatistic from './championsStatistic'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import GameHistory from './gameHistory'
 
 class SearchUserInputContent extends React.Component {
     constructor(props) {
@@ -29,27 +30,45 @@ class SearchUserInputContent extends React.Component {
         this.props.setChampionsPlayedFlex()
         this.props.setChampionsPlayedSolo()
         this.props.setChampionsPlayedAram()
+        this.props.setLast100games()
+        this.props.setChampionsIDs()
+
 
         this.props.addNewSummoner(this.state.SummonerName)
-        
 
         let getStorage = JSON.parse(localStorage.getItem(this.state.SummonerName))
+        let gamesIDsFromStorage = JSON.parse(localStorage.getItem("gamesIDs"))
+
+        if (gamesIDsFromStorage === null) {
+            this.fetchGamesID()
+            this.props.setGamesIDs(gamesIDsFromStorage)
+
+        }
+        else {
+            this.props.setGamesIDs(gamesIDsFromStorage)
+        }
+
 
         if (getStorage === null) { } // check if storage exist
-        else if (getStorage.length === 5) { // if exist check if has all needed information
+        else if (getStorage.length === 7) { // if exist check if has all needed information
 
             this.props.setBasicInfoSummoner(getStorage[0]);
 
-            // if (getStorage[1][0] === false) jsonSummonerRank[0] = false
-            if (getStorage[1][0].queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(getStorage[1][0]);
-            else this.props.setFlexRank(getStorage[1][0]);
-            // if (jsonSummonerRank[1] === undefined) jsonSummonerRank[1] = false
-            if (getStorage[1][1].queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(getStorage[1][1]);
-            else this.props.setFlexRank(getStorage[1][1]);
+            let rank1 = getStorage[1][0]
+            let rank2 = getStorage[1][1]
+
+            if (rank1.queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(rank1);
+            else if (rank1.queueType === "RANKED_FLEX_SR") this.props.setFlexRank(rank1);
+
+            if (rank2.queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(rank2);
+            else if (rank2.queueType === "RANKED_FLEX_SR") this.props.setFlexRank(rank2);
 
             this.props.setChampionsPlayedFlex(getStorage[2])
             this.props.setChampionsPlayedSolo(getStorage[3])
             this.props.setChampionsPlayedAram(getStorage[4])
+            this.props.setLast100games(getStorage[5])
+            this.props.setChampionsIDs(getStorage[6])
+
 
             this.setState({
                 isLodaing: false,
@@ -57,7 +76,7 @@ class SearchUserInputContent extends React.Component {
             return
         }
 
-        this.fetchAllDataOnMount()
+        this.fetchSummDataOnMount()
 
     }
 
@@ -65,15 +84,36 @@ class SearchUserInputContent extends React.Component {
         this._isMounted = false;
     }
 
-    async fetchAllDataOnMount() {
+    async fetchGamesID() {
+        const gamesID_url = "http://static.developer.riotgames.com/docs/lol/queues.json"
+        const responsegamesID_url = await fetch(gamesID_url)
+        if (!this._isMounted) return
+
+        if (responsegamesID_url.status !== 200) {
+            this.setState({
+                status: responsegamesID_url.status,
+                errorMessage: responsegamesID_url.statusText
+            })
+            return
+        }
+        const jsonresponseGamesID_url = await responsegamesID_url.json()
+
+        localStorage.setItem("gamesIDs", JSON.stringify(jsonresponseGamesID_url));
+
+    }
+
+    async fetchSummDataOnMount() {
         const SummonerName = this.state.SummonerName
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
         const region = "https://eun1.api.riotgames.com"
         const cors = "https://cors-anywhere.herokuapp.com/"
+        const acutalPatch = "11.1.1"
         // const cors = "https://yacdn.org/proxy/"
+        this.fetchGamesID()
 
-        // fetch data by summuner name
+        ////////////////////////////////// fetch data by summuner name ////////////////////////
+
         const SummonerByName = region + "/lol/summoner/v4/summoners/by-name/" + SummonerName + RiotApiKey
         const responseSummonerByName = await fetch(cors + SummonerByName)
         if (!this._isMounted) return
@@ -89,7 +129,8 @@ class SearchUserInputContent extends React.Component {
 
         this.props.setBasicInfoSummoner(jsonSummonerByName);
 
-        // fetch summoner rank by summoner id
+        ///////////////// fetch summoner rank by summoner id /////////////////////////////
+
         const SummonerID = jsonSummonerByName.id
         const SummonerRank = region + "/lol/league/v4/entries/by-summoner/" + SummonerID + RiotApiKey
         const responseSummonerRank = await fetch(cors + SummonerRank)
@@ -111,6 +152,45 @@ class SearchUserInputContent extends React.Component {
         else if (jsonSummonerRank[1].queueType === "RANKED_SOLO_5x5") this.props.setSoloRank(jsonSummonerRank[1]);
         else this.props.setFlexRank(jsonSummonerRank[1]);
 
+        ////////////////// fetch champions ids and their names ////////////////////
+
+        const responseChampions = await fetch("http://ddragon.leagueoflegends.com/cdn/" + acutalPatch + "/data/en_US/champion.json")
+        if (responseChampions.status !== 200) {
+            this.setState({
+                status: responseChampions.status,
+                errorMessage: responseChampions.statusText
+            })
+            return
+        }
+        const jsonChampions = await responseChampions.json()
+
+        let dictionaryChampsID = []
+
+        for (const [key, value] of Object.entries(jsonChampions.data)) {
+
+            dictionaryChampsID[value.key] = key
+        }
+
+        this.props.setChampionsIDs(dictionaryChampsID)
+
+        ////////////// fetch last 100 games by account ID ///////////////////////////////
+
+        let last_games_url = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId + RiotApiKey
+        const responsegames = await fetch(cors + last_games_url)
+
+        if (responsegames.status === 404) { }
+        else if (responsegames.status !== 200) {
+            if (!this._isMounted) return
+
+            this.setState({
+                status: responsegames.status,
+                errorMessage: responsegames.statusText,
+                isFetchError: true,
+            })
+        }
+        const json_lats_100_games = await responsegames.json()
+
+        this.props.setLast100games(json_lats_100_games.matches)
 
         ////////////// fetch games by account ID ///////////////////////////////
 
@@ -122,13 +202,12 @@ class SearchUserInputContent extends React.Component {
         championsPlayedSolo = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 420)
         championsPlayedAram = await this.fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, 450)
 
-
         if (this.state.isFetchError) return
         if (championsPlayedFlex === null) championsPlayedFlex = []
         if (championsPlayedSolo === null) championsPlayedFlex = []
         if (championsPlayedAram === null) championsPlayedFlex = []
 
-        
+
         this.props.setChampionsPlayedFlex(championsPlayedFlex)
         this.props.setChampionsPlayedSolo(championsPlayedSolo)
         this.props.setChampionsPlayedAram(championsPlayedAram)
@@ -139,6 +218,8 @@ class SearchUserInputContent extends React.Component {
         StorageData.push(championsPlayedFlex)
         StorageData.push(championsPlayedSolo)
         StorageData.push(championsPlayedAram)
+        StorageData.push(json_lats_100_games.matches)
+        StorageData.push(dictionaryChampsID)
 
         localStorage.setItem(SummonerName, JSON.stringify(StorageData));
 
@@ -147,16 +228,17 @@ class SearchUserInputContent extends React.Component {
         })
     }
 
-    async fetchListGame(region, jsonSummonerByName, RiotApiKeySecond, cors, gameID) {
+    async fetchListGame(region, jsonSummonerByName, RiotApiKey, cors, gameID) {
         let beginIndex = 0
         let endIndex = 100
         let totalGames = 0
         let fetchedGames = []
 
         do {
-            const games = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId +
-                "?queue=" + gameID + "&beginTime=1605060000000&endIndex=" + endIndex + "&beginIndex=" + beginIndex + RiotApiKeySecond
+            let games = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId +
+                "?queue=" + gameID + "&beginTime=1610085600000&endIndex=" + endIndex + "&beginIndex=" + beginIndex + RiotApiKey
             const responsegames = await fetch(cors + games)
+
             if (responsegames.status === 404) {
 
                 return []
@@ -207,7 +289,11 @@ class SearchUserInputContent extends React.Component {
                         <div id="topBannerBasicInfo">
                             <div id="summIcon">
                                 <img src={'/assets/images/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
-                                    alt={"Summoner icon"} />
+                                    alt={"Summoner icon"}
+                                    onClick={() => {
+                                        // console.log(this.props.last100games);
+                                    }}
+                                />
                                 <div>
                                     {this.props.basicInfoSummoner.summonerLevel}
                                 </div>
@@ -223,7 +309,7 @@ class SearchUserInputContent extends React.Component {
                                             this.setState({
                                                 isLodaing: true,
                                             })
-                                            this.fetchAllDataOnMount();
+                                            this.fetchSummDataOnMount();
                                         }}
                                     >
                                         Refresh
@@ -246,14 +332,14 @@ class SearchUserInputContent extends React.Component {
                                             <span>SoloQ rank</span>
                                             <span>{this.props.soloRank.tier} {this.props.soloRank.rank}</span>
                                             <span>{this.props.soloRank.leaguePoints} lp</span>
-                                            <span>{this.props.soloRank.wins} W {this.props.soloRank.losses} L</span>
+                                            <span>{this.props.soloRank.wins}W / {this.props.soloRank.losses}L</span>
                                             <span>Wina ratio <b>{Math.round(100 * (this.props.soloRank.wins / (this.props.soloRank.losses + this.props.soloRank.wins)))}%</b></span>
                                         </div>
                                     </div>
 
                                     :
                                     <div className="unranked">
-                                        SoloQ
+                                        <span>SoloQ</span>
                                         <img src={'/assets/images/rank-icons/provisional.png'}
                                             alt="provisional" />
                                         <b>Unranked</b>
@@ -270,14 +356,14 @@ class SearchUserInputContent extends React.Component {
                                             <span>Flex 5 vs 5 rank</span>
                                             <span>{this.props.flexRank.tier} {this.props.flexRank.rank}</span>
                                             <span>{this.props.flexRank.leaguePoints} LP</span>
-                                            <span>{this.props.flexRank.wins}W {this.props.flexRank.losses}L</span>
+                                            <span>{this.props.flexRank.wins}W / {this.props.flexRank.losses}L</span>
                                             <span>Wina ratio <b>{Math.round(100 * (this.props.flexRank.wins / (this.props.flexRank.losses + this.props.flexRank.wins)))}%</b></span>
                                         </div>
                                     </div>
                                     :
                                     <div className="unranked">
-                                        Flex
-                                            <img src={'/assets/images/rank-icons/provisional.png'}
+                                        <span>Flex</span>
+                                        <img src={'/assets/images/rank-icons/provisional.png'}
                                             alt="provisional" />
                                         <b>Unranked</b>
                                     </div>
@@ -287,7 +373,7 @@ class SearchUserInputContent extends React.Component {
                                 </div>
                             </div>
                             <div id="rightConteiner">
-                                f
+                                <GameHistory />
                             </div>
                         </div>
                     </div>
@@ -324,6 +410,12 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: 'PLAYED_ARAM_SET', championsPlayedAram }),
     addNewSummoner: newSummoner =>
         dispatch({ type: "ADD_SUMMONER_SET", newSummoner }),
+    setGamesIDs: gamesIDs =>
+        dispatch({ type: "GAMES_IDs_SET", gamesIDs }),
+    setChampionsIDs: championsIDs =>
+        dispatch({ type: "CHAMPIONS_IDs_SET", championsIDs }),
+    setLast100games: last100games =>
+        dispatch({ type: "LAST_100_GAMES_SET", last100games }),
 
 });
 
@@ -334,7 +426,7 @@ const mapStateToProps = state => ({
     championsPlayedFlex: state.summonerInfoState.championsPlayedFlex,
     championsPlayedSolo: state.summonerInfoState.championsPlayedSolo,
     championsPlayedAram: state.summonerInfoState.championsPlayedAram,
-
+    gamesIDs: state.someDataGame.gamesIDs,
 });
 
 export default compose(

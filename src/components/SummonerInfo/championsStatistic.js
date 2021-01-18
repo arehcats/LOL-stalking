@@ -12,8 +12,6 @@ class ChampionsStatistic extends React.Component {
         this.state = {
             isLodaing: true,
             stats: 0,
-            errorMessage: "",
-            dictionaryChampsID: [],
             setClass: ["statsSelected", "stats", "stats"],
             statsComponents: [],
             displayNumber: 6,
@@ -21,31 +19,8 @@ class ChampionsStatistic extends React.Component {
 
     };
 
-    async componentDidMount() {
-        // const SummonerName = this.state.SummonerName
-        // const region = "https://eun1.api.riotgames.com"
-        const cors = "https://cors-anywhere.herokuapp.com/"
-        // const basicInfoSummoner = this.props.basicInfoSummoner
-
-        /// fetch champions names and their ID
-        const responseChampions = await fetch(cors + "http://ddragon.leagueoflegends.com/cdn/11.1.1/data/en_US/champion.json")
-        if (responseChampions.status !== 200) {
-            this.setState({
-                status: responseChampions.status,
-                errorMessage: responseChampions.statusText
-            })
-            return
-        }
-        const jsonChampions = await responseChampions.json()
-
-        let dictionaryChampsID = []
-
-        for (const [key, value] of Object.entries(jsonChampions.data)) {
-            // console.log(`${key}: ${value.key}`);
-
-            dictionaryChampsID.push([value.key, key])
-        }
-
+    componentDidMount() {
+        let dictionaryChampsID = this.props.championsIDs
         let statsComponents = []
         statsComponents[0] = StatsComponent(this.props.championsPlayedSolo, dictionaryChampsID)
         statsComponents[1] = StatsComponent(this.props.championsPlayedFlex, dictionaryChampsID)
@@ -73,7 +48,7 @@ class ChampionsStatistic extends React.Component {
     render() {
         return (
             <div>
-                {this.state.isLodaing ? <Loading status={this.state.status} />
+                {this.state.isLodaing ? <div align="center"><CircularProgress /></div>
                     :
                     <div>
                         <div id="statsSelectGameType">
@@ -170,48 +145,31 @@ const Stats = ({ stats, statsComponents, displayNumber }) => {
 
 const StatsComponent = (championsPlayed, dictionaryChampsID) => {
     let elemtns = []
-
     championsPlayed.forEach((val, i) => {
-        dictionaryChampsID.forEach((val2, i2) => {
-            if (val2[0] === val[0]) {
                 elemtns.push(<div key={i}>
-                    <img src={'/assets/images/champions/' + val2[1] + '.png'}
+                    <img src={'/assets/images/champions/' + dictionaryChampsID[val[0]] + '.png'}
                         alt={"Summoner icon"} />
                     <div className="statsListingInside" >
                         <div>
-                            <span className="boldStats">{val2[1]}</span>
+                            <span className="boldStats">{dictionaryChampsID[val[0]]}</span>
                         </div>
                         <div>
                             <span className="fontSizeStats">Played games: </span><span className="boldStats">{val[1]}</span>
                         </div>
                     </div>
                 </div>)
-            }
-        })
     })
 
     return elemtns
 }
 
 
-const Loading = ({ status }) => {
-    if (status === false) {
-        return <div align="center"><CircularProgress /></div>
-    }
-    else if (status === 404) {
-        console.log("ell");
-        return <div>User not found</div>
-    }
-    else {
-        return <div>Ups... something went wrong</div>
-    }
-}
-
 const mapStateToProps = state => ({
     basicInfoSummoner: state.summonerInfoState.basicInfoSummoner,
     championsPlayedFlex: state.summonerInfoState.championsPlayedFlex,
     championsPlayedSolo: state.summonerInfoState.championsPlayedSolo,
     championsPlayedAram: state.summonerInfoState.championsPlayedAram,
+    championsIDs: state.someDataGame.championsIDs,
 });
 
 export default compose(

@@ -1,65 +1,74 @@
 const INITIAL_STATE = {
   basicInfoSummoner: null,
   flexRank: null,
-  soloRank: null,  
+  soloRank: null,
   championsPlayedFlex: [],
   championsPlayedSolo: [],
   championsPlayedAram: [],
-  };
-   
-  const applyBasicInfoSummoner = (state, action) => ({
-    ...state,
-    basicInfoSummoner: action.jsonSummonerByName,
-  });
+  last100games: [],
+};
 
-  const applyFlexRank = (state, action) => ({
-    ...state,
-    flexRank: action.flexRank,
-  });
+const applyBasicInfoSummoner = (state, action) => ({
+  ...state,
+  basicInfoSummoner: action.jsonSummonerByName,
+});
 
-  const applySoloRank = (state, action) => ({
-    ...state,
-    soloRank: action.soloRank,
-  });
+const applyFlexRank = (state, action) => ({
+  ...state,
+  flexRank: action.flexRank,
+});
 
-  const applyChampionsPlayedFlex = (state, action) => ({
-    ...state,
-    championsPlayedFlex: action.championsPlayedFlex,
-  });
+const applySoloRank = (state, action) => ({
+  ...state,
+  soloRank: action.soloRank,
+});
 
-  const applyChampionsPlayedSolo = (state, action) => ({
-    ...state,
-    championsPlayedSolo: action.championsPlayedSolo,
-  });
+const applyChampionsPlayedFlex = (state, action) => ({
+  ...state,
+  championsPlayedFlex: action.championsPlayedFlex,
+});
 
-  const applyChampionsPlayedAram = (state, action) => ({
-    ...state,
-    championsPlayedAram: action.championsPlayedAram,
-  });
-   
-  function summonerInfoReducer(state = INITIAL_STATE, action) {
-    switch (action.type) {
-      case 'BASIC_INFO_SUMMOONER_SET': {
-        return applyBasicInfoSummoner(state, action);
-      }
-      case 'FLEX_RANK_SET': {
-        return applyFlexRank(state, action);
-      }
-      case 'SOLO_RANK_SET': {
-        return applySoloRank(state, action);
-      }
-      case 'PLAYED_FLEX_SET': {
-        return applyChampionsPlayedFlex(state, action);
-      }
-      case 'PLAYED_SOLO_SET': {
-        return applyChampionsPlayedSolo(state, action);
-      }
-      case 'PLAYED_ARAM_SET': {
-        return applyChampionsPlayedAram(state, action);
-      }
-      default:
-        return state;
+const applyChampionsPlayedSolo = (state, action) => ({
+  ...state,
+  championsPlayedSolo: action.championsPlayedSolo,
+});
+
+const applyChampionsPlayedAram = (state, action) => ({
+  ...state,
+  championsPlayedAram: action.championsPlayedAram,
+});
+
+const applylast100games = (state, action) => ({
+  ...state,
+  last100games: action.last100games,
+});
+
+function summonerInfoReducer(state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case 'BASIC_INFO_SUMMOONER_SET': {
+      return applyBasicInfoSummoner(state, action);
     }
+    case 'FLEX_RANK_SET': {
+      return applyFlexRank(state, action);
+    }
+    case 'SOLO_RANK_SET': {
+      return applySoloRank(state, action);
+    }
+    case 'PLAYED_FLEX_SET': {
+      return applyChampionsPlayedFlex(state, action);
+    }
+    case 'PLAYED_SOLO_SET': {
+      return applyChampionsPlayedSolo(state, action);
+    }
+    case 'PLAYED_ARAM_SET': {
+      return applyChampionsPlayedAram(state, action);
+    }
+    case 'LAST_100_GAMES_SET': {
+      return applylast100games(state, action);
+    }
+    default:
+      return state;
   }
+}
 
-  export default summonerInfoReducer;
+export default summonerInfoReducer;
