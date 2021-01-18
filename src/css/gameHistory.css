@@ -1,4 +1,59 @@
 .gameHistory{
     margin-bottom: 10px;
-    background-color: blanchedalmond;
+    display: flex;
+}
+.otherPlayers{
+    display: flex;
+    margin: 10px;
+
+}
+.otherPlayers div{
+    margin-left: 10px;
+    width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.playerList{
+    height: 25px;
+    line-height: 25px;    
+}
+.playerList img{
+    width: 20px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+.championAndSpellsImg {
+    margin: auto 10px auto 10px;
+    text-align: center;
+}
+.championAndSpellsImg :first-child {
+    display: flex;
+}
+.championAndSpellsImg div{
+    /* border: 3px solid red; */
+
+}
+.championsImg img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.SpellsImg img{
+    width: 26px;
+    height: 26px;
+
+    /* margin-left: 5px; */
+    margin: 2px 0 2px 5px;
+    vertical-align: middle;
+}
+.championName{
+    color: rgb(63, 60, 60);
+    margin-top: 5px;
+}
+.win{
+    background-color: rgb(174, 215, 253);
+}
+.lose{
+    background-color: rgb(236, 171, 171);
 }

@@ -288,7 +288,7 @@ class SearchUserInputContent extends React.Component {
                     <div>
                         <div id="topBannerBasicInfo">
                             <div id="summIcon">
-                                <img src={'/assets/images/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
+                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
                                     alt={"Summoner icon"}
                                     onClick={() => {
                                         // console.log(this.props.last100games);
@@ -393,8 +393,8 @@ const Loading = ({ status, errorMessage }) => {
     else {
         return <div>Ups something went wrong... {errorMessage}</div>
     }
-
 }
+
 const mapDispatchToProps = dispatch => ({
     setBasicInfoSummoner: jsonSummonerByName =>
         dispatch({ type: 'BASIC_INFO_SUMMOONER_SET', jsonSummonerByName }),
