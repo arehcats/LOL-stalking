@@ -162,7 +162,7 @@ class GameHistory extends React.Component {
                                 <div className="championAndSpellsImg">
                                     <div>
                                         <div className="championsImg" >
-                                            <img src={'/assets/images/champions/'
+                                            <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
                                                 + champions[allGameInfo[0].participants[allGameInfo[1][0]].championId] + '.png'}
                                                 alt={"Champion"} />
                                         </div>

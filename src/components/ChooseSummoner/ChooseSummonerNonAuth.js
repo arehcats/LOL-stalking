@@ -39,11 +39,14 @@ class ChooseSummonerNonAuth extends Component {
                                     </Button>
                                 </div>
                             </NavLink>
-                            { !this.props.favoriteSummoners.includes(value) ? <img className="plusIcon" src={'/assets/images/delete_plus/add.svg'} alt={"Summoner icon"}
+                            {this.props.authUser ?
+                             !this.props.favoriteSummoners.includes(value) ? <img className="plusIcon" src={'/assets/images/delete_plus/add.svg'} alt={"Summoner icon"}
                                 onClick={() => {
                                     this.addSummoner(value)
                                 }}
                             />
+                                :
+                                false
                                 :
                                 false
                             }
@@ -74,7 +77,9 @@ class ChooseSummonerNonAuth extends Component {
 
 const mapStateToProps = state => ({
     summoners: state.summoners.summoners,
-    favoriteSummoners: state.summoners.favoriteSummoners
+    favoriteSummoners: state.summoners.favoriteSummoners,
+    authUser: state.sessionState.authUser,
+
 })
 const mapDispatchToProps = dispatch => ({
     deleteSummoner: newSummoner =>
