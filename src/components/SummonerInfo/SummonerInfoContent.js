@@ -322,6 +322,7 @@ class SearchUserInputContent extends React.Component {
                         </div>
                         <div id="allOderInfo">
                             <div id="leftContainer">
+                                <div>
                                 {this.props.soloRank ?
                                     <div className="rankSummoner">
                                         <div>
@@ -368,11 +369,12 @@ class SearchUserInputContent extends React.Component {
                                         <b>Unranked</b>
                                     </div>
                                 }
+                                </div>
                                 <div id="championsStats">
                                     <ChampionsStatistic />
                                 </div>
                             </div>
-                            <div id="rightConteiner">
+                            <div>
                                 <GameHistory />
                             </div>
                         </div>

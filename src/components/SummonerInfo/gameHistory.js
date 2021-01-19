@@ -124,13 +124,13 @@ class GameHistory extends React.Component {
     render() {
         let champions = this.props.championsIDs
         return (
-            <div>
+            <div id="rightConteiner">
                 <div
                     onClick={() => {
                         console.log(this.state.fetchedGames);
                     }}
                 >
-                    click
+                    {/* click */}
                 </div>
                 { this.state.isLoading ? <Loading status={this.state.status} errorMessage={this.state.errorMessage} />
                     :
@@ -139,17 +139,61 @@ class GameHistory extends React.Component {
                             let classBackround = "gameHistory lose"
                             console.log(allGameInfo);
                             console.log(allGameInfo[0]);
-                            console.log(allGameInfo[0].teams[0]);
+                            let kills = allGameInfo[0].participants[allGameInfo[1][0]].stats.kills
+                            let deaths = allGameInfo[0].participants[allGameInfo[1][0]].stats.deaths
+                            let assists = allGameInfo[0].participants[allGameInfo[1][0]].stats.assists
+                            let kda = Math.round(100 * (kills + assists) / deaths) / 100
+                            let gameDurationMinutes = Math.round((allGameInfo[0].gameDuration) / 60)
+                            let gameDurationSeconds = (allGameInfo[0].gameDuration) % 60
+
+                            let timeInMs = Date.now();
+                            let gameCreation = allGameInfo[0].gameCreation
+                            let timeMinutes = Math.round((timeInMs - gameCreation) / 60000)
+                            let timeAgo
+                            let minutesAgoString = "minutes ago"
+
+                            if (timeMinutes <= 60) {
+                                timeAgo = timeMinutes
+                            }
+                            else if (timeMinutes / 60 <= 24) {
+                                timeAgo = Math.round(timeMinutes / 60)
+                                minutesAgoString = "hours ago"
+                            }
+                            else {
+                                timeAgo = Math.round((timeMinutes / 60) / 24)
+                                minutesAgoString = "days ago"
+                            }
+
+                            let ifWin
+                            if (allGameInfo[0].participants[allGameInfo[1][0]].stats.win) ifWin = "Victory"
+                            else ifWin = "Defeat"
+
+
+
+                            let killsInRows
+
+                            if (allGameInfo[0].participants[allGameInfo[1][0]].stats.pentaKills) {
+                                killsInRows = "Penta kill"
+                            }
+                            else if (allGameInfo[0].participants[allGameInfo[1][0]].stats.quadraKills) {
+                                killsInRows = "Quadra kill"
+                            }
+                            else if (allGameInfo[0].participants[allGameInfo[1][0]].stats.tripleKills) {
+                                killsInRows = "Triple kill"
+                            }
+                            else if (allGameInfo[0].participants[allGameInfo[1][0]].stats.doubleKills) {
+                                killsInRows = "Dobule kill"
+                            }
 
                             if (allGameInfo[0].teams[0].teamId === allGameInfo[1][1]) {
-                                if (allGameInfo[0].teams[0].win === "Fail"){
+                                if (allGameInfo[0].teams[0].win === "Fail") {
                                 }
                                 else {
                                     classBackround = "gameHistory win"
                                 }
                             }
                             else if (allGameInfo[0].teams[1].teamId === allGameInfo[1][1]) {
-                                if (allGameInfo[0].teams[1].win === "Fail"){
+                                if (allGameInfo[0].teams[1].win === "Fail") {
                                 }
                                 else {
                                     classBackround = "gameHistory win"
@@ -157,7 +201,21 @@ class GameHistory extends React.Component {
                             }
                             return <div className={classBackround} key={i}>
                                 <div>
-                                    1
+                                    <div className="gameType">
+                                        {allGameInfo[0].gameMode}
+                                    </div>
+                                    <div className="timeAgo">
+                                        {timeAgo} {minutesAgoString}
+                                    </div>
+                                    <div className="styledLine">
+
+                                    </div>
+                                    <div className={ifWin}>
+                                        {ifWin}
+                                    </div>
+                                    <div className="gameDuration">
+                                        {gameDurationMinutes}m {gameDurationSeconds}s
+                                    </div>
                                 </div>
                                 <div className="championAndSpellsImg">
                                     <div>
@@ -181,14 +239,117 @@ class GameHistory extends React.Component {
                                         {champions[allGameInfo[0].participants[allGameInfo[1][0]].championId]}
                                     </div>
                                 </div>
-                                <div>
-
+                                <div className="killsAndKDA">
+                                    <div className="killsDeats">
+                                        {kills} / <span className="colorRed">{deaths}</span> / {assists}
+                                    </div>
+                                    <div className="kda">
+                                        {kda} <span className="colorGrey">KDA</span>
+                                    </div>
+                                    <div className="killsInRows">
+                                        {killsInRows}
+                                    </div>
                                 </div>
-                                <div>
-
+                                <div className="level_cs_patr_kills">
+                                    <div className="champLevel">
+                                        <div>
+                                            Level
+                                        </div>
+                                        <div>
+                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.champLevel}
+                                        </div>
+                                    </div>
+                                    <div className="minions">
+                                        <div>
+                                            Minions
+                                        </div>
+                                        <div>
+                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.totalMinionsKilled}
+                                        </div>
+                                    </div>
+                                    <div className="minionsMinute">
+                                        <div>
+                                            Minions / minute
+                                        </div>
+                                        <div>
+                                            {Math.round(10 * (allGameInfo[0].participants[allGameInfo[1][0]].stats.totalMinionsKilled) / (allGameInfo[0].gameDuration / 60)) / 10}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
+                                <div className="items">
+                                    <div>
+                                        <div>
+                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item0 ?
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item0 + '.png'}
+                                                    alt={""} />
+                                                :
+                                                []
+                                            }
+                                        </div>
+                                        <div>
+                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item1 ?
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item1 + '.png'}
+                                                    alt={""} />
+                                                :
+                                                []
+                                            }
+                                        </div>
+                                        <div>
+                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item2 ?
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item2 + '.png'}
+                                                    alt={""} />
+                                                :
+                                                []
+                                            }
+                                        </div>
+                                        <div>
+                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item6 ?
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item6 + '.png'}
+                                                    alt={""} />
+                                                :
+                                                []
+                                            }
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item3 ?
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item3 + '.png'}
+                                                    alt={""} />
+                                                :
+                                                []
+                                            }
+                                        </div>
+                                        <div>
+                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item4 ?
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item4 + '.png'}
+                                                    alt={""} />
+                                                :
+                                                []
+                                            }
+                                        </div>
+                                        <div>
+                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item5 ?
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item5 + '.png'}
+                                                    alt={""} />
+                                                :
+                                                []
+                                            }
+                                        </div>
+                                        <div className="displayNone">
 
+                                        </div>
+                                    </div>
+                                    <div>
+
+                                    </div>
                                 </div>
                                 <div className="otherPlayers" >
                                     <div>

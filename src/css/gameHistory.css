@@ -1,15 +1,28 @@
-.gameHistory{
-    margin-bottom: 10px;
-    display: flex;
+#rightConteiner{
+    width: 885px;
+    height: 100%;
+    margin-left: 15px;
+    background-color: rgb(243, 243, 243);    
 }
+.gameHistory{
+    margin-bottom: 7px;
+    display: flex;
+    border-radius: 2%;
+}
+.gameHistory div{
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .otherPlayers{
     display: flex;
-    margin: 10px;
-
+    margin: 4px;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 .otherPlayers div{
-    margin-left: 10px;
-    width: 150px;
+    margin-right: 5px;
+    width: 120px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -19,7 +32,8 @@
     line-height: 25px;    
 }
 .playerList img{
-    width: 20px;
+    width: 18px;
+    height: 18px;
     margin-right: 5px;
     vertical-align: middle;
 }
@@ -30,10 +44,7 @@
 .championAndSpellsImg :first-child {
     display: flex;
 }
-.championAndSpellsImg div{
-    /* border: 3px solid red; */
 
-}
 .championsImg img{
     width: 60px;
     height: 60px;
@@ -52,8 +63,133 @@
     margin-top: 5px;
 }
 .win{
-    background-color: rgb(174, 215, 253);
+    background-color: rgb(193, 245, 177);
+    border: 1px solid rgb(21, 255, 0);
 }
 .lose{
-    background-color: rgb(236, 171, 171);
+    background-color: rgb(245, 188, 188);
+    border: 1px solid rgb(240, 120, 120);
+}
+.items{
+    margin: auto 10px auto 10px;
+}
+.items div{
+    display: flex;
+}
+.items div div{
+    /* border: 3px solid red; */
+    background-color: rgb(116, 116, 116, 0.5);
+    width: 25px;
+    height: 25px;
+    margin: 3px;
+    border-radius: 15%;
+}
+
+.items div div img{
+    width: 25px;
+    height: 25px;
+    opacity: 100%;
+    border-radius: 15%;
+
+}
+.displayNone{
+    display: none !important;
+}
+
+.killsAndKDA {
+    margin: auto 0px auto 0px;
+    text-align: center;
+    font-weight: 700;
+    color: rgb(75, 71, 71);
+}
+
+.killsAndKDA div{
+    margin-bottom: 10px;
+}
+.killsDeats{
+    font-size: 18px;
+}
+.kda{
+    font-size: 14px;
+
+}
+.killsInRows{
+    color: whitesmoke;
+    background-color: red;
+    border-radius: 25%;
+    padding: 2px 7px 2px 7px;
+    font-size: 14px;
+}
+.killsInRows:empty{
+    display: none;
+}
+
+.gameType{
+    margin: 15px auto 5px auto;
+    text-align: center;
+    font-weight: 700;
+    color: rgb(13, 6, 78);
+
+}
+.timeAgo{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.styledLine{
+    background-color: rgb(63, 173, 41);
+    height: 3px;
+    margin-bottom: 10px;
+    width: 30px;
+    opacity: 50%;
+}
+.Victory{
+    text-align: center;
+    margin-bottom: 5px;
+    color: rgb(0, 44, 240);
+}
+.Defeat{
+    text-align: center;
+    margin-bottom: 5px;
+    color: rgb(243, 0, 0);
+}
+
+.gameDuration{
+    text-align: center;
+    margin-bottom: 5px;
+}
+.colorRed{
+    color: rgb(209, 27, 27);
+}
+.colorGrey{
+    color: rgb(96, 104, 96);
+}
+.level_cs_patr_kills{
+    text-align: center;
+    font-size: 14px;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: rgb(82, 80, 80);
+}
+
+.champLevel {
+    margin-bottom: 5px;
+    
+}
+.minions {
+    margin-bottom: 5px;
+}
+
+.champLevel :nth-child(2) {
+    font-weight: 700;
+    color: rgb(192, 14, 14);
+}
+.minions :nth-child(2){
+    font-weight: 700;    
+    color: rgb(192, 14, 14);
+
+}
+.minionsMinute :nth-child(2){
+    font-weight: 700;    
+    color: rgb(192, 14, 14);
+
 }
