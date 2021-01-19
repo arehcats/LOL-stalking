@@ -125,11 +125,14 @@
 }
 
 .gameType{
-    margin: 15px auto 5px auto;
+    margin: 10px auto 5px auto;
     text-align: center;
     font-weight: 700;
     color: rgb(13, 6, 78);
-    max-width: 120px;
+    max-width: 140px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .timeAgo{
     text-align: center;
