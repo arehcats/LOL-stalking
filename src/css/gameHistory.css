@@ -129,7 +129,7 @@
     text-align: center;
     font-weight: 700;
     color: rgb(13, 6, 78);
-
+    max-width: 120px;
 }
 .timeAgo{
     text-align: center;

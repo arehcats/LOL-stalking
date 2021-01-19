@@ -15,6 +15,8 @@ const INITIAL_STATE = {
     39: "SummonerSnowURFSnowball_Mark",
     32: "SummonerSnowball",
     12: "SummonerTeleport",
+    11: "SummonerSmite",
+
   }
 };
 

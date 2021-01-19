@@ -202,7 +202,7 @@ class GameHistory extends React.Component {
                             return <div className={classBackround} key={i}>
                                 <div>
                                     <div className="gameType">
-                                        {allGameInfo[0].gameMode}
+                                        {this.props.gamesIDs[allGameInfo[0].queueId]}
                                     </div>
                                     <div className="timeAgo">
                                         {timeAgo} {minutesAgoString}

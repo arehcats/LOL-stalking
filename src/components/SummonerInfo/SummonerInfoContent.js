@@ -39,10 +39,9 @@ class SearchUserInputContent extends React.Component {
         let getStorage = JSON.parse(localStorage.getItem(this.state.SummonerName))
         let gamesIDsFromStorage = JSON.parse(localStorage.getItem("gamesIDs"))
 
+        
         if (gamesIDsFromStorage === null) {
             this.fetchGamesID()
-            this.props.setGamesIDs(gamesIDsFromStorage)
-
         }
         else {
             this.props.setGamesIDs(gamesIDsFromStorage)
@@ -96,9 +95,14 @@ class SearchUserInputContent extends React.Component {
             })
             return
         }
+        let gamesIDs = {}
         const jsonresponseGamesID_url = await responsegamesID_url.json()
+        jsonresponseGamesID_url.forEach((val)=>{
+            gamesIDs[val.queueId] = val.description
+        })
 
-        localStorage.setItem("gamesIDs", JSON.stringify(jsonresponseGamesID_url));
+        localStorage.setItem("gamesIDs", JSON.stringify(gamesIDs));
+        this.props.setGamesIDs(gamesIDs)
 
     }
 
@@ -310,6 +314,7 @@ class SearchUserInputContent extends React.Component {
                                                 isLodaing: true,
                                             })
                                             this.fetchSummDataOnMount();
+                                            // this.fetchGamesID();
                                         }}
                                     >
                                         Refresh
@@ -323,52 +328,52 @@ class SearchUserInputContent extends React.Component {
                         <div id="allOderInfo">
                             <div id="leftContainer">
                                 <div>
-                                {this.props.soloRank ?
-                                    <div className="rankSummoner">
-                                        <div>
-                                            <img src={'/assets/images/rank-icons/' + this.props.soloRank.tier + '.png'}
-                                                alt={this.props.soloRank.tier} />
+                                    {this.props.soloRank ?
+                                        <div className="rankSummoner">
+                                            <div>
+                                                <img src={'/assets/images/rank-icons/' + this.props.soloRank.tier + '.png'}
+                                                    alt={this.props.soloRank.tier} />
+                                            </div>
+                                            <div className="soloQandFlexStats">
+                                                <span>SoloQ rank</span>
+                                                <span>{this.props.soloRank.tier} {this.props.soloRank.rank}</span>
+                                                <span>{this.props.soloRank.leaguePoints} lp</span>
+                                                <span>{this.props.soloRank.wins}W / {this.props.soloRank.losses}L</span>
+                                                <span>Wina ratio <b>{Math.round(100 * (this.props.soloRank.wins / (this.props.soloRank.losses + this.props.soloRank.wins)))}%</b></span>
+                                            </div>
                                         </div>
-                                        <div className="soloQandFlexStats">
-                                            <span>SoloQ rank</span>
-                                            <span>{this.props.soloRank.tier} {this.props.soloRank.rank}</span>
-                                            <span>{this.props.soloRank.leaguePoints} lp</span>
-                                            <span>{this.props.soloRank.wins}W / {this.props.soloRank.losses}L</span>
-                                            <span>Wina ratio <b>{Math.round(100 * (this.props.soloRank.wins / (this.props.soloRank.losses + this.props.soloRank.wins)))}%</b></span>
-                                        </div>
-                                    </div>
 
-                                    :
-                                    <div className="unranked">
-                                        <span>SoloQ</span>
-                                        <img src={'/assets/images/rank-icons/provisional.png'}
-                                            alt="provisional" />
-                                        <b>Unranked</b>
-                                    </div>
-                                }
+                                        :
+                                        <div className="unranked">
+                                            <span>SoloQ</span>
+                                            <img src={'/assets/images/rank-icons/provisional.png'}
+                                                alt="provisional" />
+                                            <b>Unranked</b>
+                                        </div>
+                                    }
 
-                                {this.props.flexRank ?
-                                    <div className="rankSummoner">
-                                        <div>
-                                            <img src={'/assets/images/rank-icons/' + this.props.flexRank.tier + '.png'}
-                                                alt={this.props.flexRank.tier} />
+                                    {this.props.flexRank ?
+                                        <div className="rankSummoner">
+                                            <div>
+                                                <img src={'/assets/images/rank-icons/' + this.props.flexRank.tier + '.png'}
+                                                    alt={this.props.flexRank.tier} />
+                                            </div>
+                                            <div className="soloQandFlexStats">
+                                                <span>Flex 5 vs 5 rank</span>
+                                                <span>{this.props.flexRank.tier} {this.props.flexRank.rank}</span>
+                                                <span>{this.props.flexRank.leaguePoints} LP</span>
+                                                <span>{this.props.flexRank.wins}W / {this.props.flexRank.losses}L</span>
+                                                <span>Wina ratio <b>{Math.round(100 * (this.props.flexRank.wins / (this.props.flexRank.losses + this.props.flexRank.wins)))}%</b></span>
+                                            </div>
                                         </div>
-                                        <div className="soloQandFlexStats">
-                                            <span>Flex 5 vs 5 rank</span>
-                                            <span>{this.props.flexRank.tier} {this.props.flexRank.rank}</span>
-                                            <span>{this.props.flexRank.leaguePoints} LP</span>
-                                            <span>{this.props.flexRank.wins}W / {this.props.flexRank.losses}L</span>
-                                            <span>Wina ratio <b>{Math.round(100 * (this.props.flexRank.wins / (this.props.flexRank.losses + this.props.flexRank.wins)))}%</b></span>
+                                        :
+                                        <div className="unranked">
+                                            <span>Flex</span>
+                                            <img src={'/assets/images/rank-icons/provisional.png'}
+                                                alt="provisional" />
+                                            <b>Unranked</b>
                                         </div>
-                                    </div>
-                                    :
-                                    <div className="unranked">
-                                        <span>Flex</span>
-                                        <img src={'/assets/images/rank-icons/provisional.png'}
-                                            alt="provisional" />
-                                        <b>Unranked</b>
-                                    </div>
-                                }
+                                    }
                                 </div>
                                 <div id="championsStats">
                                     <ChampionsStatistic />
@@ -418,6 +423,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: "CHAMPIONS_IDs_SET", championsIDs }),
     setLast100games: last100games =>
         dispatch({ type: "LAST_100_GAMES_SET", last100games }),
+    setQueueIDs: queueIds =>
+        dispatch({ type: "QUEUE_ID_SET", queueIds }),
 
 });
 
