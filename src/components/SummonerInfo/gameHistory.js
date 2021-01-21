@@ -12,7 +12,7 @@ class GameHistory extends React.Component {
         this.state = {
             isLoading: true,
             displayedGames: 0,
-            fetchStep: 2,
+            fetchStep: 21,
             status: false,
             errorMessage: "",
             fetchedGames: [],
@@ -43,7 +43,7 @@ class GameHistory extends React.Component {
         let fetchedGames = this.state.fetchedGames
         const condition = displayedGames + fetchStep
         let matchIDs = []
-        let baisicsGameInfo = []
+        let baisicsGameInfo = this.state.baisicsGameInfo
 
         for (; displayedGames < condition; displayedGames++) {
             matchIDs.push(lastGames[displayedGames].gameId)
@@ -96,10 +96,10 @@ class GameHistory extends React.Component {
                 }
             }
         }))
-        console.log(rest);
+        // console.log(rest);
 
         fetchedGames.push(...rest)
-        console.log(fetchedGames);
+        // console.log(fetchedGames);
 
         this.setState({
             fetchedGames: fetchedGames,
@@ -132,13 +132,13 @@ class GameHistory extends React.Component {
                         {this.state.fetchedGames.map((allGameInfo, i) => {
                             let classBackround = "gameHistory lose"
                             // console.log(allGameInfo);
-                            console.log(allGameInfo[0].gameId);
-                            console.log(i);
+                            // console.log(allGameInfo[0].gameId);
+                            // console.log(i);
 
                             let participantId = []
 
                             allGameInfo[0].participants.forEach((participant, participantsIndex) => {
-
+                                
                                 if (participant.championId === this.state.baisicsGameInfo[i].champion) {
 
                                     participantId.push(participantsIndex, participant.teamId)
@@ -209,7 +209,7 @@ class GameHistory extends React.Component {
                                 }
                             }
                             return <div className={classBackround} key={i}>
-                                <div>
+                                <div className = "basicInfoGame">
                                     <div title={this.props.gamesIDs[allGameInfo[0].queueId]} className="gameType">
                                         {this.props.gamesIDs[allGameInfo[0].queueId]}
                                     </div>
@@ -362,12 +362,12 @@ class GameHistory extends React.Component {
                                 </div>
                                 <div className="otherPlayers" >
                                     <div>
-                                        {allGameInfo[0].participantIdentities.map((participant, i) => {
-                                            if (i > 4) return []
+                                        {allGameInfo[0].participantIdentities.map((participant, i_OtherPlayers) => {
+                                            if (i_OtherPlayers > 4) return []
                                             else {
-                                                return <div className="playerList" key={i}>
+                                                return <div className="playerList" key={i_OtherPlayers}>
                                                     <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
-                                                        + champions[allGameInfo[0].participants[i].championId] + '.png'}
+                                                        + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}
                                                 </div>
@@ -375,12 +375,12 @@ class GameHistory extends React.Component {
                                         })}
                                     </div>
                                     <div>
-                                        {allGameInfo[0].participantIdentities.map((participant, i) => {
-                                            if (i < 5) return []
+                                        {allGameInfo[0].participantIdentities.map((participant, i_OtherPlayers) => {
+                                            if (i_OtherPlayers < 5) return []
                                             else {
-                                                return <div className="playerList" key={i}>
+                                                return <div className="playerList" key={i_OtherPlayers}>
                                                     <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
-                                                        + champions[allGameInfo[0].participants[i].championId] + '.png'}
+                                                        + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}
                                                 </div>
@@ -403,44 +403,6 @@ class GameHistory extends React.Component {
         );
     }
 }
-
-
-
-
-
-const gameHistoryRender = (championsPlayed, dictionaryChampsID) => {
-    let elemtns = []
-    championsPlayed.forEach((val, i) => {
-                elemtns.push(<div key={i}>
-                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/' + dictionaryChampsID[val[0]] + '.png'}
-                        alt={"Summoner icon"} />
-                    <div className="statsListingInside" >
-                        <div>
-                            <span className="boldStats">{dictionaryChampsID[val[0]]}</span>
-                        </div>
-                        <div>
-                            <span className="fontSizeStats">Played games: </span><span className="boldStats">{val[1]}</span>
-                        </div>
-                    </div>
-                </div>)
-    })
-
-    return elemtns
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

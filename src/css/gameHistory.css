@@ -123,6 +123,9 @@
 .killsInRows:empty{
     display: none;
 }
+.basicInfoGame{
+    width: 130px;
+}
 
 .gameType{
     margin: 10px auto 5px auto;
