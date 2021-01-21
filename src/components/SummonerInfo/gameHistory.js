@@ -16,12 +16,21 @@ class GameHistory extends React.Component {
             status: false,
             errorMessage: "",
             fetchedGames: [],
+            baisicsGameInfo: [],
         };
+        this._isMounted = false;
 
     };
 
     componentDidMount() {
+        this._isMounted = true;
+
         this.fetchInfoAboutGame()
+
+        // console.log(localStorage.length);
+        // for (var i = 0; i < localStorage.length; i++){
+        //    console.log(localStorage.getItem(localStorage.key(i)));
+        // }
 
     }
 
@@ -49,76 +58,61 @@ class GameHistory extends React.Component {
         const region = "https://eun1.api.riotgames.com"
         const cors = "https://cors-anywhere.herokuapp.com/"
         let getStorageGame
-        let fetchURLs = []
-        matchIDs.forEach(matchID => {
+        // let fetchURLs = []
+        let response = ''
+        let timeInMs = Date.now();
+        // let gameInfo = ''
+
+        let [...rest] = await Promise.all(
+        matchIDs.map(async (matchID) => {
             getStorageGame = JSON.parse(localStorage.getItem(matchID))
+            // getStorageGame = false
             // console.log(getStorageGame);
             if (getStorageGame) {
-                // console.log("storage");
-                fetchedGames.push(getStorageGame)
-                fetchURLs.push("")
+                console.log("11111");
+
+                return getStorageGame
             }
             else {
-                fetchURLs.push(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
+
+                response = await fetch(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
+
+                if (!this._isMounted) return
+
+                if (response.status !== 200) {
+                    console.log("22222");
+
+                    return "error"
+
+                }
+                else {
+                    console.log("33333");
+                    let jsonresponse = await response.json()
+                    console.log(jsonresponse);
+                    let returngameInfo = [jsonresponse, timeInMs]
+                    localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
+                    return returngameInfo
+
+                }
             }
-            // fetchURLs.push(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
+        }))
+        console.log(rest);
 
-        });
-        // console.log(fetchURLs);
-
-        // const [...rest] = await Promise.all(
-        //     [
-        //         fetch(fetchURLs[0]),
-        //         fetch(fetchURLs[1]),
-        //     ]
-        // );
-
-        // console.log(rest);
-
-        // const game1 = await rest[0].json();
-        // const game2 = await rest[1].json();
-        // let game1participant = []
-        // let game2participant = []
-
-        // game1.participants.forEach((participant, i) => {
-        //     console.log(participant);
-
-        //     if (participant.championId === baisicsGameInfo[0].champion) {
-        //         console.log("111");
-        //         game1participant.push(i, participant.teamId, baisicsGameInfo[0].timestamp)
-
-        //     }
-        // })
-        // game2.participants.forEach((participant, i) => {
-        //     console.log(participant);
-
-        //     if (participant.championId === baisicsGameInfo[1].champion) {
-        //         console.log("222");
-        //         game2participant.push(i, participant.teamId, baisicsGameInfo[1].timestamp)
-        //     }
-        // })
-
-        // console.log(game1participant);
-        // console.log(game2participant);
-
-        // let gameInfo1 = [game1, game1participant]
-        // let gameInfo2 = [game2, game2participant]
-        // console.log(game1);
-        // console.log(game2);
-
-        // localStorage.setItem(game1.gameId, JSON.stringify(gameInfo1));
-        // localStorage.setItem(game2.gameId, JSON.stringify(gameInfo2));
-
-
-        // fetchedGames.push(gameInfo1, gameInfo2)
+        fetchedGames.push(...rest)
+        console.log(fetchedGames);
 
         this.setState({
             fetchedGames: fetchedGames,
             displayedGames: displayedGames,
             isLoading: false,
+            baisicsGameInfo: baisicsGameInfo,
         })
 
 
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render() {
@@ -137,15 +131,30 @@ class GameHistory extends React.Component {
                     <div>
                         {this.state.fetchedGames.map((allGameInfo, i) => {
                             let classBackround = "gameHistory lose"
-                            console.log(allGameInfo);
-                            console.log(allGameInfo[0]);
-                            let kills = allGameInfo[0].participants[allGameInfo[1][0]].stats.kills
-                            let deaths = allGameInfo[0].participants[allGameInfo[1][0]].stats.deaths
-                            let assists = allGameInfo[0].participants[allGameInfo[1][0]].stats.assists
+                            // console.log(allGameInfo);
+                            console.log(allGameInfo[0].gameId);
+                            console.log(i);
+
+                            let participantId = []
+
+                            allGameInfo[0].participants.forEach((participant, participantsIndex) => {
+
+                                if (participant.championId === this.state.baisicsGameInfo[i].champion) {
+
+                                    participantId.push(participantsIndex, participant.teamId)
+
+                                }
+                            })
+
+                            let kills = allGameInfo[0].participants[participantId[0]].stats.kills
+                            let deaths = allGameInfo[0].participants[participantId[0]].stats.deaths
+                            let assists = allGameInfo[0].participants[participantId[0]].stats.assists
+
                             let kda = Math.round(100 * (kills + assists) / deaths) / 100
+                            if (kda === Infinity) kda = "Perfect"
+
                             let gameDurationMinutes = Math.round((allGameInfo[0].gameDuration) / 60)
                             let gameDurationSeconds = (allGameInfo[0].gameDuration) % 60
-
                             let timeInMs = Date.now();
                             let gameCreation = allGameInfo[0].gameCreation
                             let timeMinutes = Math.round((timeInMs - gameCreation) / 60000)
@@ -165,34 +174,34 @@ class GameHistory extends React.Component {
                             }
 
                             let ifWin
-                            if (allGameInfo[0].participants[allGameInfo[1][0]].stats.win) ifWin = "Victory"
+                            if (allGameInfo[0].participants[participantId[0]].stats.win) ifWin = "Victory"
                             else ifWin = "Defeat"
 
 
 
                             let killsInRows
 
-                            if (allGameInfo[0].participants[allGameInfo[1][0]].stats.pentaKills) {
+                            if (allGameInfo[0].participants[participantId[0]].stats.pentaKills) {
                                 killsInRows = "Penta kill"
                             }
-                            else if (allGameInfo[0].participants[allGameInfo[1][0]].stats.quadraKills) {
+                            else if (allGameInfo[0].participants[participantId[0]].stats.quadraKills) {
                                 killsInRows = "Quadra kill"
                             }
-                            else if (allGameInfo[0].participants[allGameInfo[1][0]].stats.tripleKills) {
+                            else if (allGameInfo[0].participants[participantId[0]].stats.tripleKills) {
                                 killsInRows = "Triple kill"
                             }
-                            else if (allGameInfo[0].participants[allGameInfo[1][0]].stats.doubleKills) {
+                            else if (allGameInfo[0].participants[participantId[0]].stats.doubleKills) {
                                 killsInRows = "Dobule kill"
                             }
 
-                            if (allGameInfo[0].teams[0].teamId === allGameInfo[1][1]) {
+                            if (allGameInfo[0].teams[0].teamId === participantId[1]) {
                                 if (allGameInfo[0].teams[0].win === "Fail") {
                                 }
                                 else {
                                     classBackround = "gameHistory win"
                                 }
                             }
-                            else if (allGameInfo[0].teams[1].teamId === allGameInfo[1][1]) {
+                            else if (allGameInfo[0].teams[1].teamId === participantId[1]) {
                                 if (allGameInfo[0].teams[1].win === "Fail") {
                                 }
                                 else {
@@ -201,7 +210,7 @@ class GameHistory extends React.Component {
                             }
                             return <div className={classBackround} key={i}>
                                 <div>
-                                    <div title = {this.props.gamesIDs[allGameInfo[0].queueId]} className="gameType">
+                                    <div title={this.props.gamesIDs[allGameInfo[0].queueId]} className="gameType">
                                         {this.props.gamesIDs[allGameInfo[0].queueId]}
                                     </div>
                                     <div className="timeAgo">
@@ -221,22 +230,22 @@ class GameHistory extends React.Component {
                                     <div>
                                         <div className="championsImg" >
                                             <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
-                                                + champions[allGameInfo[0].participants[allGameInfo[1][0]].championId] + '.png'}
+                                                + champions[allGameInfo[0].participants[participantId[0]].championId] + '.png'}
                                                 alt={"Champion"} />
                                         </div>
                                         <div className="SpellsImg">
                                             <img
                                                 src={"http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/"
-                                                    + this.props.spellsDictionary[allGameInfo[0].participants[allGameInfo[1][0]].spell1Id] + ".png"}
+                                                    + this.props.spellsDictionary[allGameInfo[0].participants[participantId[0]].spell1Id] + ".png"}
                                                 alt={"Spell"} />
                                             <img
                                                 src={"http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/"
-                                                    + this.props.spellsDictionary[allGameInfo[0].participants[allGameInfo[1][0]].spell2Id] + ".png"}
+                                                    + this.props.spellsDictionary[allGameInfo[0].participants[participantId[0]].spell2Id] + ".png"}
                                                 alt={"Spell"} />
                                         </div>
                                     </div>
                                     <div className="championName">
-                                        {champions[allGameInfo[0].participants[allGameInfo[1][0]].championId]}
+                                        {champions[allGameInfo[0].participants[participantId[0]].championId]}
                                     </div>
                                 </div>
                                 <div className="killsAndKDA">
@@ -256,7 +265,7 @@ class GameHistory extends React.Component {
                                             Level
                                         </div>
                                         <div>
-                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.champLevel}
+                                            {allGameInfo[0].participants[participantId[0]].stats.champLevel}
                                         </div>
                                     </div>
                                     <div className="minions">
@@ -264,7 +273,7 @@ class GameHistory extends React.Component {
                                             Minions
                                         </div>
                                         <div>
-                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.totalMinionsKilled}
+                                            {allGameInfo[0].participants[participantId[0]].stats.totalMinionsKilled}
                                         </div>
                                     </div>
                                     <div className="minionsMinute">
@@ -272,43 +281,43 @@ class GameHistory extends React.Component {
                                             Minions / minute
                                         </div>
                                         <div>
-                                            {Math.round(10 * (allGameInfo[0].participants[allGameInfo[1][0]].stats.totalMinionsKilled) / (allGameInfo[0].gameDuration / 60)) / 10}
+                                            {Math.round(10 * (allGameInfo[0].participants[participantId[0]].stats.totalMinionsKilled) / (allGameInfo[0].gameDuration / 60)) / 10}
                                         </div>
                                     </div>
                                 </div>
                                 <div className="items">
                                     <div>
                                         <div>
-                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item0 ?
+                                            {allGameInfo[0].participants[participantId[0]].stats.item0 ?
                                                 <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
-                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item0 + '.png'}
+                                                    + allGameInfo[0].participants[participantId[0]].stats.item0 + '.png'}
                                                     alt={""} />
                                                 :
                                                 []
                                             }
                                         </div>
                                         <div>
-                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item1 ?
+                                            {allGameInfo[0].participants[participantId[0]].stats.item1 ?
                                                 <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
-                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item1 + '.png'}
+                                                    + allGameInfo[0].participants[participantId[0]].stats.item1 + '.png'}
                                                     alt={""} />
                                                 :
                                                 []
                                             }
                                         </div>
                                         <div>
-                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item2 ?
+                                            {allGameInfo[0].participants[participantId[0]].stats.item2 ?
                                                 <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
-                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item2 + '.png'}
+                                                    + allGameInfo[0].participants[participantId[0]].stats.item2 + '.png'}
                                                     alt={""} />
                                                 :
                                                 []
                                             }
                                         </div>
                                         <div>
-                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item6 ?
+                                            {allGameInfo[0].participants[participantId[0]].stats.item6 ?
                                                 <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
-                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item6 + '.png'}
+                                                    + allGameInfo[0].participants[participantId[0]].stats.item6 + '.png'}
                                                     alt={""} />
                                                 :
                                                 []
@@ -317,27 +326,27 @@ class GameHistory extends React.Component {
                                     </div>
                                     <div>
                                         <div>
-                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item3 ?
+                                            {allGameInfo[0].participants[participantId[0]].stats.item3 ?
                                                 <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
-                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item3 + '.png'}
+                                                    + allGameInfo[0].participants[participantId[0]].stats.item3 + '.png'}
                                                     alt={""} />
                                                 :
                                                 []
                                             }
                                         </div>
                                         <div>
-                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item4 ?
+                                            {allGameInfo[0].participants[participantId[0]].stats.item4 ?
                                                 <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
-                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item4 + '.png'}
+                                                    + allGameInfo[0].participants[participantId[0]].stats.item4 + '.png'}
                                                     alt={""} />
                                                 :
                                                 []
                                             }
                                         </div>
                                         <div>
-                                            {allGameInfo[0].participants[allGameInfo[1][0]].stats.item5 ?
+                                            {allGameInfo[0].participants[participantId[0]].stats.item5 ?
                                                 <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
-                                                    + allGameInfo[0].participants[allGameInfo[1][0]].stats.item5 + '.png'}
+                                                    + allGameInfo[0].participants[participantId[0]].stats.item5 + '.png'}
                                                     alt={""} />
                                                 :
                                                 []
@@ -394,6 +403,46 @@ class GameHistory extends React.Component {
         );
     }
 }
+
+
+
+
+
+const gameHistoryRender = (championsPlayed, dictionaryChampsID) => {
+    let elemtns = []
+    championsPlayed.forEach((val, i) => {
+                elemtns.push(<div key={i}>
+                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/' + dictionaryChampsID[val[0]] + '.png'}
+                        alt={"Summoner icon"} />
+                    <div className="statsListingInside" >
+                        <div>
+                            <span className="boldStats">{dictionaryChampsID[val[0]]}</span>
+                        </div>
+                        <div>
+                            <span className="fontSizeStats">Played games: </span><span className="boldStats">{val[1]}</span>
+                        </div>
+                    </div>
+                </div>)
+    })
+
+    return elemtns
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const Loading = ({ status, errorMessage }) => {
     if (status === false) {
