@@ -19,6 +19,7 @@ class GameHistory extends React.Component {
             baisicsGameInfo: [],
             loadAgain: false,
             loadMore: true,
+            isDisabled: false,
         };
         this._isMounted = false;
 
@@ -48,13 +49,8 @@ class GameHistory extends React.Component {
         let baisicsGameInfo = this.state.baisicsGameInfo
 
 
-        console.log(this.props.last100games);
         for (; displayedGames < condition; displayedGames++) {
-            console.log(displayedGames);
-            console.log(lastGames.length);
             if (lastGames.length > displayedGames) {
-                console.log("loop");
-                console.log(displayedGames);
                 matchIDs.push(lastGames[displayedGames].gameId)
                 baisicsGameInfo.push(lastGames[displayedGames])
             }
@@ -65,8 +61,9 @@ class GameHistory extends React.Component {
             }
         }
 
-        console.log(matchIDs);
-        // matchIDs[2] = "4444d44"
+        // console.log(matchIDs);
+        matchIDs[1] = "4444d44"
+        baisicsGameInfo.push(lastGames[3])
 
         // console.log(baisicsGameInfo);
         // console.log(matchIDs);
@@ -102,12 +99,11 @@ class GameHistory extends React.Component {
                     if (!this._isMounted) return
                     if (response.status !== 200) {
                         console.log("22222");
-                        return ["error", cors + region + "/lol/match/v4/matches/" + matchIDs[1] + RiotApiKey]
+                        return ["error", cors + region + "/lol/match/v4/matches/" + matchIDs[0] + RiotApiKey]
                     }
                     else {
                         console.log("33333");
                         let jsonresponse = await response.json()
-                        console.log(jsonresponse);
                         let returngameInfo = [jsonresponse, timeInMs]
                         localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
                         return returngameInfo
@@ -123,8 +119,9 @@ class GameHistory extends React.Component {
         this.setState({
             fetchedGames: fetchedGames,
             displayedGames: displayedGames,
-            isLoading: false,
             baisicsGameInfo: baisicsGameInfo,
+            isLoading: false,
+            isDisabled: false,
         })
 
 
@@ -138,18 +135,13 @@ class GameHistory extends React.Component {
         let champions = this.props.championsIDs
         return (
             <div id="rightConteiner">
-                <div
-                    onClick={() => {
-                        console.log(this.state.fetchedGames);
-                    }}
-                >
-                    {/* click */}
-                </div>
                 { this.state.isLoading ? <Loading status={this.state.status} errorMessage={this.state.errorMessage} />
                     :
                     <div>
                         {this.state.fetchedGames.map((allGameInfo, i) => {
                             console.log(allGameInfo);
+                            console.log(this.state.baisicsGameInfo);
+                            
                             if (allGameInfo[0] === "error") {
 
                                 return <div key={i} onClick={async () => {
@@ -173,13 +165,13 @@ class GameHistory extends React.Component {
                                         let timeInMs = Date.now();
 
                                         let jsonresponse = await response.json()
-                                        console.log(jsonresponse);
+                                        // console.log(jsonresponse);
                                         let returngameInfo = [jsonresponse, timeInMs]
                                         localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
 
                                         let games = this.state.fetchedGames
                                         games[i] = returngameInfo
-
+                                        // console.log(games);
                                         this.setState({
                                             fetchedGames: games,
                                             loadAgain: false,
@@ -464,19 +456,20 @@ class GameHistory extends React.Component {
                         })}
                         <div>
                             {this.state.loadMore ?
-                                <div
-                                className = "showMoreHistory"
+                                <Button
                                     onClick={() => {
-                                        this.fetchInfoAboutGame()
+                                        this.setState({
+                                            isDisabled: true,
+                                        }, () => {
+                                            this.fetchInfoAboutGame()
+                                        })
                                     }}
-                                >
-                                    <Button id="showMoreHistoryButton" type="submit" variant="outlined" color="primary">
-                                        Show more
+                                    disabled={this.state.isDisabled} id="showMoreHistoryButton" type="submit" variant="outlined" color="primary">
+                                    {this.state.isDisabled ? <div align="center"><CircularProgress /></div> : "Show more"}
                                 </Button>
-                                </div>
                                 :
-                                <Button id="showMoreHistoryButton" disabled = {true} type="submit" variant="outlined" color="primary">
-                                        No more games to display
+                                <Button id="showMoreHistoryButton" disabled={true} type="submit" variant="outlined" color="primary">
+                                    No more games to display
                                 </Button>
                             }
                         </div>
