@@ -114,7 +114,7 @@ class ChampionsStatistic extends React.Component {
 
 const Stats = ({ stats, statsComponents, displayNumber }) => {
     if (stats === 0) {
-        if (statsComponents[0].length === 0) return <div className="gamesNotFound" >You haven't play this game mode in preseason</div>
+        if (statsComponents[0].length === 0) return <div className="gamesNotFound" >You haven't play this game mode in this season</div>
         return <div className="statsListing" >
             {statsComponents[0].map((val, i) => {
                 if (i > displayNumber) return null
@@ -123,7 +123,7 @@ const Stats = ({ stats, statsComponents, displayNumber }) => {
         </div>
     }
     else if (stats === 1) {
-        if (statsComponents[1].length === 0) return <div className="gamesNotFound">You haven't play this game mode in preseason</div>
+        if (statsComponents[1].length === 0) return <div className="gamesNotFound">You haven't play this game mode in this season</div>
         return <div className="statsListing" >
             {statsComponents[1].map((val, i) => {
                 if (i > displayNumber) return null
@@ -132,7 +132,7 @@ const Stats = ({ stats, statsComponents, displayNumber }) => {
         </div>
     }
     else {
-        if (statsComponents[2].length === 0) return <div className="gamesNotFound">You haven't play this game mode in preseason</div>
+        if (statsComponents[2].length === 0) return <div className="gamesNotFound">You haven't play this game mode in this season</div>
         return <div className="statsListing" >
             {statsComponents[2].map((val, i) => {
                 if (i > displayNumber) return null

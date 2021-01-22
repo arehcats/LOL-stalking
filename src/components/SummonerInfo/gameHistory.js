@@ -181,7 +181,7 @@ class GameHistory extends React.Component {
 
 
                                 }}>
-                                    {this.state.loadAgain ? <div align="center"><CircularProgress /></div>
+                                    {this.state.loadAgain ? <div className = "circular" align="center"><CircularProgress /></div>
                                         :
                                         <div className="refresh">
                                             Ups.. something went wrong, click to try refresh

@@ -228,6 +228,12 @@
 .refresh{
     cursor: pointer;
 }
+.circular{
+    height: 72px;
+    margin-bottom: 7px;
+
+
+}
 
 #showMoreHistoryButton {
     background-color: rgb(159, 241, 233);
