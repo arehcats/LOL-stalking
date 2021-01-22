@@ -70,6 +70,10 @@
     background-color: rgb(245, 188, 188);
     border: 1px solid rgb(240, 120, 120);
 }
+.remakeGame{
+    background-color: rgb(214, 210, 210);
+    border: 1px solid rgb(175, 170, 170);
+}
 .items{
     margin: auto 10px auto 10px;
 }
@@ -142,7 +146,7 @@
     margin-bottom: 10px;
 }
 .styledLine{
-    background-color: rgb(63, 173, 41);
+    background-color: rgb(73, 141, 60);
     height: 3px;
     margin-bottom: 10px;
     width: 30px;
@@ -152,11 +156,21 @@
     text-align: center;
     margin-bottom: 5px;
     color: rgb(0, 44, 240);
+    font-weight: 700;
+
 }
 .Defeat{
     text-align: center;
     margin-bottom: 5px;
     color: rgb(243, 0, 0);
+    font-weight: 700;
+
+}
+.Remake{
+    text-align: center;
+    margin-bottom: 5px;
+    color: rgb(0, 0, 0);
+    font-weight: 700;
 }
 
 .gameDuration{
@@ -198,4 +212,28 @@
     font-weight: 700;    
     color: rgb(192, 14, 14);
 
+}
+.refresh{
+    margin-bottom: 7px;
+    display: flex;
+    border-radius: 2%;
+    background-color: rgb(247, 227, 189);
+    border: 1px solid rgb(255, 0, 0);
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    justify-content: center;
+    font-size: 20px;
+}
+.refresh{
+    cursor: pointer;
+}
+.showMoreHistory{
+    width: 885px;
+}
+#showMoreHistoryButton {
+    background-color: rgb(159, 241, 233);
+    margin: auto;
+    display: block;
+    width: 250px;
 }

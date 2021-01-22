@@ -339,7 +339,7 @@ class SearchUserInputContent extends React.Component {
                                                 <span>{this.props.soloRank.tier} {this.props.soloRank.rank}</span>
                                                 <span>{this.props.soloRank.leaguePoints} lp</span>
                                                 <span>{this.props.soloRank.wins}W / {this.props.soloRank.losses}L</span>
-                                                <span>Wina ratio <b>{Math.round(100 * (this.props.soloRank.wins / (this.props.soloRank.losses + this.props.soloRank.wins)))}%</b></span>
+                                                <span>Win ratio <b>{Math.round(100 * (this.props.soloRank.wins / (this.props.soloRank.losses + this.props.soloRank.wins)))}%</b></span>
                                             </div>
                                         </div>
 
@@ -363,7 +363,7 @@ class SearchUserInputContent extends React.Component {
                                                 <span>{this.props.flexRank.tier} {this.props.flexRank.rank}</span>
                                                 <span>{this.props.flexRank.leaguePoints} LP</span>
                                                 <span>{this.props.flexRank.wins}W / {this.props.flexRank.losses}L</span>
-                                                <span>Wina ratio <b>{Math.round(100 * (this.props.flexRank.wins / (this.props.flexRank.losses + this.props.flexRank.wins)))}%</b></span>
+                                                <span>Win ratio <b>{Math.round(100 * (this.props.flexRank.wins / (this.props.flexRank.losses + this.props.flexRank.wins)))}%</b></span>
                                             </div>
                                         </div>
                                         :

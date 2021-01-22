@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../css/gameHistory.css'
-// import Button from '@material-ui/core/Button'
+import Button from '@material-ui/core/Button'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -12,11 +12,13 @@ class GameHistory extends React.Component {
         this.state = {
             isLoading: true,
             displayedGames: 0,
-            fetchStep: 21,
+            fetchStep: 3,
             status: false,
             errorMessage: "",
             fetchedGames: [],
             baisicsGameInfo: [],
+            loadAgain: false,
+            loadMore: true,
         };
         this._isMounted = false;
 
@@ -45,10 +47,27 @@ class GameHistory extends React.Component {
         let matchIDs = []
         let baisicsGameInfo = this.state.baisicsGameInfo
 
+
+        console.log(this.props.last100games);
         for (; displayedGames < condition; displayedGames++) {
-            matchIDs.push(lastGames[displayedGames].gameId)
-            baisicsGameInfo.push(lastGames[displayedGames])
+            console.log(displayedGames);
+            console.log(lastGames.length);
+            if (lastGames.length > displayedGames) {
+                console.log("loop");
+                console.log(displayedGames);
+                matchIDs.push(lastGames[displayedGames].gameId)
+                baisicsGameInfo.push(lastGames[displayedGames])
+            }
+            else {
+                this.setState({
+                    loadMore: false
+                })
+            }
         }
+
+        console.log(matchIDs);
+        // matchIDs[2] = "4444d44"
+
         // console.log(baisicsGameInfo);
         // console.log(matchIDs);
         // console.log(displayedGames);
@@ -64,39 +83,39 @@ class GameHistory extends React.Component {
         // let gameInfo = ''
 
         let [...rest] = await Promise.all(
-        matchIDs.map(async (matchID) => {
-            getStorageGame = JSON.parse(localStorage.getItem(matchID))
-            // getStorageGame = false
-            // console.log(getStorageGame);
-            if (getStorageGame) {
-                console.log("11111");
+            matchIDs.map(async (matchID, index) => {
+                getStorageGame = JSON.parse(localStorage.getItem(matchID))
+                // getStorageGame = false
+                // console.log(getStorageGame);
+                // if (index === 2) return "error"
 
-                return getStorageGame
-            }
-            else {
 
-                response = await fetch(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
+                if (getStorageGame) {
+                    console.log("11111");
 
-                if (!this._isMounted) return
-
-                if (response.status !== 200) {
-                    console.log("22222");
-
-                    return "error"
-
+                    return getStorageGame
                 }
                 else {
-                    console.log("33333");
-                    let jsonresponse = await response.json()
-                    console.log(jsonresponse);
-                    let returngameInfo = [jsonresponse, timeInMs]
-                    localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
-                    return returngameInfo
+                    console.log("dddd");
+                    response = await fetch(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
 
+                    if (!this._isMounted) return
+                    if (response.status !== 200) {
+                        console.log("22222");
+                        return ["error", cors + region + "/lol/match/v4/matches/" + matchIDs[1] + RiotApiKey]
+                    }
+                    else {
+                        console.log("33333");
+                        let jsonresponse = await response.json()
+                        console.log(jsonresponse);
+                        let returngameInfo = [jsonresponse, timeInMs]
+                        localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
+                        return returngameInfo
+
+                    }
                 }
-            }
-        }))
-        // console.log(rest);
+            }))
+        console.log(rest);
 
         fetchedGames.push(...rest)
         // console.log(fetchedGames);
@@ -130,15 +149,60 @@ class GameHistory extends React.Component {
                     :
                     <div>
                         {this.state.fetchedGames.map((allGameInfo, i) => {
+                            console.log(allGameInfo);
+                            if (allGameInfo[0] === "error") {
+
+                                return <div key={i} onClick={async () => {
+
+                                    this.setState({
+                                        loadAgain: true,
+                                    })
+
+                                    let response = await fetch(allGameInfo[1])
+
+                                    if (!this._isMounted) return
+
+                                    if (response.status !== 200) {
+                                        console.log("aaaaaaaaaaaaaa");
+                                        return this.setState({
+                                            loadAgain: false,
+                                        })
+                                    }
+                                    else {
+                                        console.log("bbbbbbbbbbbb");
+                                        let timeInMs = Date.now();
+
+                                        let jsonresponse = await response.json()
+                                        console.log(jsonresponse);
+                                        let returngameInfo = [jsonresponse, timeInMs]
+                                        localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
+
+                                        let games = this.state.fetchedGames
+                                        games[i] = returngameInfo
+
+                                        this.setState({
+                                            fetchedGames: games,
+                                            loadAgain: false,
+                                        })
+
+                                    }
+
+
+                                }}>
+                                    {this.state.loadAgain ? <div align="center"><CircularProgress /></div>
+                                        :
+                                        <div className="refresh">
+                                            Ups.. something went wrong, click to try refresh
+                                        </div>
+                                    }
+                                </div>
+                            }
                             let classBackround = "gameHistory lose"
-                            // console.log(allGameInfo);
-                            // console.log(allGameInfo[0].gameId);
-                            // console.log(i);
 
                             let participantId = []
 
                             allGameInfo[0].participants.forEach((participant, participantsIndex) => {
-                                
+
                                 if (participant.championId === this.state.baisicsGameInfo[i].champion) {
 
                                     participantId.push(participantsIndex, participant.teamId)
@@ -173,11 +237,6 @@ class GameHistory extends React.Component {
                                 minutesAgoString = "days ago"
                             }
 
-                            let ifWin
-                            if (allGameInfo[0].participants[participantId[0]].stats.win) ifWin = "Victory"
-                            else ifWin = "Defeat"
-
-
 
                             let killsInRows
 
@@ -194,6 +253,12 @@ class GameHistory extends React.Component {
                                 killsInRows = "Dobule kill"
                             }
 
+
+
+                            let ifWin
+                            if (allGameInfo[0].participants[participantId[0]].stats.win) ifWin = "Victory"
+                            else ifWin = "Defeat"
+
                             if (allGameInfo[0].teams[0].teamId === participantId[1]) {
                                 if (allGameInfo[0].teams[0].win === "Fail") {
                                 }
@@ -208,8 +273,15 @@ class GameHistory extends React.Component {
                                     classBackround = "gameHistory win"
                                 }
                             }
+                            // check if remake
+                            if (gameDurationMinutes * 60 < 401) {
+                                classBackround = "gameHistory remakeGame"
+                                ifWin = "Remake"
+                            }
+
+
                             return <div className={classBackround} key={i}>
-                                <div className = "basicInfoGame">
+                                <div className="basicInfoGame">
                                     <div title={this.props.gamesIDs[allGameInfo[0].queueId]} className="gameType">
                                         {this.props.gamesIDs[allGameInfo[0].queueId]}
                                     </div>
@@ -273,7 +345,7 @@ class GameHistory extends React.Component {
                                             Minions
                                         </div>
                                         <div>
-                                            {allGameInfo[0].participants[participantId[0]].stats.totalMinionsKilled}
+                                            {allGameInfo[0].participants[participantId[0]].stats.totalMinionsKilled + allGameInfo[0].participants[participantId[0]].stats.neutralMinionsKilled}
                                         </div>
                                     </div>
                                     <div className="minionsMinute">
@@ -281,7 +353,7 @@ class GameHistory extends React.Component {
                                             Minions / minute
                                         </div>
                                         <div>
-                                            {Math.round(10 * (allGameInfo[0].participants[participantId[0]].stats.totalMinionsKilled) / (allGameInfo[0].gameDuration / 60)) / 10}
+                                            {Math.round(10 * (allGameInfo[0].participants[participantId[0]].stats.totalMinionsKilled + allGameInfo[0].participants[participantId[0]].stats.neutralMinionsKilled) / (allGameInfo[0].gameDuration / 60)) / 10}
                                         </div>
                                     </div>
                                 </div>
@@ -390,15 +462,26 @@ class GameHistory extends React.Component {
                                 </div>
                             </div>
                         })}
+                        <div>
+                            {this.state.loadMore ?
+                                <div
+                                className = "showMoreHistory"
+                                    onClick={() => {
+                                        this.fetchInfoAboutGame()
+                                    }}
+                                >
+                                    <Button id="showMoreHistoryButton" type="submit" variant="outlined" color="primary">
+                                        Show more
+                                </Button>
+                                </div>
+                                :
+                                <Button id="showMoreHistoryButton" disabled = {true} type="submit" variant="outlined" color="primary">
+                                        No more games to display
+                                </Button>
+                            }
+                        </div>
                     </div>
                 }
-                <div
-                    onClick={() => {
-                        this.fetchInfoAboutGame()
-                    }}
-                >
-                    Load more
-                </div>
             </div>
         );
     }
