@@ -433,33 +433,27 @@ class GameHistory extends React.Component {
 
                                 <div className="otherPlayers" >
                                     <div>
-                                        {allGameInfo[0].participantIdentities.map((participant, i_OtherPlayers) => {
-                                            if (i_OtherPlayers > 4) return []
-                                            else {
-                                                return <div className="playerList" key={i_OtherPlayers}>
-                                                    <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
-                                                        <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
-                                                            + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
-                                                            alt={"Champion"} />
-                                                        {participant.player.summonerName}
-                                                    </Link>
-                                                </div>
-                                            }
+                                        {allGameInfo[0].participantIdentities.slice(0, 5).map((participant, i_OtherPlayers) => {
+                                            return <div className="playerList" key={i_OtherPlayers}>
+                                                <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
+                                                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
+                                                        + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
+                                                        alt={"Champion"} />
+                                                    {participant.player.summonerName}
+                                                </Link>
+                                            </div>
                                         })}
                                     </div>
                                     <div>
-                                        {allGameInfo[0].participantIdentities.map((participant, i_OtherPlayers) => {
-                                            if (i_OtherPlayers < 5) return []
-                                            else {
-                                                return <div className="playerList" key={i_OtherPlayers}>
-                                                    <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
-                                                        <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
-                                                            + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
-                                                            alt={"Champion"} />
-                                                        {participant.player.summonerName}
-                                                    </Link>
-                                                </div>
-                                            }
+                                        {allGameInfo[0].participantIdentities.slice(5, 10).map((participant, i_OtherPlayers) => {
+                                            return <div className="playerList" key={i_OtherPlayers}>
+                                                <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
+                                                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
+                                                        + champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId] + '.png'}
+                                                        alt={"Champion"} />
+                                                    {participant.player.summonerName}
+                                                </Link>
+                                            </div>
                                         })}
                                     </div>
                                 </div>

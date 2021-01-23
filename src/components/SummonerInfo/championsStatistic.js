@@ -14,7 +14,7 @@ class ChampionsStatistic extends React.Component {
             stats: 0,
             setClass: ["statsSelected", "stats", "stats"],
             statsComponents: [],
-            displayNumber: 6,
+            displayNumber: 7,
             showMoreId: "showMore",
         };
 
@@ -64,7 +64,7 @@ class ChampionsStatistic extends React.Component {
                                         this.changeClass(0)
                                         this.setState({
                                             stats: 0,
-                                            displayNumber: 6,
+                                            displayNumber: 7,
                                         })
                                     }}
                                 >
@@ -77,7 +77,7 @@ class ChampionsStatistic extends React.Component {
                                         this.changeClass(1)
                                         this.setState({
                                             stats: 1,
-                                            displayNumber: 6,
+                                            displayNumber: 7,
                                         })
                                     }}
                                 >
@@ -90,7 +90,7 @@ class ChampionsStatistic extends React.Component {
                                         this.changeClass(2)
                                         this.setState({
                                             stats: 2,
-                                            displayNumber: 6,
+                                            displayNumber: 7,
                                         })
                                     }}
                                 >
@@ -129,8 +129,7 @@ const Stats = ({ stats, statsComponents, displayNumber }) => {
     if (stats === 0) {
         if (statsComponents[0].length === 0) return <div className="gamesNotFound" >You haven't play this game mode in this season</div>
         return <div className="statsListing" >
-            {statsComponents[0].map((val, i) => {
-                if (i > displayNumber) return null
+            {statsComponents[0].slice(0, displayNumber).map((val, i) => {
                 return val
             })}
         </div>
@@ -138,8 +137,7 @@ const Stats = ({ stats, statsComponents, displayNumber }) => {
     else if (stats === 1) {
         if (statsComponents[1].length === 0) return <div className="gamesNotFound">You haven't play this game mode in this season</div>
         return <div className="statsListing" >
-            {statsComponents[1].map((val, i) => {
-                if (i > displayNumber) return null
+            {statsComponents[1].slice(0, displayNumber).map((val, i) => {
                 return val
             })}
         </div>
@@ -147,8 +145,7 @@ const Stats = ({ stats, statsComponents, displayNumber }) => {
     else {
         if (statsComponents[2].length === 0) return <div className="gamesNotFound">You haven't play this game mode in this season</div>
         return <div className="statsListing" >
-            {statsComponents[2].map((val, i) => {
-                if (i > displayNumber) return null
+            {statsComponents[2].slice(0, displayNumber).map((val, i) => {
                 return val
             })}
         </div>
