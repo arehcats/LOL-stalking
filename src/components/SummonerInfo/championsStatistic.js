@@ -15,6 +15,7 @@ class ChampionsStatistic extends React.Component {
             setClass: ["statsSelected", "stats", "stats"],
             statsComponents: [],
             displayNumber: 6,
+            showMoreId: "showMore",
         };
 
     };
@@ -44,6 +45,11 @@ class ChampionsStatistic extends React.Component {
         });
     }
 
+    changeClassShowMore = (newClassName) => {
+        this.setState({
+            showMoreId: newClassName,
+        })
+    }
 
     render() {
         return (
@@ -94,16 +100,23 @@ class ChampionsStatistic extends React.Component {
                         </div>
                         <div>
                             <Stats stats={this.state.stats}
-                                statsComponents={this.state.statsComponents} displayNumber={this.state.displayNumber} />
+                                statsComponents={this.state.statsComponents}
+                                displayNumber={this.state.displayNumber}
+                            />
                         </div>
                         <div id="stats" onClick={() => {
                             this.setState((prevState) => ({
                                 displayNumber: prevState.displayNumber + 8
                             }));
                         }}>
-                            <Button id="showMore" type="submit" variant="outlined" color="primary">
-                                Show more
-                                </Button>
+                            {(this.state.displayNumber >= this.state.statsComponents[this.state.stats].length)
+                                ?
+                                ""
+                                :
+                                < Button id="showMore"
+                                    type="submit" variant="outlined" color="primary">
+                                    Show more
+                                </Button>}
                         </div>
                     </div>
                 }
@@ -146,18 +159,18 @@ const Stats = ({ stats, statsComponents, displayNumber }) => {
 const StatsComponent = (championsPlayed, dictionaryChampsID) => {
     let elemtns = []
     championsPlayed.forEach((val, i) => {
-                elemtns.push(<div key={i}>
-                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/' + dictionaryChampsID[val[0]] + '.png'}
-                        alt={"Summoner icon"} />
-                    <div className="statsListingInside" >
-                        <div>
-                            <span className="boldStats">{dictionaryChampsID[val[0]]}</span>
-                        </div>
-                        <div>
-                            <span className="fontSizeStats">Played games: </span><span className="boldStats">{val[1]}</span>
-                        </div>
-                    </div>
-                </div>)
+        elemtns.push(<div key={i}>
+            <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/' + dictionaryChampsID[val[0]] + '.png'}
+                alt={"Summoner icon"} />
+            <div className="statsListingInside" >
+                <div>
+                    <span className="boldStats">{dictionaryChampsID[val[0]]}</span>
+                </div>
+                <div>
+                    <span className="fontSizeStats">Played games: </span><span className="boldStats">{val[1]}</span>
+                </div>
+            </div>
+        </div>)
     })
 
     return elemtns
