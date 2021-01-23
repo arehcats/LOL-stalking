@@ -31,6 +31,10 @@
     height: 25px;
     line-height: 25px;    
 }
+.playerList a{
+    text-decoration: none;    
+    color: rgb(34, 29, 29);
+}
 .playerList img{
     width: 18px;
     height: 18px;

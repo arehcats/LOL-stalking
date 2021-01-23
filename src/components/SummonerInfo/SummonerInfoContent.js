@@ -107,7 +107,7 @@ class SearchUserInputContent extends React.Component {
     }
 
     async fetchSummDataOnMount() {
-        const SummonerName = this.state.SummonerName
+        const SummonerName = this.state.SummonerName.toLowerCase()
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
         const region = "https://eun1.api.riotgames.com"

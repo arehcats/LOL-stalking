@@ -19,7 +19,7 @@ class SearchUserInputContent extends React.Component {
     onSubmit = event => {
         const { nickname } = this.state;
         const { history } = this.props;
-        history.push("/eune/" + nickname)
+        history.push("/eune/" + nickname.toLowerCase())
 
         event.preventDefault();
     };

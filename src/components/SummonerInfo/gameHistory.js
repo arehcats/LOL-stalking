@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import { Link } from "react-router-dom";
 
 class GameHistory extends React.Component {
     constructor(props) {
@@ -168,7 +168,7 @@ class GameHistory extends React.Component {
                                         })
                                     }
                                 }}>
-                                    {this.state.loadAgain[i] ? <div className = "circular" align="center"><CircularProgress /></div>
+                                    {this.state.loadAgain[i] ? <div className="circular" align="center"><CircularProgress /></div>
                                         :
                                         <div className="refresh">
                                             Ups.. something went wrong, click to try refresh
@@ -437,10 +437,12 @@ class GameHistory extends React.Component {
                                             if (i_OtherPlayers > 4) return []
                                             else {
                                                 return <div className="playerList" key={i_OtherPlayers}>
-                                                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
-                                                        + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
-                                                        alt={"Champion"} />
-                                                    {participant.player.summonerName}
+                                                    <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
+                                                        <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
+                                                            + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
+                                                            alt={"Champion"} />
+                                                        {participant.player.summonerName}
+                                                    </Link>
                                                 </div>
                                             }
                                         })}
@@ -450,10 +452,12 @@ class GameHistory extends React.Component {
                                             if (i_OtherPlayers < 5) return []
                                             else {
                                                 return <div className="playerList" key={i_OtherPlayers}>
-                                                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
-                                                        + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
-                                                        alt={"Champion"} />
-                                                    {participant.player.summonerName}
+                                                    <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
+                                                        <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
+                                                            + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
+                                                            alt={"Champion"} />
+                                                        {participant.player.summonerName}
+                                                    </Link>
                                                 </div>
                                             }
                                         })}
