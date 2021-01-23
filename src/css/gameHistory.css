@@ -128,7 +128,7 @@
     padding: 2px 7px 2px 7px;
     font-size: 14px;
 }
-.killsInRows:empty{
+.killsInRow:empty{
     display: none;
 }
 .basicInfoGame{
