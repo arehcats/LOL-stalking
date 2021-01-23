@@ -17,7 +17,7 @@ class GameHistory extends React.Component {
             errorMessage: "",
             fetchedGames: [],
             baisicsGameInfo: [],
-            loadAgain: false,
+            loadAgain: [],
             loadMore: true,
             isDisabled: false,
         };
@@ -39,7 +39,6 @@ class GameHistory extends React.Component {
 
     async fetchInfoAboutGame() {
 
-        // console.log(this.props.last100games[0]);
         const lastGames = this.props.last100games
         let displayedGames = this.state.displayedGames
         const fetchStep = this.state.fetchStep
@@ -61,42 +60,31 @@ class GameHistory extends React.Component {
             }
         }
 
-        // console.log(matchIDs);
-        matchIDs[1] = "4444d44"
-        baisicsGameInfo.push(lastGames[3])
-
-        // console.log(baisicsGameInfo);
-        // console.log(matchIDs);
-        // console.log(displayedGames);
+        // matchIDs[1] = "4444d44"
+        // baisicsGameInfo.push(lastGames[3])
 
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         // const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
         const region = "https://eun1.api.riotgames.com"
-        const cors = "https://cors-anywhere.herokuapp.com/"
+        // const cors = "https://cors-anywhere.herokuapp.com/"
+        const cors = ""
         let getStorageGame
-        // let fetchURLs = []
         let response = ''
         let timeInMs = Date.now();
-        // let gameInfo = ''
 
         let [...rest] = await Promise.all(
-            matchIDs.map(async (matchID, index) => {
+            matchIDs.map(async (matchID) => {
                 getStorageGame = JSON.parse(localStorage.getItem(matchID))
-                // getStorageGame = false
-                // console.log(getStorageGame);
-                // if (index === 2) return "error"
-
 
                 if (getStorageGame) {
-                    console.log("11111");
 
                     return getStorageGame
                 }
                 else {
-                    console.log("dddd");
                     response = await fetch(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
 
                     if (!this._isMounted) return
+
                     if (response.status !== 200) {
                         console.log("22222");
                         return ["error", cors + region + "/lol/match/v4/matches/" + matchIDs[0] + RiotApiKey]
@@ -111,10 +99,8 @@ class GameHistory extends React.Component {
                     }
                 }
             }))
-        console.log(rest);
 
         fetchedGames.push(...rest)
-        // console.log(fetchedGames);
 
         this.setState({
             fetchedGames: fetchedGames,
@@ -139,49 +125,50 @@ class GameHistory extends React.Component {
                     :
                     <div>
                         {this.state.fetchedGames.map((allGameInfo, i) => {
-                            console.log(allGameInfo);
-                            console.log(this.state.baisicsGameInfo);
-                            
-                            if (allGameInfo[0] === "error") {
 
+
+
+                            // check if game fetched properly
+                            if (allGameInfo[0] === "error") {
                                 return <div key={i} onClick={async () => {
 
+
+                                    let loadAgain = this.state.loadAgain
+                                    console.log(loadAgain);
+                                    loadAgain[i] = true
                                     this.setState({
-                                        loadAgain: true,
+                                        loadAgain: loadAgain,
                                     })
 
                                     let response = await fetch(allGameInfo[1])
-
+                                    console.log(response);
                                     if (!this._isMounted) return
 
                                     if (response.status !== 200) {
-                                        console.log("aaaaaaaaaaaaaa");
+                                        loadAgain[i] = false
+
                                         return this.setState({
-                                            loadAgain: false,
+                                            loadAgain: loadAgain,
                                         })
                                     }
                                     else {
-                                        console.log("bbbbbbbbbbbb");
                                         let timeInMs = Date.now();
 
                                         let jsonresponse = await response.json()
-                                        // console.log(jsonresponse);
                                         let returngameInfo = [jsonresponse, timeInMs]
                                         localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
 
                                         let games = this.state.fetchedGames
                                         games[i] = returngameInfo
-                                        // console.log(games);
+                                        loadAgain[i] = false
+
                                         this.setState({
                                             fetchedGames: games,
-                                            loadAgain: false,
+                                            loadAgain: loadAgain,
                                         })
-
                                     }
-
-
                                 }}>
-                                    {this.state.loadAgain ? <div className = "circular" align="center"><CircularProgress /></div>
+                                    {this.state.loadAgain[i] ? <div className = "circular" align="center"><CircularProgress /></div>
                                         :
                                         <div className="refresh">
                                             Ups.. something went wrong, click to try refresh
@@ -189,6 +176,10 @@ class GameHistory extends React.Component {
                                     }
                                 </div>
                             }
+
+
+
+
                             let classBackround = "gameHistory lose"
 
                             let participantId = []
@@ -201,7 +192,6 @@ class GameHistory extends React.Component {
 
                                 }
                             })
-
                             let kills = allGameInfo[0].participants[participantId[0]].stats.kills
                             let deaths = allGameInfo[0].participants[participantId[0]].stats.deaths
                             let assists = allGameInfo[0].participants[participantId[0]].stats.assists
@@ -230,19 +220,19 @@ class GameHistory extends React.Component {
                             }
 
 
-                            let killsInRows
+                            let killsInRow
 
                             if (allGameInfo[0].participants[participantId[0]].stats.pentaKills) {
-                                killsInRows = "Penta kill"
+                                killsInRow = "Penta kill"
                             }
                             else if (allGameInfo[0].participants[participantId[0]].stats.quadraKills) {
-                                killsInRows = "Quadra kill"
+                                killsInRow = "Quadra kill"
                             }
                             else if (allGameInfo[0].participants[participantId[0]].stats.tripleKills) {
-                                killsInRows = "Triple kill"
+                                killsInRow = "Triple kill"
                             }
                             else if (allGameInfo[0].participants[participantId[0]].stats.doubleKills) {
-                                killsInRows = "Dobule kill"
+                                killsInRow = "Dobule kill"
                             }
 
 
@@ -266,13 +256,15 @@ class GameHistory extends React.Component {
                                 }
                             }
                             // check if remake
-                            if (gameDurationMinutes * 60 < 401) {
+                            if (gameDurationMinutes * 60 < 401 && (allGameInfo[0].queueId === 420 || allGameInfo[0].queueId === 440)) {
                                 classBackround = "gameHistory remakeGame"
                                 ifWin = "Remake"
                             }
 
 
                             return <div className={classBackround} key={i}>
+
+
                                 <div className="basicInfoGame">
                                     <div title={this.props.gamesIDs[allGameInfo[0].queueId]} className="gameType">
                                         {this.props.gamesIDs[allGameInfo[0].queueId]}
@@ -290,6 +282,9 @@ class GameHistory extends React.Component {
                                         {gameDurationMinutes}m {gameDurationSeconds}s
                                     </div>
                                 </div>
+
+
+
                                 <div className="championAndSpellsImg">
                                     <div>
                                         <div className="championsImg" >
@@ -312,6 +307,9 @@ class GameHistory extends React.Component {
                                         {champions[allGameInfo[0].participants[participantId[0]].championId]}
                                     </div>
                                 </div>
+
+
+
                                 <div className="killsAndKDA">
                                     <div className="killsDeats">
                                         {kills} / <span className="colorRed">{deaths}</span> / {assists}
@@ -319,11 +317,14 @@ class GameHistory extends React.Component {
                                     <div className="kda">
                                         {kda} <span className="colorGrey">KDA</span>
                                     </div>
-                                    <div className="killsInRows">
-                                        {killsInRows}
+                                    <div className="killsInRow">
+                                        {killsInRow}
                                     </div>
                                 </div>
-                                <div className="level_cs_patr_kills">
+
+
+
+                                <div className="level_cs_part_kills">
                                     <div className="champLevel">
                                         <div>
                                             Level
@@ -349,6 +350,9 @@ class GameHistory extends React.Component {
                                         </div>
                                     </div>
                                 </div>
+
+
+
                                 <div className="items">
                                     <div>
                                         <div>
@@ -424,6 +428,9 @@ class GameHistory extends React.Component {
 
                                     </div>
                                 </div>
+
+
+
                                 <div className="otherPlayers" >
                                     <div>
                                         {allGameInfo[0].participantIdentities.map((participant, i_OtherPlayers) => {
@@ -452,6 +459,9 @@ class GameHistory extends React.Component {
                                         })}
                                     </div>
                                 </div>
+
+
+
                             </div>
                         })}
                         <div>

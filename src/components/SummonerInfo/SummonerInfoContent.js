@@ -39,7 +39,7 @@ class SearchUserInputContent extends React.Component {
         let getStorage = JSON.parse(localStorage.getItem(this.state.SummonerName))
         let gamesIDsFromStorage = JSON.parse(localStorage.getItem("gamesIDs"))
 
-        
+
         if (gamesIDsFromStorage === null) {
             this.fetchGamesID()
         }
@@ -97,7 +97,7 @@ class SearchUserInputContent extends React.Component {
         }
         let gamesIDs = {}
         const jsonresponseGamesID_url = await responsegamesID_url.json()
-        jsonresponseGamesID_url.forEach((val)=>{
+        jsonresponseGamesID_url.forEach((val) => {
             gamesIDs[val.queueId] = val.description
         })
 
@@ -111,7 +111,8 @@ class SearchUserInputContent extends React.Component {
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
         const region = "https://eun1.api.riotgames.com"
-        const cors = "https://cors-anywhere.herokuapp.com/"
+        // const cors = "https://cors-anywhere.herokuapp.com/"
+        const cors = ""
         const acutalPatch = "11.1.1"
         // const cors = "https://yacdn.org/proxy/"
         this.fetchGamesID()

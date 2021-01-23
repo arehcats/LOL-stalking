@@ -117,7 +117,7 @@
     font-size: 14px;
 
 }
-.killsInRows{
+.killsInRow{
     color: whitesmoke;
     background-color: red;
     border-radius: 25%;
@@ -183,7 +183,7 @@
 .colorGrey{
     color: rgb(96, 104, 96);
 }
-.level_cs_patr_kills{
+.level_cs_part_kills{
     text-align: center;
     font-size: 14px;
     margin-top: auto;
