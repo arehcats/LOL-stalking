@@ -68,6 +68,10 @@ class SearchUserInputContent extends React.Component {
             this.props.setChampionsPlayedSolo(getStorage[3])
             this.props.setChampionsPlayedAram(getStorage[4])
             this.props.setLast100games(getStorage[5])
+
+            if (getStorage[5] === null) {
+                this.props.setLast100games([])
+            }
             this.props.setChampionsIDs(getStorage[6])
 
             this.setState({
@@ -197,7 +201,12 @@ class SearchUserInputContent extends React.Component {
         }
         const json_lats_100_games = await responsegames.json()
 
-        this.props.setLast100games(json_lats_100_games.matches)
+        if (json_lats_100_games.matches === undefined) {
+            this.props.setLast100games([])
+        }
+        else {
+            this.props.setLast100games(json_lats_100_games.matches)
+        }
 
         ////////////// fetch games by account ID ///////////////////////////////
 
@@ -357,7 +366,7 @@ const LastUpdate = ({ lastUpdate }) => {
     let timeAgoString
 
     if (timeMinutes === 0) {
-        timeAgo= ""
+        timeAgo = ""
         timeAgoString = "a few seconds ago"
         console.log(1);
     }
