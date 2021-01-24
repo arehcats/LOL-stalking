@@ -181,3 +181,18 @@
     padding-bottom: 5px;
     border-bottom: 1px solid rgb(185, 206, 216);
 }
+.lastUpdate{
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 3px;
+    margin-top: 5px;
+    color: rgb(124, 122, 122);
+}
+.lastUpdate div span{
+    color: rgb(112, 109, 109);
+    font-weight: 700;
+}
+#update{
+    background-color: rgb(124, 243, 231);
+    margin-top: 5px;
+}

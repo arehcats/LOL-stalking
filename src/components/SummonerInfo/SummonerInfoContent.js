@@ -12,11 +12,12 @@ class SearchUserInputContent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            SummonerName: this.props.match.params.SummonerName,
+            SummonerName: this.props.match.params.SummonerName.toLowerCase(),
             isLodaing: true,
             status: false,
             errorMessage: "",
             isFetchError: false,
+            lastUpdate: "",
         };
         // this.fetchListGame = this.fetchListGame.bind(this)
         this._isMounted = false;
@@ -50,7 +51,7 @@ class SearchUserInputContent extends React.Component {
 
 
         if (getStorage === null) { } // check if storage exist
-        else if (getStorage.length === 7) { // if exist check if has all needed information
+        else if (getStorage.length === 8) { // if exist check if has all needed information
 
             this.props.setBasicInfoSummoner(getStorage[0]);
 
@@ -69,20 +70,20 @@ class SearchUserInputContent extends React.Component {
             this.props.setLast100games(getStorage[5])
             this.props.setChampionsIDs(getStorage[6])
 
-
             this.setState({
+                lastUpdate: getStorage[7],
                 isLodaing: false,
             })
             return
         }
 
         this.fetchSummDataOnMount()
-
     }
 
     componentWillUnmount() {
         this._isMounted = false;
     }
+
 
     async fetchGamesID() {
         const gamesID_url = "http://static.developer.riotgames.com/docs/lol/queues.json"
@@ -217,6 +218,7 @@ class SearchUserInputContent extends React.Component {
         this.props.setChampionsPlayedFlex(championsPlayedFlex)
         this.props.setChampionsPlayedSolo(championsPlayedSolo)
         this.props.setChampionsPlayedAram(championsPlayedAram)
+        let lastUpdate = Date.now()
 
         let StorageData = []
         StorageData.push(jsonSummonerByName)
@@ -226,10 +228,12 @@ class SearchUserInputContent extends React.Component {
         StorageData.push(championsPlayedAram)
         StorageData.push(json_lats_100_games.matches)
         StorageData.push(dictionaryChampsID)
+        StorageData.push(lastUpdate)
 
         localStorage.setItem(SummonerName, JSON.stringify(StorageData));
 
         this.setState({
+            lastUpdate: lastUpdate,
             isLodaing: false,
         })
     }
@@ -305,7 +309,7 @@ class SearchUserInputContent extends React.Component {
                                     {this.props.basicInfoSummoner.name}
                                 </div>
                                 <div>
-                                    <Button id="LiveGame" type="submit" variant="outlined" color="primary"
+                                    <Button id="update" type="submit" variant="outlined" color="primary"
                                         onClick={() => {
                                             // localStorage.setItem(this.state.SummonerName, JSON.stringify("Refreshed"));
                                             this.setState({
@@ -314,11 +318,14 @@ class SearchUserInputContent extends React.Component {
                                             this.fetchSummDataOnMount();
                                         }}
                                     >
-                                        Refresh
+                                        Update
                                     </Button>
                                     {/* <Button id="LiveGame" type="submit" variant="outlined" color="primary">
                                         Live game to do
                                     </Button> */}
+                                </div>
+                                <div className="lastUpdate">
+                                    <LastUpdate lastUpdate={this.state.lastUpdate} />
                                 </div>
                             </div>
                         </div>
@@ -340,6 +347,37 @@ class SearchUserInputContent extends React.Component {
             </div>
         );
     }
+}
+
+const LastUpdate = ({ lastUpdate }) => {
+    let dateNow = Date.now()
+    let timeMinutes = Math.round((dateNow - lastUpdate) / 60000)
+    let timeAgo = timeMinutes
+
+    let timeAgoString
+
+    if (timeMinutes === 0) {
+        timeAgo= ""
+        timeAgoString = "a few seconds ago"
+        console.log(1);
+    }
+    else if (timeMinutes <= 60) {
+        console.log(2);
+        timeAgoString = "minutes ago"
+    }
+    else if (timeMinutes / 60 <= 24) {
+        console.log(3);
+
+        timeAgo = Math.round(timeMinutes / 60)
+        timeAgoString = "hours ago"
+    }
+    else {
+        timeAgo = Math.round((timeMinutes / 60) / 24)
+        timeAgoString = "days ago"
+    }
+
+    return <div>Last update: <span>{timeAgo} {timeAgoString}</span></div>
+
 }
 
 const Loading = ({ status, errorMessage }) => {
