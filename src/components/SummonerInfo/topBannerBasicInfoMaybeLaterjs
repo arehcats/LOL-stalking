@@ -1,0 +1,41 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button'
+
+const topBannerBasicInfo = (props) => {
+    console.log(props);
+    return <React.Fragment>
+        <div id="summIcon">
+            <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/profileicon/' + props.basicInfoSummoner.profileIconId + '.png'}
+                alt={"Summoner icon"} />
+            <div>
+                {props.basicInfoSummoner.summonerLevel}
+            </div>
+        </div>
+        <div id="summNick">
+            <div>
+                {props.basicInfoSummoner.name}
+            </div>
+            <div>
+                <Button id="LiveGame" type="submit" variant="outlined" color="primary"
+                    onClick={() => {
+                        // localStorage.setItem(state.SummonerName, JSON.stringify("Refreshed"));
+                        this.setState({
+                            isLodaing: true,
+                        })
+                        // fetchSummDataOnMount();
+                    }}
+                >
+                    Refresh
+                </Button>
+
+            </div>
+        </div>
+    </React.Fragment>
+}
+
+const mapStateToProps = state => ({
+    basicInfoSummoner: state.summonerInfoState.basicInfoSummoner,
+});
+
+export default connect(mapStateToProps)(topBannerBasicInfo);

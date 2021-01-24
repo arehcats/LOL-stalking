@@ -6,6 +6,7 @@ import ChampionsStatistic from './championsStatistic'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import GameHistory from './gameHistory'
+import SummonerRanks from './summonerRanks'
 
 class SearchUserInputContent extends React.Component {
     constructor(props) {
@@ -294,11 +295,7 @@ class SearchUserInputContent extends React.Component {
                         <div id="topBannerBasicInfo">
                             <div id="summIcon">
                                 <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
-                                    alt={"Summoner icon"}
-                                    onClick={() => {
-                                        // console.log(this.props.last100games);
-                                    }}
-                                />
+                                    alt={"Summoner icon"} />
                                 <div>
                                     {this.props.basicInfoSummoner.summonerLevel}
                                 </div>
@@ -315,66 +312,20 @@ class SearchUserInputContent extends React.Component {
                                                 isLodaing: true,
                                             })
                                             this.fetchSummDataOnMount();
-                                            // this.fetchGamesID();
                                         }}
                                     >
                                         Refresh
                                     </Button>
-                                    <Button id="LiveGame" type="submit" variant="outlined" color="primary">
+                                    {/* <Button id="LiveGame" type="submit" variant="outlined" color="primary">
                                         Live game to do
-                                    </Button>
+                                    </Button> */}
                                 </div>
                             </div>
                         </div>
                         <div id="allOderInfo">
                             <div id="leftContainer">
                                 <div>
-                                    {this.props.soloRank ?
-                                        <div className="rankSummoner">
-                                            <div>
-                                                <img src={'/assets/images/rank-icons/' + this.props.soloRank.tier + '.png'}
-                                                    alt={this.props.soloRank.tier} />
-                                            </div>
-                                            <div className="soloQandFlexStats">
-                                                <span>SoloQ rank</span>
-                                                <span>{this.props.soloRank.tier} {this.props.soloRank.rank}</span>
-                                                <span>{this.props.soloRank.leaguePoints} lp</span>
-                                                <span>{this.props.soloRank.wins}W / {this.props.soloRank.losses}L</span>
-                                                <span>Win ratio <b>{Math.round(100 * (this.props.soloRank.wins / (this.props.soloRank.losses + this.props.soloRank.wins)))}%</b></span>
-                                            </div>
-                                        </div>
-
-                                        :
-                                        <div className="unranked">
-                                            <span>SoloQ</span>
-                                            <img src={'/assets/images/rank-icons/provisional.png'}
-                                                alt="provisional" />
-                                            <b>Unranked</b>
-                                        </div>
-                                    }
-
-                                    {this.props.flexRank ?
-                                        <div className="rankSummoner">
-                                            <div>
-                                                <img src={'/assets/images/rank-icons/' + this.props.flexRank.tier + '.png'}
-                                                    alt={this.props.flexRank.tier} />
-                                            </div>
-                                            <div className="soloQandFlexStats">
-                                                <span>Flex 5 vs 5 rank</span>
-                                                <span>{this.props.flexRank.tier} {this.props.flexRank.rank}</span>
-                                                <span>{this.props.flexRank.leaguePoints} LP</span>
-                                                <span>{this.props.flexRank.wins}W / {this.props.flexRank.losses}L</span>
-                                                <span>Win ratio <b>{Math.round(100 * (this.props.flexRank.wins / (this.props.flexRank.losses + this.props.flexRank.wins)))}%</b></span>
-                                            </div>
-                                        </div>
-                                        :
-                                        <div className="unranked">
-                                            <span>Flex</span>
-                                            <img src={'/assets/images/rank-icons/provisional.png'}
-                                                alt="provisional" />
-                                            <b>Unranked</b>
-                                        </div>
-                                    }
+                                    <SummonerRanks />
                                 </div>
                                 <div id="championsStats">
                                     <ChampionsStatistic />
