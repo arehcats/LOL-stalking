@@ -20,6 +20,9 @@ class GameHistory extends React.Component {
             loadAgain: [],
             loadMore: true,
             isDisabled: false,
+            filterHistory: "All games",
+            gameTypes: [],
+            quueueTypeActiveIndex: 0,
         };
         this._isMounted = false;
 
@@ -27,26 +30,37 @@ class GameHistory extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
+        let gameTypes = []
+        this.props.last100games.forEach((game) => {
+            if (gameTypes.includes(game.queue)) { }
+            else gameTypes.push(game.queue)
+        })
 
+        gameTypes.sort()
+        gameTypes.unshift("All games")
+        this.setState({
+            gameTypes: gameTypes,
+        })
         this.fetchInfoAboutGame()
 
         // console.log(localStorage.length);
         // for (var i = 0; i < localStorage.length; i++){
         //    console.log(localStorage.getItem(localStorage.key(i)));
+        //    console.log("///////////////////////////////////////////////////");
         // }
 
     }
 
     async fetchInfoAboutGame() {
-
-        const lastGames = this.props.last100games
+        const filterHistory = this.state.filterHistory
+        const lastGames = this.props.last100games.filter(game => game.queue === filterHistory || filterHistory === "All games")
         let displayedGames = this.state.displayedGames
         const fetchStep = this.state.fetchStep
         let fetchedGames = this.state.fetchedGames
         const condition = displayedGames + fetchStep
         let matchIDs = []
         let baisicsGameInfo = this.state.baisicsGameInfo
-
+        // console.log(lastGames);
 
         for (; displayedGames < condition; displayedGames++) {
             if (lastGames.length > displayedGames) {
@@ -87,7 +101,7 @@ class GameHistory extends React.Component {
 
                     if (response.status !== 200) {
                         console.log("22222");
-                        return ["error", cors + region + "/lol/match/v4/matches/" + matchIDs[0] + RiotApiKey]
+                        return ["error", cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey]
                     }
                     else {
                         console.log("33333");
@@ -100,8 +114,10 @@ class GameHistory extends React.Component {
                 }
             }))
 
+
         fetchedGames.push(...rest)
 
+        // console.log(fetchedGames);
         this.setState({
             fetchedGames: fetchedGames,
             displayedGames: displayedGames,
@@ -112,6 +128,11 @@ class GameHistory extends React.Component {
 
 
     }
+    applyNewClass = (indexQueue) => {
+        this.setState({
+            quueueTypeActiveIndex: indexQueue,
+        })
+    }
 
     componentWillUnmount() {
         this._isMounted = false;
@@ -121,11 +142,45 @@ class GameHistory extends React.Component {
         let champions = this.props.championsIDs
         return (
             <div id="rightConteiner">
+
+                <div className="topBoxHistory">
+                    <div className="topBoxfilterHistory">
+                        {this.state.gameTypes.map((queueId, indexQueue) => {
+                            const className = (this.state.quueueTypeActiveIndex === indexQueue) ? "quueueTypeActive" : "quueueType"
+
+                            let name
+                            if (queueId === "All games") name = "All games"
+                            else name = this.props.gamesIDs[queueId]
+
+                            return <div className={className} key={indexQueue} onClick={() => {
+                                this.setState({
+                                    filterHistory: queueId,
+                                    displayedGames: 0,
+                                    fetchedGames: [],
+                                    baisicsGameInfo: [],
+                                    loadMore: true
+
+                                }, () => {
+                                    this.applyNewClass(indexQueue)
+                                    this.fetchInfoAboutGame()
+                                })
+                            }}>
+                                <Button type="submit" variant="outlined" color="primary">
+                                    {name}
+                                </Button>
+
+                            </div>
+                        })}
+                    </div>
+                    {/* <div className="topBoxStats">
+                        stats history
+                    </div> */}
+                </div>
+
                 { this.state.isLoading ? <Loading status={this.state.status} errorMessage={this.state.errorMessage} />
                     :
                     <div>
                         {this.state.fetchedGames.map((allGameInfo, i) => {
-
 
 
                             // check if game fetched properly
@@ -192,6 +247,7 @@ class GameHistory extends React.Component {
 
                                 }
                             })
+
                             let kills = allGameInfo[0].participants[participantId[0]].stats.kills
                             let deaths = allGameInfo[0].participants[participantId[0]].stats.deaths
                             let assists = allGameInfo[0].participants[participantId[0]].stats.assists
@@ -288,17 +344,17 @@ class GameHistory extends React.Component {
                                 <div className="championAndSpellsImg">
                                     <div>
                                         <div className="championsImg" >
-                                            <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
+                                            <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/'
                                                 + champions[allGameInfo[0].participants[participantId[0]].championId] + '.png'}
                                                 alt={"Champion"} />
                                         </div>
                                         <div className="SpellsImg">
                                             <img
-                                                src={"http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/"
+                                                src={"http://ddragon.leagueoflegends.com/cdn/11.2.1/img/spell/"
                                                     + this.props.spellsDictionary[allGameInfo[0].participants[participantId[0]].spell1Id] + ".png"}
                                                 alt={"Spell"} />
                                             <img
-                                                src={"http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/"
+                                                src={"http://ddragon.leagueoflegends.com/cdn/11.2.1/img/spell/"
                                                     + this.props.spellsDictionary[allGameInfo[0].participants[participantId[0]].spell2Id] + ".png"}
                                                 alt={"Spell"} />
                                         </div>
@@ -357,7 +413,7 @@ class GameHistory extends React.Component {
                                     <div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item0 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item0 + '.png'}
                                                     alt={""} />
                                                 :
@@ -366,7 +422,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item1 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item1 + '.png'}
                                                     alt={""} />
                                                 :
@@ -375,7 +431,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item2 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item2 + '.png'}
                                                     alt={""} />
                                                 :
@@ -384,7 +440,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item6 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item6 + '.png'}
                                                     alt={""} />
                                                 :
@@ -395,7 +451,7 @@ class GameHistory extends React.Component {
                                     <div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item3 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item3 + '.png'}
                                                     alt={""} />
                                                 :
@@ -404,7 +460,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item4 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item4 + '.png'}
                                                     alt={""} />
                                                 :
@@ -413,7 +469,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item5 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item5 + '.png'}
                                                     alt={""} />
                                                 :
@@ -436,7 +492,7 @@ class GameHistory extends React.Component {
                                         {allGameInfo[0].participantIdentities.slice(0, 5).map((participant, i_OtherPlayers) => {
                                             return <div className="playerList" key={i_OtherPlayers}>
                                                 <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
-                                                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
+                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers].championId]} src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/'
                                                         + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}
@@ -448,7 +504,7 @@ class GameHistory extends React.Component {
                                         {allGameInfo[0].participantIdentities.slice(5, 10).map((participant, i_OtherPlayers) => {
                                             return <div className="playerList" key={i_OtherPlayers}>
                                                 <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
-                                                    <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/'
+                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers].championId]} src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/'
                                                         + champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}

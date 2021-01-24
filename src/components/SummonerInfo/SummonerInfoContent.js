@@ -113,7 +113,7 @@ class SearchUserInputContent extends React.Component {
         const region = "https://eun1.api.riotgames.com"
         // const cors = "https://cors-anywhere.herokuapp.com/"
         const cors = ""
-        const acutalPatch = "11.1.1"
+        const acutalPatch = "11.2.1"
         // const cors = "https://yacdn.org/proxy/"
         this.fetchGamesID()
 
@@ -293,7 +293,7 @@ class SearchUserInputContent extends React.Component {
                     <div>
                         <div id="topBannerBasicInfo">
                             <div id="summIcon">
-                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
+                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
                                     alt={"Summoner icon"}
                                     onClick={() => {
                                         // console.log(this.props.last100games);

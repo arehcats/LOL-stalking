@@ -30,7 +30,7 @@ const applyChampionsIDs = (state, action) => ({
 });
 const applySpellsDictionary = (state, action) => ({
   ...state,
-  championsIDs: action.championsIDs,
+  spellsDictionary: action.spellsDictionary,
 });
 
 function someDataGameReducer(state = INITIAL_STATE, action) {
