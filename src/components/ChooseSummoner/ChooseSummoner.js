@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import { compose } from 'recompose';
 import ChooseSummonerAuth from './ChooseSummonerAuth'
-import ChooseSummonerNonAuth from './ChooseSummonerNonAuth'
+import ChooseSummonerHistory from './ChooseSummonerHistory'
 
 const ChooseSummoner = ({ authUser }) => {
     return (
         <React.Fragment>
             { authUser ? <ChooseSummonerAuth /> : <div></div>}
-            <ChooseSummonerNonAuth />
+            <ChooseSummonerHistory />
         </React.Fragment>
 
     )

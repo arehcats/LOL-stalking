@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button'
 import '../../css/ChooseSummoner.css'
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 
-class ChooseSummonerNonAuth extends Component {
+class ChooseSummonerHistory extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -40,15 +40,18 @@ class ChooseSummonerNonAuth extends Component {
                                 </div>
                             </NavLink>
                             {this.props.authUser ?
-                             !this.props.favoriteSummoners.includes(value) ? <img className="plusIcon" src={'/assets/images/delete_plus/add.svg'} alt={"Summoner icon"}
-                                onClick={() => {
-                                    this.addSummoner(value)
-                                }}
-                            />
+                                !this.props.favoriteSummoners.includes(value) ? <img className="plusIcon" src={'/assets/images/delete_plus/add.svg'} alt={"Summoner icon"}
+                                    onClick={() => {
+                                        this.addSummoner(value)
+                                    }}
+                                />
+                                    :
+                                    false
                                 :
-                                false
-                                :
-                                false
+                                <Link title="Add to farvorite" className="linkToLoginPage" to={"/login"}>
+                                    <img src={'/assets/images/delete_plus/add.svg'} alt={"Summoner icon"} />
+                                </Link>
+
                             }
 
                         </React.Fragment>
@@ -91,4 +94,4 @@ export default compose(
     connect(mapStateToProps,
         mapDispatchToProps
     ),
-)(ChooseSummonerNonAuth)
+)(ChooseSummonerHistory)
