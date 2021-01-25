@@ -19,7 +19,6 @@ class SearchUserInputContent extends React.Component {
             isFetchError: false,
             lastUpdate: "",
         };
-        // this.fetchListGame = this.fetchListGame.bind(this)
         this._isMounted = false;
 
     };

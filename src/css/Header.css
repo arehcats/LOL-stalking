@@ -1,3 +1,75 @@
 .header{
-    height: 60px;
+    height: 55px;
+    display: flex;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#rightNavbar{
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 35px;
+}
+#rightNavbar div{
+    margin-left: 10px;
+    margin-right: 25px;
+}
+#rightNavbar div:first-child{
+    cursor: context-menu;
+    font-size: 15px;
+
+}
+.logInOut{
+    font-size: 17px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    display: block;
+}
+.logInOut:hover{
+    color: rgb(118, 227, 235);
+    transition: ease 0.15s;
+    transform: scale(1.005)
+}
+
+#leftNavbar{
+    /* align-items: center; */
+    display: flex;
+    /* margin-top: 15px; */
+    /* margin-bottom: 15px; */
+    font-size: 17px;
+    margin-left: 40px;
+
+}
+
+
+.navigate{
+    cursor: pointer;
+    text-align: center;
+    min-width: 120px;
+    margin-right: 20px;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+    border-bottom: 4px solid transparent;
+}
+.navigate {
+    /* padding-left: 10px;
+    padding-right: 10px; */
+}
+.navigate span {
+    line-height: 45px;
+    height: 100%;
+    display: block;
+}
+.navigate :hover{
+    color: rgb(118, 227, 235);
+    transition: ease 0.15s;
+    transform: scale(1.01);
+    border-bottom: 4px solid rgb(118, 227, 235);
+}
+.navigateSelected{
+    color: rgb(118, 227, 235);
+    transition: ease 0.15s;
+    transform: scale(1.01);
+    border-bottom: 4px solid rgb(118, 227, 235);
 }

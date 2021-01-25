@@ -5,7 +5,7 @@ import '../../css/App.css'
 function Footer() {
     return (
         <div id='footer' className="ClassHeaderFooter">
-            Footer
+            {/* Footer */}
         </div>
     );
 }

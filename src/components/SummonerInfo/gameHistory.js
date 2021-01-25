@@ -253,7 +253,7 @@ class GameHistory extends React.Component {
                             let assists = allGameInfo[0].participants[participantId[0]].stats.assists
 
                             let kda = Math.round(100 * (kills + assists) / deaths) / 100
-                            if (kda === Infinity) kda = "Perfect"
+                            if (kda === Infinity || isNaN(kda)) kda = "Perfect"
 
                             let gameDurationMinutes = Math.round((allGameInfo[0].gameDuration) / 60)
                             let gameDurationSeconds = (allGameInfo[0].gameDuration) % 60
@@ -504,7 +504,7 @@ class GameHistory extends React.Component {
                                         {allGameInfo[0].participantIdentities.slice(5, 10).map((participant, i_OtherPlayers) => {
                                             return <div className="playerList" key={i_OtherPlayers}>
                                                 <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
-                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers].championId]} src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/'
+                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId]} src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/'
                                                         + champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}
