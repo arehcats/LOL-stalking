@@ -9,8 +9,8 @@ import { NavLink } from "react-router-dom";
 import { withFirebase } from '../Firebase';
 
 const Header = ({ authUser, firebase, ...props }) => {
-    console.log(props.location.pathname === '/eune/');
-    console.log(props);
+    // console.log(props.location.pathname === '/eune/');
+    // console.log(props);
     // var str = "Hello world, welcome to the universe.";
     // var n = str.startsWith("Hello");
     return (

@@ -80,8 +80,8 @@ class GameHistory extends React.Component {
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         // const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
         const region = "https://eun1.api.riotgames.com"
-        // const cors = "https://cors-anywhere.herokuapp.com/"
-        const cors = ""
+        const cors = "https://cors-anywhere.herokuapp.com/"
+        // const cors = ""
         let getStorageGame
         let response = ''
         let timeInMs = Date.now();

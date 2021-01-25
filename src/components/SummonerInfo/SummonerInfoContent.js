@@ -116,8 +116,8 @@ class SearchUserInputContent extends React.Component {
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
         const region = "https://eun1.api.riotgames.com"
-        // const cors = "https://cors-anywhere.herokuapp.com/"
-        const cors = ""
+        const cors = "https://cors-anywhere.herokuapp.com/"
+        // const cors = ""
         const acutalPatch = "11.2.1"
         // const cors = "https://yacdn.org/proxy/"
         this.fetchGamesID()
