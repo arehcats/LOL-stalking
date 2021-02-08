@@ -22,9 +22,25 @@ class SearchUserInputContent extends React.Component {
         this._isMounted = false;
 
     };
-    componentDidMount() {
+    async componentDidMount() {
+
         this._isMounted = true;
 
+        //////////// fetch actual patch //////////////////////
+        const responseActualPatch = await fetch("https://ddragon.leagueoflegends.com/api/versions.json")
+        if (!this._isMounted) return
+
+        if (responseActualPatch.status !== 200) {
+            this.setState({
+                status: responseActualPatch.status,
+                errorMessage: responseActualPatch.statusText
+            })
+            return
+        }
+        const jsonActualPatch = await responseActualPatch.json()
+        this.props.setActualPatch(jsonActualPatch[0]);
+
+        ////////// reset state //////
         this.props.setBasicInfoSummoner()
         this.props.setSoloRank()
         this.props.setFlexRank()
@@ -38,14 +54,13 @@ class SearchUserInputContent extends React.Component {
         this.props.addNewSummoner(this.state.SummonerName)
 
         let getStorage = JSON.parse(localStorage.getItem(this.state.SummonerName))
-        let gamesIDsFromStorage = JSON.parse(localStorage.getItem("gamesIDs"))
+        let queuesIDsDictionaryFromStorage = JSON.parse(localStorage.getItem("queuesIDsDictionary"))
 
-
-        if (gamesIDsFromStorage === null) {
-            this.fetchGamesID()
+        if (queuesIDsDictionaryFromStorage === null) {
+            await this.fetchQueuesIDs()
         }
         else {
-            this.props.setGamesIDs(gamesIDsFromStorage)
+            this.props.setQueuesIDsDictionary(queuesIDsDictionaryFromStorage)
         }
 
 
@@ -88,9 +103,10 @@ class SearchUserInputContent extends React.Component {
     }
 
 
-    async fetchGamesID() {
+    async fetchQueuesIDs() {
         const gamesID_url = "http://static.developer.riotgames.com/docs/lol/queues.json"
         const responsegamesID_url = await fetch(gamesID_url)
+
         if (!this._isMounted) return
 
         if (responsegamesID_url.status !== 200) {
@@ -100,14 +116,14 @@ class SearchUserInputContent extends React.Component {
             })
             return
         }
-        let gamesIDs = {}
+        let queuesIDsDictionary = {}
         const jsonresponseGamesID_url = await responsegamesID_url.json()
         jsonresponseGamesID_url.forEach((val) => {
-            gamesIDs[val.queueId] = val.description
+            queuesIDsDictionary[val.queueId] = val.description
         })
 
-        localStorage.setItem("gamesIDs", JSON.stringify(gamesIDs));
-        this.props.setGamesIDs(gamesIDs)
+        localStorage.setItem("queuesIDsDictionary", JSON.stringify(queuesIDsDictionary));
+        this.props.setQueuesIDsDictionary(queuesIDsDictionary)
 
     }
 
@@ -116,11 +132,11 @@ class SearchUserInputContent extends React.Component {
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
         const region = "https://eun1.api.riotgames.com"
-        const cors = "https://cors-anywhere.herokuapp.com/"
-        // const cors = ""
-        const acutalPatch = "11.2.1"
+        // const cors = "https://cors-anywhere.herokuapp.com/"
+        const cors = ""
+        const acutalPatch = this.props.acutalPatch
         // const cors = "https://yacdn.org/proxy/"
-        this.fetchGamesID()
+        this.fetchQueuesIDs()
 
         ////////////////////////////////// fetch data by summuner name ////////////////////////
 
@@ -306,7 +322,7 @@ class SearchUserInputContent extends React.Component {
                     <div>
                         <div id="topBannerBasicInfo">
                             <div id="summIcon">
-                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
+                                <img src={'http://ddragon.leagueoflegends.com/cdn/'+ this.props.acutalPatch +'/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
                                     alt={"Summoner icon"} />
                                 <div>
                                     {this.props.basicInfoSummoner.summonerLevel}
@@ -367,14 +383,11 @@ const LastUpdate = ({ lastUpdate }) => {
     if (timeMinutes === 0) {
         timeAgo = ""
         timeAgoString = "a few seconds ago"
-        console.log(1);
     }
     else if (timeMinutes <= 60) {
-        console.log(2);
         timeAgoString = "minutes ago"
     }
     else if (timeMinutes / 60 <= 24) {
-        console.log(3);
 
         timeAgo = Math.round(timeMinutes / 60)
         timeAgoString = "hours ago"
@@ -415,14 +428,16 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: 'PLAYED_ARAM_SET', championsPlayedAram }),
     addNewSummoner: newSummoner =>
         dispatch({ type: "ADD_SUMMONER_SET", newSummoner }),
-    setGamesIDs: gamesIDs =>
-        dispatch({ type: "GAMES_IDs_SET", gamesIDs }),
+    setQueuesIDsDictionary: queuesIDsDictionary =>
+        dispatch({ type: "GAMES_IDs_SET", queuesIDsDictionary }),
     setChampionsIDs: championsIDs =>
         dispatch({ type: "CHAMPIONS_IDs_SET", championsIDs }),
     setLast100games: last100games =>
         dispatch({ type: "LAST_100_GAMES_SET", last100games }),
     setQueueIDs: queueIds =>
         dispatch({ type: "QUEUE_ID_SET", queueIds }),
+    setActualPatch: acutalPatch =>
+        dispatch({ type: "ACTUAL_PATCH_SET", acutalPatch }),
 
 });
 
@@ -433,7 +448,8 @@ const mapStateToProps = state => ({
     championsPlayedFlex: state.summonerInfoState.championsPlayedFlex,
     championsPlayedSolo: state.summonerInfoState.championsPlayedSolo,
     championsPlayedAram: state.summonerInfoState.championsPlayedAram,
-    gamesIDs: state.someDataGame.gamesIDs,
+    queuesIDsDictionary: state.someDataGame.queuesIDsDictionary,
+    acutalPatch: state.someDataGame.acutalPatch,
 });
 
 export default compose(

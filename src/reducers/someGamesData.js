@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
-  gamesIDs: null,
+  queuesIDsDictionary: null,
   championsIDs: null,
+  acutalPatch: null,
   spellsDictionary: {
     21: "SummonerBarrier",
     1: "SummonerBoost",
@@ -20,9 +21,9 @@ const INITIAL_STATE = {
   }
 };
 
-const applyGamesIDs = (state, action) => ({
+const applyQueuesIDsDictionary = (state, action) => ({
   ...state,
-  gamesIDs: action.gamesIDs,
+  queuesIDsDictionary: action.queuesIDsDictionary,
 });
 const applyChampionsIDs = (state, action) => ({
   ...state,
@@ -33,16 +34,24 @@ const applySpellsDictionary = (state, action) => ({
   spellsDictionary: action.spellsDictionary,
 });
 
+const applyacutalPatch = (state, action) => ({
+  ...state,
+  acutalPatch: action.acutalPatch,
+});
+
 function someDataGameReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'GAMES_IDs_SET': {
-      return applyGamesIDs(state, action);
+      return applyQueuesIDsDictionary(state, action);
     }
     case 'CHAMPIONS_IDs_SET': {
       return applyChampionsIDs(state, action);
     }
     case 'SPELLS_DICT_SET': {
       return applySpellsDictionary(state, action);
+    }
+    case 'ACTUAL_PATCH_SET': {
+      return applyacutalPatch(state, action);
     }
     default:
       return state;

@@ -43,11 +43,27 @@ class GameHistory extends React.Component {
         })
         this.fetchInfoAboutGame()
 
-        // console.log(localStorage.length);
-        // for (var i = 0; i < localStorage.length; i++){
-        //    console.log(localStorage.getItem(localStorage.key(i)));
-        //    console.log("///////////////////////////////////////////////////");
-        // }
+    //     console.log(localStorage.length);
+    //     for (var i = 0; i < localStorage.length; i++){
+    //        console.log(localStorage.getItem(localStorage.key(i)));
+    //        console.log("///////////////////////////////////////////////////");
+    //     }
+
+    //     var data = '';
+
+    // console.log('Current local storage: ');
+
+    // for(var key in window.localStorage){
+
+    //     if(window.localStorage.hasOwnProperty(key)){
+    //         data += window.localStorage[key];
+    //         // console.log( key + " = " + ((window.localStorage[key].length * 16)/(8 * 1024)).toFixed(2) + ' KB' );
+    //     }
+
+    // }
+
+    // console.log(data ? '\n' + 'Total space used: ' + ((data.length * 16)/(8 * 1024)).toFixed(2) + ' KB' : 'Empty (0 KB)');
+    // console.log(data ? 'Approx. space remaining: ' + (5120 - ((data.length * 16)/(8 * 1024)).toFixed(2)) + ' KB' : '5 MB');
 
     }
 
@@ -60,7 +76,6 @@ class GameHistory extends React.Component {
         const condition = displayedGames + fetchStep
         let matchIDs = []
         let baisicsGameInfo = this.state.baisicsGameInfo
-        // console.log(lastGames);
 
         for (; displayedGames < condition; displayedGames++) {
             if (lastGames.length > displayedGames) {
@@ -80,8 +95,8 @@ class GameHistory extends React.Component {
         const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         // const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
         const region = "https://eun1.api.riotgames.com"
-        const cors = "https://cors-anywhere.herokuapp.com/"
-        // const cors = ""
+        // const cors = "https://cors-anywhere.herokuapp.com/"
+        const cors = ""
         let getStorageGame
         let response = ''
         let timeInMs = Date.now();
@@ -117,7 +132,6 @@ class GameHistory extends React.Component {
 
         fetchedGames.push(...rest)
 
-        // console.log(fetchedGames);
         this.setState({
             fetchedGames: fetchedGames,
             displayedGames: displayedGames,
@@ -140,6 +154,8 @@ class GameHistory extends React.Component {
 
     render() {
         let champions = this.props.championsIDs
+        const acutalPatch = this.props.acutalPatch
+        
         return (
             <div id="rightConteiner">
 
@@ -150,7 +166,7 @@ class GameHistory extends React.Component {
 
                             let name
                             if (queueId === "All games") name = "All games"
-                            else name = this.props.gamesIDs[queueId]
+                            else name = this.props.queuesIDsDictionary[queueId]
 
                             return <div className={className} key={indexQueue} onClick={() => {
                                 this.setState({
@@ -189,14 +205,12 @@ class GameHistory extends React.Component {
 
 
                                     let loadAgain = this.state.loadAgain
-                                    console.log(loadAgain);
                                     loadAgain[i] = true
                                     this.setState({
                                         loadAgain: loadAgain,
                                     })
 
                                     let response = await fetch(allGameInfo[1])
-                                    console.log(response);
                                     if (!this._isMounted) return
 
                                     if (response.status !== 200) {
@@ -322,8 +336,8 @@ class GameHistory extends React.Component {
 
 
                                 <div className="basicInfoGame">
-                                    <div title={this.props.gamesIDs[allGameInfo[0].queueId]} className="gameType">
-                                        {this.props.gamesIDs[allGameInfo[0].queueId]}
+                                    <div title={this.props.queuesIDsDictionary[allGameInfo[0].queueId]} className="gameType">
+                                        {this.props.queuesIDsDictionary[allGameInfo[0].queueId]}
                                     </div>
                                     <div className="timeAgo">
                                         {timeAgo} {minutesAgoString}
@@ -344,17 +358,17 @@ class GameHistory extends React.Component {
                                 <div className="championAndSpellsImg">
                                     <div>
                                         <div className="championsImg" >
-                                            <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/'
+                                            <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
                                                 + champions[allGameInfo[0].participants[participantId[0]].championId] + '.png'}
                                                 alt={"Champion"} />
                                         </div>
                                         <div className="SpellsImg">
                                             <img
-                                                src={"http://ddragon.leagueoflegends.com/cdn/11.2.1/img/spell/"
+                                                src={"http://ddragon.leagueoflegends.com/cdn/" + acutalPatch + "/img/spell/"
                                                     + this.props.spellsDictionary[allGameInfo[0].participants[participantId[0]].spell1Id] + ".png"}
                                                 alt={"Spell"} />
                                             <img
-                                                src={"http://ddragon.leagueoflegends.com/cdn/11.2.1/img/spell/"
+                                                src={"http://ddragon.leagueoflegends.com/cdn/" + acutalPatch + "/img/spell/"
                                                     + this.props.spellsDictionary[allGameInfo[0].participants[participantId[0]].spell2Id] + ".png"}
                                                 alt={"Spell"} />
                                         </div>
@@ -413,7 +427,7 @@ class GameHistory extends React.Component {
                                     <div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item0 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item0 + '.png'}
                                                     alt={""} />
                                                 :
@@ -422,7 +436,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item1 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item1 + '.png'}
                                                     alt={""} />
                                                 :
@@ -431,7 +445,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item2 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item2 + '.png'}
                                                     alt={""} />
                                                 :
@@ -440,7 +454,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item6 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item6 + '.png'}
                                                     alt={""} />
                                                 :
@@ -451,7 +465,7 @@ class GameHistory extends React.Component {
                                     <div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item3 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item3 + '.png'}
                                                     alt={""} />
                                                 :
@@ -460,7 +474,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item4 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item4 + '.png'}
                                                     alt={""} />
                                                 :
@@ -469,7 +483,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item5 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/item/'
+                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item5 + '.png'}
                                                     alt={""} />
                                                 :
@@ -492,7 +506,7 @@ class GameHistory extends React.Component {
                                         {allGameInfo[0].participantIdentities.slice(0, 5).map((participant, i_OtherPlayers) => {
                                             return <div className="playerList" key={i_OtherPlayers}>
                                                 <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
-                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers].championId]} src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/'
+                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers].championId]} src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
                                                         + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}
@@ -504,7 +518,7 @@ class GameHistory extends React.Component {
                                         {allGameInfo[0].participantIdentities.slice(5, 10).map((participant, i_OtherPlayers) => {
                                             return <div className="playerList" key={i_OtherPlayers}>
                                                 <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
-                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId]} src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/'
+                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId]} src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
                                                         + champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}
@@ -562,8 +576,9 @@ const Loading = ({ status, errorMessage }) => {
 const mapStateToProps = state => ({
     last100games: state.summonerInfoState.last100games,
     championsIDs: state.someDataGame.championsIDs,
-    gamesIDs: state.someDataGame.gamesIDs,
+    queuesIDsDictionary: state.someDataGame.queuesIDsDictionary,
     spellsDictionary: state.someDataGame.spellsDictionary,
+    acutalPatch: state.someDataGame.acutalPatch,
 });
 
 export default compose(
