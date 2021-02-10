@@ -122,7 +122,11 @@ class SearchUserInputContent extends React.Component {
             queuesIDsDictionary[val.queueId] = val.description
         })
 
-        localStorage.setItem("queuesIDsDictionary", JSON.stringify(queuesIDsDictionary));
+        try {
+            localStorage.setItem("queuesIDsDictionary", JSON.stringify(queuesIDsDictionary));
+        } catch (e) {
+            localStorage.clear()
+        }
         this.props.setQueuesIDsDictionary(queuesIDsDictionary)
 
     }
@@ -254,7 +258,11 @@ class SearchUserInputContent extends React.Component {
         StorageData.push(dictionaryChampsID)
         StorageData.push(lastUpdate)
 
-        localStorage.setItem(SummonerName, JSON.stringify(StorageData));
+        try {
+            localStorage.setItem(SummonerName, JSON.stringify(StorageData));
+        } catch (e) {
+            localStorage.clear()
+        }
 
         this.setState({
             lastUpdate: lastUpdate,
@@ -322,7 +330,7 @@ class SearchUserInputContent extends React.Component {
                     <div>
                         <div id="topBannerBasicInfo">
                             <div id="summIcon">
-                                <img src={'http://ddragon.leagueoflegends.com/cdn/'+ this.props.acutalPatch +'/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
+                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + this.props.acutalPatch + '/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
                                     alt={"Summoner icon"} />
                                 <div>
                                     {this.props.basicInfoSummoner.summonerLevel}

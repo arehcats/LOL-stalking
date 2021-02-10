@@ -12,7 +12,7 @@ class GameHistory extends React.Component {
         this.state = {
             isLoading: true,
             displayedGames: 0,
-            fetchStep: 3,
+            fetchStep: 10,
             status: false,
             errorMessage: "",
             fetchedGames: [],
@@ -43,27 +43,27 @@ class GameHistory extends React.Component {
         })
         this.fetchInfoAboutGame()
 
-    //     console.log(localStorage.length);
-    //     for (var i = 0; i < localStorage.length; i++){
-    //        console.log(localStorage.getItem(localStorage.key(i)));
-    //        console.log("///////////////////////////////////////////////////");
-    //     }
+        //     console.log(localStorage.length);
+        //     for (var i = 0; i < localStorage.length; i++){
+        //        console.log(localStorage.getItem(localStorage.key(i)));
+        //        console.log("///////////////////////////////////////////////////");
+        //     }
 
-    //     var data = '';
+        //     var data = '';
 
-    // console.log('Current local storage: ');
+        // console.log('Current local storage: ');
 
-    // for(var key in window.localStorage){
+        // for(var key in window.localStorage){
 
-    //     if(window.localStorage.hasOwnProperty(key)){
-    //         data += window.localStorage[key];
-    //         // console.log( key + " = " + ((window.localStorage[key].length * 16)/(8 * 1024)).toFixed(2) + ' KB' );
-    //     }
+        //     if(window.localStorage.hasOwnProperty(key)){
+        //         data += window.localStorage[key];
+        //         // console.log( key + " = " + ((window.localStorage[key].length * 16)/(8 * 1024)).toFixed(2) + ' KB' );
+        //     }
 
-    // }
+        // }
 
-    // console.log(data ? '\n' + 'Total space used: ' + ((data.length * 16)/(8 * 1024)).toFixed(2) + ' KB' : 'Empty (0 KB)');
-    // console.log(data ? 'Approx. space remaining: ' + (5120 - ((data.length * 16)/(8 * 1024)).toFixed(2)) + ' KB' : '5 MB');
+        // console.log(data ? '\n' + 'Total space used: ' + ((data.length * 16)/(8 * 1024)).toFixed(2) + ' KB' : 'Empty (0 KB)');
+        // console.log(data ? 'Approx. space remaining: ' + (5120 - ((data.length * 16)/(8 * 1024)).toFixed(2)) + ' KB' : '5 MB');
 
     }
 
@@ -122,7 +122,12 @@ class GameHistory extends React.Component {
                         console.log("33333");
                         let jsonresponse = await response.json()
                         let returngameInfo = [jsonresponse, timeInMs]
-                        localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
+                        try {
+                            localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
+                        } catch (e) {
+                            console.log("clear //////////////////////////");
+                            localStorage.clear()
+                        }
                         return returngameInfo
 
                     }
@@ -155,7 +160,7 @@ class GameHistory extends React.Component {
     render() {
         let champions = this.props.championsIDs
         const acutalPatch = this.props.acutalPatch
-        
+
         return (
             <div id="rightConteiner">
 
@@ -225,8 +230,11 @@ class GameHistory extends React.Component {
 
                                         let jsonresponse = await response.json()
                                         let returngameInfo = [jsonresponse, timeInMs]
-                                        localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
-
+                                        try {
+                                            localStorage.setItem(jsonresponse.gameId, JSON.stringify(returngameInfo));
+                                        } catch (e) {
+                                            localStorage.clear()
+                                        }
                                         let games = this.state.fetchedGames
                                         games[i] = returngameInfo
                                         loadAgain[i] = false
