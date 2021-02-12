@@ -96,7 +96,7 @@
 .items div div img{
     width: 25px;
     height: 25px;
-    opacity: 100%;
+    opacity: 1;
     border-radius: 15%;
 
 }
@@ -154,7 +154,7 @@
     height: 3px;
     margin-bottom: 10px;
     width: 30px;
-    opacity: 50%;
+    opacity: 0.5;
 }
 .Victory{
     text-align: center;

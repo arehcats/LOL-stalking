@@ -1,18 +1,34 @@
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
+from config import APP_RITO_API_KEY
 
 app = FastAPI()
 
-r = requests.get('https://eun1.api.riotgames.com/lol/match/v4/matches/2688632321?api_key=RGAPI-492fac5d-ee87-45bc-8b3c-deeba004a33d')
 
 # print(r.json())
+
+print(APP_RITO_API_KEY)
 
 
 app.mount("/static", StaticFiles(directory="../frontend/build/static"), name="static")
 templates = Jinja2Templates(directory="../frontend/build")
+
+
+
+
+@app.get("/", tags=["Statics"])
+@app.get("/login", tags=["Statics"])
+@app.get("/eune/{username}", tags=["Statics"])
+async def show_statics(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/summoner", tags=["riot_api"])
+async def get_todos(region, SummonerName) :
+    return requests.get("https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + SummonerName + "?api_key=" + APP_RITO_API_KEY).json()
 
 
 # origins = [
@@ -28,12 +44,3 @@ templates = Jinja2Templates(directory="../frontend/build")
 #     allow_methods=["*"],
 #     allow_headers=["*"]
 # )
-
-@app.get("/")
-async def show_public_statics(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-
-@app.get("/todo", tags=["todos"])
-async def get_todos() -> dict:
-    return { "data": "dd" }
