@@ -23,5 +23,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+__pycache__/config.cpython-38.pyc
 config.py
 venv
