@@ -42,10 +42,11 @@ async def show_statics(request: Request):
 
 @app.get("/api/summoner", tags=["riot_api"])
 async def get_summoner(region, SummonerName) :
+    
     return requests.get("https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + SummonerName + "?api_key=" + APP_RITO_API_KEY).json()
 
 @app.get("/api/summonerID", tags=["riot_api"])
 async def summonerRank(region, SummonerID) :
-    # print("https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + SummonerID + "?api_key=" + APP_RITO_API_KEY)
+    print("https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + SummonerID + "?api_key=" + APP_RITO_API_KEY)
     return requests.get("https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + SummonerID + "?api_key=" + APP_RITO_API_KEY).json()
 

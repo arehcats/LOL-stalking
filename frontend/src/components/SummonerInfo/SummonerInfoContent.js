@@ -24,7 +24,7 @@ class SearchUserInputContent extends React.Component {
     };
     async componentDidMount() {
         this._isMounted = true;
-
+        // localStorage.clear()
         //////////// fetch actual patch //////////////////////
         const responseActualPatch = await fetch("https://ddragon.leagueoflegends.com/api/versions.json")
         if (!this._isMounted) return
@@ -147,7 +147,7 @@ class SearchUserInputContent extends React.Component {
         // const SummonerByName = region + "/lol/summoner/v4/summoners/by-name/" + SummonerName + RiotApiKey
         // const responseSummonerByName = await fetch(cors + SummonerByName)
         const responseSummonerByName = await fetch("http://localhost:8000/api/summoner?region=" + region2 + "&SummonerName=" + SummonerName)
-
+        console.log(responseSummonerByName);
         if (!this._isMounted) return
 
         if (responseSummonerByName.status !== 200) {
@@ -158,16 +158,15 @@ class SearchUserInputContent extends React.Component {
             return
         }
         const jsonSummonerByName = await responseSummonerByName.json()
-
+        console.log(jsonSummonerByName);
         this.props.setBasicInfoSummoner(jsonSummonerByName);
 
         ///////////////// fetch summoner rank by summoner id /////////////////////////////
 
         const SummonerID = jsonSummonerByName.id
-        const SummonerRank = region + "/lol/league/v4/entries/by-summoner/" + SummonerID + RiotApiKey
-        const responseSummonerRank = await fetch(cors + SummonerRank)
-
-
+        // const SummonerRank = region + "/lol/league/v4/entries/by-summoner/" + SummonerID + RiotApiKey
+        // const responseSummonerRank = await fetch(cors + SummonerRank)
+        const responseSummonerRank = await fetch("http://localhost:8000/api/summonerID?region=" + region2 + "&SummonerID=" + SummonerID)
 
         if (!this._isMounted) return
 
