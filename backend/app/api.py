@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, Request
+from fastapi import Depends, FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -7,10 +7,24 @@ from config import APP_RITO_API_KEY
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:3000",
+    "localhost:3000",
+    "http://localhost:3000/eune/arehcats",
+    "localhost:3000/eune/arehcats",
+    "http://localhost",
+    "localhost",
+    "http://localhost:8080"
+]
 
-# print(r.json())
 
-print(APP_RITO_API_KEY)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=['*'],
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 
 app.mount("/static", StaticFiles(directory="../frontend/build/static"), name="static")
@@ -26,21 +40,12 @@ async def show_statics(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.get("/summoner", tags=["riot_api"])
-async def get_todos(region, SummonerName) :
+@app.get("/api/summoner", tags=["riot_api"])
+async def get_summoner(region, SummonerName) :
     return requests.get("https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + SummonerName + "?api_key=" + APP_RITO_API_KEY).json()
 
+@app.get("/api/summonerID", tags=["riot_api"])
+async def summonerRank(region, SummonerID) :
+    # print("https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + SummonerID + "?api_key=" + APP_RITO_API_KEY)
+    return requests.get("https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + SummonerID + "?api_key=" + APP_RITO_API_KEY).json()
 
-# origins = [
-#     "http://localhost:3000",
-#     "localhost:3000"
-# ]
-
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"]
-# )
