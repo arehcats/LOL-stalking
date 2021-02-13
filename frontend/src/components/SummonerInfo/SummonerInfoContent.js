@@ -209,8 +209,9 @@ class SearchUserInputContent extends React.Component {
 
         ////////////// fetch last 100 games by account ID ///////////////////////////////
 
-        let last_games_url = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId + RiotApiKey
-        const responsegames = await fetch(cors + last_games_url)
+        // let last_games_url = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId + RiotApiKey
+        // const responsegames = await fetch(cors + last_games_url)
+        const responsegames = await fetch("http://localhost:8000/api/last100games?region=" + region2 + "&accountId=" + jsonSummonerByName.accountId)
 
         if (responsegames.status === 404) { }
         else if (responsegames.status !== 200) {
@@ -279,12 +280,15 @@ class SearchUserInputContent extends React.Component {
         let endIndex = 100
         let totalGames = 0
         let fetchedGames = []
-
+        let region2 = "eun1"
         do {
-            let games = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId +
-                "?queue=" + gameID + "&beginTime=1610085600000&endIndex=" + endIndex + "&beginIndex=" + beginIndex + RiotApiKey
-            const responsegames = await fetch(cors + games)
+            // let games = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId +
+            //     "?queue=" + gameID + "&beginTime=1610085600000&endIndex=" + endIndex + "&beginIndex=" + beginIndex + RiotApiKey
+            // const responsegames = await fetch(cors + games)
+            const responsegames = await fetch("http://localhost:8000/api/matchlists?region=" + region2 +
+                "&accountId=" + jsonSummonerByName.accountId + "&gameID=" + gameID + "&endIndex=" + endIndex + "&beginIndex=" + beginIndex)
 
+            console.log(responsegames.status);
             if (responsegames.status === 404) {
 
                 return []

@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, Request, Response
+from fastapi import Depends, FastAPI, Request, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -42,11 +42,33 @@ async def show_statics(request: Request):
 
 @app.get("/api/summoner", tags=["riot_api"])
 async def get_summoner(region, SummonerName) :
-    
-    return requests.get("https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + SummonerName + "?api_key=" + APP_RITO_API_KEY).json()
+    response = requests.get("https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + SummonerName + "?api_key=" + APP_RITO_API_KEY)
+    responseJSON = response.json()    
+    if response.status_code != 200:
+        raise HTTPException(status_code=responseJSON["status"]["status_code"], detail=responseJSON["status"]["message"])
+    return responseJSON
 
 @app.get("/api/summonerID", tags=["riot_api"])
 async def summonerRank(region, SummonerID) :
-    print("https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + SummonerID + "?api_key=" + APP_RITO_API_KEY)
-    return requests.get("https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + SummonerID + "?api_key=" + APP_RITO_API_KEY).json()
+    response = requests.get("https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + SummonerID + "?api_key=" + APP_RITO_API_KEY)
+    responseJSON = response.json()    
+    if response.status_code != 200:
+        raise HTTPException(status_code=responseJSON["status"]["status_code"], detail=responseJSON["status"]["message"])
+    return responseJSON
 
+@app.get("/api/last100games", tags=["riot_api"])
+async def last100games(region, accountId) :
+    response = requests.get("https://" + region + ".api.riotgames.com/lol/match/v4/matchlists/by-account/" + accountId + "?api_key=" + APP_RITO_API_KEY)
+    responseJSON = response.json()    
+    if response.status_code != 200:
+        raise HTTPException(status_code=responseJSON["status"]["status_code"], detail=responseJSON["status"]["message"])
+    return responseJSON
+
+@app.get("/api/matchlists", tags=["riot_api"])
+async def matchlists(region, accountId, gameID, endIndex, beginIndex) :
+    print("_")
+    response = requests.get("https://" + region + ".api.riotgames.com/lol/match/v4/matchlists/by-account/" + accountId + "?queue=" + gameID + "&beginTime=1610085600000&endIndex=" + endIndex + "&beginIndex=" + beginIndex + "&api_key=" + APP_RITO_API_KEY)
+    responseJSON = response.json()    
+    if response.status_code != 200:
+        raise HTTPException(status_code=responseJSON["status"]["status_code"], detail=responseJSON["status"]["message"])
+    return responseJSON
