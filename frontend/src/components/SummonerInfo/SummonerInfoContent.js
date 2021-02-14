@@ -24,7 +24,7 @@ class SearchUserInputContent extends React.Component {
     };
     async componentDidMount() {
         this._isMounted = true;
-        localStorage.clear()
+        // localStorage.clear()
         //////////// fetch actual patch //////////////////////
         const responseActualPatch = await fetch("https://ddragon.leagueoflegends.com/api/versions.json")
         if (!this._isMounted) return
