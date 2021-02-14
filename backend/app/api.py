@@ -40,7 +40,7 @@ app.add_middleware(
 @app.get("/eune/{username}", tags=["Statics"])
 # @app.get("/favicon.ico", tags=["Statics"])
 async def show_statics(request: Request):
-    return "ffff"
+    return {"predictions": "Hello Man"}
 
 # @app.get("/manifest.json", tags=["Statics"])
 # async def manifes(request: Request):
