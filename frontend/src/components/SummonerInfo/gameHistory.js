@@ -92,11 +92,12 @@ class GameHistory extends React.Component {
         // matchIDs[1] = "4444d44"
         // baisicsGameInfo.push(lastGames[3])
 
-        const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
+        // const RiotApiKey = "?api_key=" + process.env.REACT_APP_RITO_API_KEY
         // const RiotApiKeySecond = "&api_key=" + process.env.REACT_APP_RITO_API_KEY
-        const region = "https://eun1.api.riotgames.com"
+        // const region = "https://eun1.api.riotgames.com"
+        const region = "eun1"
         // const cors = "https://cors-anywhere.herokuapp.com/"
-        const cors = ""
+        // const cors = ""
         let getStorageGame
         let response = ''
         let timeInMs = Date.now();
@@ -110,13 +111,14 @@ class GameHistory extends React.Component {
                     return getStorageGame
                 }
                 else {
-                    response = await fetch(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
+                    // response = await fetch(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
+                    response = await fetch("http://localhost:8000/api/match?region=" + region + "&matchID=" + matchID)
 
                     if (!this._isMounted) return
 
                     if (response.status !== 200) {
                         console.log("22222");
-                        return ["error", cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey]
+                        return ["error", "http://localhost:8000/api/match?region=" + region + "&matchID=" + matchID]
                     }
                     else {
                         console.log("33333");
@@ -281,10 +283,11 @@ class GameHistory extends React.Component {
                             let gameDurationSeconds = (allGameInfo[0].gameDuration) % 60
                             let timeInMs = Date.now();
                             let gameCreation = allGameInfo[0].gameCreation
-                            let timeMinutes = Math.round((timeInMs - gameCreation) / 60000)
+                            // console.log(timeInMs - gameCreation);
+                            // console.log((timeInMs - gameCreation)/1000/60);
+                            let timeMinutes = Math.round((timeInMs - gameCreation) / 60000) - 30
                             let timeAgo
                             let minutesAgoString = "minutes ago"
-
                             if (timeMinutes <= 60) {
                                 timeAgo = timeMinutes
                             }
