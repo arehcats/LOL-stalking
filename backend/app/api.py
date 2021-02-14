@@ -36,10 +36,10 @@ app.add_middleware(
 
 @app.get("/", tags=["Statics"])
 # @app.get("/assets/images/delete_plus/delete.svg", tags=["Statics"])
-@app.get("/login", tags=["Statics"])
-@app.get("/eune/{username}", tags=["Statics"])
+# @app.get("/login", tags=["Statics"])
+# @app.get("/eune/{username}", tags=["Statics"])
 # @app.get("/favicon.ico", tags=["Statics"])
-async def show_statics(request: Request):
+async def show_statics():
     return {"predictions": "Hello Man"}
 
 # @app.get("/manifest.json", tags=["Statics"])
