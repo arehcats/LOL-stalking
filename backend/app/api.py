@@ -9,15 +9,15 @@ APP_RITO_API_KEY = "RGAPI-492fac5d-ee87-45bc-8b3c-deeba004a33d"
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-    "localhost:3000",
-    "http://localhost:3000/eune/arehcats",
-    "localhost:3000/eune/arehcats",
-    "http://localhost",
-    "localhost",
-    "http://localhost:8080"
-]
+# origins = [
+#     "http://localhost:3000",
+#     "localhost:3000",
+#     "http://localhost:3000/eune/arehcats",
+#     "localhost:3000/eune/arehcats",
+#     "http://localhost",
+#     "localhost",
+#     "http://localhost:8080"
+# ]
 
 
 app.add_middleware(
