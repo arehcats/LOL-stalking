@@ -40,7 +40,7 @@ templates = Jinja2Templates(directory="../frontend/build")
 @app.get("/eune/{username}", tags=["Statics"])
 # @app.get("/favicon.ico", tags=["Statics"])
 async def show_statics(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return "ffff"
 
 # @app.get("/manifest.json", tags=["Statics"])
 # async def manifes(request: Request):
