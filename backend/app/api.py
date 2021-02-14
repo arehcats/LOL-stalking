@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 import requests
 from config import APP_RITO_API_KEY
 
+
 app = FastAPI()
 
 origins = [
@@ -32,13 +33,27 @@ templates = Jinja2Templates(directory="../frontend/build")
 
 
 
-
 @app.get("/", tags=["Statics"])
+# @app.get("/assets/images/delete_plus/delete.svg", tags=["Statics"])
 @app.get("/login", tags=["Statics"])
 @app.get("/eune/{username}", tags=["Statics"])
+# @app.get("/favicon.ico", tags=["Statics"])
 async def show_statics(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/manifest.json", tags=["Statics"])
+async def manifes(request: Request):
+    return templates.TemplateResponse("manifest.json", {"request": request}, media_type='application/json')
+
+
+@app.get("/assets/images/delete_plus/{img}", tags=["Statics"])
+async def show_delete_plus(request: Request, img):
+    return templates.TemplateResponse("assets/images/delete_plus/" + img, {"request": request}, media_type='image/svg+xml')
+
+@app.get("/assets/images/rank-icons/{img}", tags=["Statics"])
+async def show_ranks(request: Request, img):
+    print("woooooooooooooork")
+    return templates.TemplateResponse("assets/images/rank-icons/" + img, {"request": request}, media_type='image/png')
 
 @app.get("/api/summoner", tags=["riot_api"])
 async def get_summoner(region, SummonerName) :

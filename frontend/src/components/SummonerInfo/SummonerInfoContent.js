@@ -147,7 +147,6 @@ class SearchUserInputContent extends React.Component {
         // const SummonerByName = region + "/lol/summoner/v4/summoners/by-name/" + SummonerName + RiotApiKey
         // const responseSummonerByName = await fetch(cors + SummonerByName)
         const responseSummonerByName = await fetch("http://localhost:8000/api/summoner?region=" + region + "&SummonerName=" + SummonerName)
-        console.log(responseSummonerByName);
         if (!this._isMounted) return
 
         if (responseSummonerByName.status !== 200) {
@@ -158,7 +157,6 @@ class SearchUserInputContent extends React.Component {
             return
         }
         const jsonSummonerByName = await responseSummonerByName.json()
-        console.log(jsonSummonerByName);
         this.props.setBasicInfoSummoner(jsonSummonerByName);
 
         ///////////////// fetch summoner rank by summoner id /////////////////////////////
@@ -287,7 +285,6 @@ class SearchUserInputContent extends React.Component {
             const responsegames = await fetch("http://localhost:8000/api/matchlists?region=" + region +
                 "&accountId=" + jsonSummonerByName.accountId + "&gameID=" + gameID + "&endIndex=" + endIndex + "&beginIndex=" + beginIndex)
 
-            console.log(responsegames.status);
             if (responsegames.status === 404) {
 
                 return []
