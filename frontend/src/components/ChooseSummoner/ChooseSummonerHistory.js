@@ -40,7 +40,7 @@ class ChooseSummonerHistory extends Component {
                                 </div>
                             </NavLink>
                             {this.props.authUser ?
-                                !this.props.favoriteSummoners.includes(value) ? <img className="plusIcon" src={'/assets/images/delete_plus/add.svg'} alt={"Summoner icon"}
+                                !this.props.favoriteSummoners.includes(value) ? <img className="plusIcon" src={'/assets/delete_plus/add.svg'} alt={"Summoner icon"}
                                     onClick={() => {
                                         this.addSummoner(value)
                                     }}
@@ -49,7 +49,7 @@ class ChooseSummonerHistory extends Component {
                                     false
                                 :
                                 <Link title="Add to farvorite" className="linkToLoginPage" to={"/login"}>
-                                    <img src={'/assets/images/delete_plus/add.svg'} alt={"Summoner icon"} />
+                                    <img src={'/assets/delete_plus/add.svg'} alt={"Summoner icon"} />
                                 </Link>
 
                             }

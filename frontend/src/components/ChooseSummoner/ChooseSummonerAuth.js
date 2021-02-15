@@ -72,7 +72,7 @@ class ChooseSummonerAuth extends Component {
                                         </Button>
                                     </div>
                                 </NavLink>
-                                <img className="plusIcon" src={'/assets/images/delete_plus/delete.svg'} alt={"Summoner icon"}
+                                <img className="plusIcon" src={'/assets/delete_plus/delete.svg'} alt={"Summoner icon"}
                                     onClick={() => {
                                         this.deleteSummoner(value)
                                     }}
