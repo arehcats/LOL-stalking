@@ -103,7 +103,7 @@ class SearchUserInputContent extends React.Component {
 
 
     async fetchQueuesIDs() {
-        const gamesID_url = "http://static.developer.riotgames.com/docs/lol/queues.json"
+        const gamesID_url = "https://static.developer.riotgames.com/docs/lol/queues.json"
         const responsegamesID_url = await fetch(gamesID_url)
 
         if (!this._isMounted) return
@@ -146,7 +146,7 @@ class SearchUserInputContent extends React.Component {
 
         // const SummonerByName = region + "/lol/summoner/v4/summoners/by-name/" + SummonerName + RiotApiKey
         // const responseSummonerByName = await fetch(cors + SummonerByName)
-        const responseSummonerByName = await fetch("http://localhost:8000/api/summoner?region=" + region + "&SummonerName=" + SummonerName)
+        const responseSummonerByName = await fetch("/api/summoner?region=" + region + "&SummonerName=" + SummonerName)
         if (!this._isMounted) return
 
         if (responseSummonerByName.status !== 200) {
@@ -164,7 +164,7 @@ class SearchUserInputContent extends React.Component {
         const SummonerID = jsonSummonerByName.id
         // const SummonerRank = region + "/lol/league/v4/entries/by-summoner/" + SummonerID + RiotApiKey
         // const responseSummonerRank = await fetch(cors + SummonerRank)
-        const responseSummonerRank = await fetch("http://localhost:8000/api/summonerID?region=" + region + "&SummonerID=" + SummonerID)
+        const responseSummonerRank = await fetch("/api/summonerID?region=" + region + "&SummonerID=" + SummonerID)
 
         if (!this._isMounted) return
 
@@ -186,7 +186,7 @@ class SearchUserInputContent extends React.Component {
 
         ////////////////// fetch champions ids and their names ////////////////////
 
-        const responseChampions = await fetch("http://ddragon.leagueoflegends.com/cdn/" + acutalPatch + "/data/en_US/champion.json")
+        const responseChampions = await fetch("https://ddragon.leagueoflegends.com/cdn/" + acutalPatch + "/data/en_US/champion.json")
         if (responseChampions.status !== 200) {
             this.setState({
                 status: responseChampions.status,
@@ -209,7 +209,7 @@ class SearchUserInputContent extends React.Component {
 
         // let last_games_url = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId + RiotApiKey
         // const responsegames = await fetch(cors + last_games_url)
-        const responsegames = await fetch("http://localhost:8000/api/last100games?region=" + region + "&accountId=" + jsonSummonerByName.accountId)
+        const responsegames = await fetch("/api/last100games?region=" + region + "&accountId=" + jsonSummonerByName.accountId)
 
         if (responsegames.status === 404) { }
         else if (responsegames.status !== 200) {
@@ -282,7 +282,7 @@ class SearchUserInputContent extends React.Component {
             // let games = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId +
             //     "?queue=" + gameID + "&beginTime=1610085600000&endIndex=" + endIndex + "&beginIndex=" + beginIndex + RiotApiKey
             // const responsegames = await fetch(cors + games)
-            const responsegames = await fetch("http://localhost:8000/api/matchlists?region=" + region +
+            const responsegames = await fetch("/api/matchlists?region=" + region +
                 "&accountId=" + jsonSummonerByName.accountId + "&gameID=" + gameID + "&endIndex=" + endIndex + "&beginIndex=" + beginIndex)
 
             if (responsegames.status === 404) {
@@ -334,7 +334,7 @@ class SearchUserInputContent extends React.Component {
                     <div>
                         <div id="topBannerBasicInfo">
                             <div id="summIcon">
-                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + this.props.acutalPatch + '/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
+                                <img src={'https://ddragon.leagueoflegends.com/cdn/' + this.props.acutalPatch + '/img/profileicon/' + this.props.basicInfoSummoner.profileIconId + '.png'}
                                     alt={"Summoner icon"} />
                                 <div>
                                     {this.props.basicInfoSummoner.summonerLevel}

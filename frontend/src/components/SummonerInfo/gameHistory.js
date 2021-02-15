@@ -112,13 +112,13 @@ class GameHistory extends React.Component {
                 }
                 else {
                     // response = await fetch(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
-                    response = await fetch("http://localhost:8000/api/match?region=" + region + "&matchID=" + matchID)
+                    response = await fetch("/api/match?region=" + region + "&matchID=" + matchID)
 
                     if (!this._isMounted) return
 
                     if (response.status !== 200) {
                         console.log("22222");
-                        return ["error", "http://localhost:8000/api/match?region=" + region + "&matchID=" + matchID]
+                        return ["error", "/api/match?region=" + region + "&matchID=" + matchID]
                     }
                     else {
                         console.log("33333");
@@ -369,17 +369,17 @@ class GameHistory extends React.Component {
                                 <div className="championAndSpellsImg">
                                     <div>
                                         <div className="championsImg" >
-                                            <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
+                                            <img src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
                                                 + champions[allGameInfo[0].participants[participantId[0]].championId] + '.png'}
                                                 alt={"Champion"} />
                                         </div>
                                         <div className="SpellsImg">
                                             <img
-                                                src={"http://ddragon.leagueoflegends.com/cdn/" + acutalPatch + "/img/spell/"
+                                                src={"https://ddragon.leagueoflegends.com/cdn/" + acutalPatch + "/img/spell/"
                                                     + this.props.spellsDictionary[allGameInfo[0].participants[participantId[0]].spell1Id] + ".png"}
                                                 alt={"Spell"} />
                                             <img
-                                                src={"http://ddragon.leagueoflegends.com/cdn/" + acutalPatch + "/img/spell/"
+                                                src={"https://ddragon.leagueoflegends.com/cdn/" + acutalPatch + "/img/spell/"
                                                     + this.props.spellsDictionary[allGameInfo[0].participants[participantId[0]].spell2Id] + ".png"}
                                                 alt={"Spell"} />
                                         </div>
@@ -438,7 +438,7 @@ class GameHistory extends React.Component {
                                     <div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item0 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
+                                                <img src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item0 + '.png'}
                                                     alt={""} />
                                                 :
@@ -447,7 +447,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item1 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
+                                                <img src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item1 + '.png'}
                                                     alt={""} />
                                                 :
@@ -456,7 +456,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item2 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
+                                                <img src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item2 + '.png'}
                                                     alt={""} />
                                                 :
@@ -465,7 +465,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item6 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
+                                                <img src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item6 + '.png'}
                                                     alt={""} />
                                                 :
@@ -476,7 +476,7 @@ class GameHistory extends React.Component {
                                     <div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item3 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
+                                                <img src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item3 + '.png'}
                                                     alt={""} />
                                                 :
@@ -485,7 +485,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item4 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
+                                                <img src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item4 + '.png'}
                                                     alt={""} />
                                                 :
@@ -494,7 +494,7 @@ class GameHistory extends React.Component {
                                         </div>
                                         <div>
                                             {allGameInfo[0].participants[participantId[0]].stats.item5 ?
-                                                <img src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
+                                                <img src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/item/'
                                                     + allGameInfo[0].participants[participantId[0]].stats.item5 + '.png'}
                                                     alt={""} />
                                                 :
@@ -517,7 +517,7 @@ class GameHistory extends React.Component {
                                         {allGameInfo[0].participantIdentities.slice(0, 5).map((participant, i_OtherPlayers) => {
                                             return <div className="playerList" key={i_OtherPlayers}>
                                                 <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
-                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers].championId]} src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
+                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers].championId]} src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
                                                         + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}
@@ -529,7 +529,7 @@ class GameHistory extends React.Component {
                                         {allGameInfo[0].participantIdentities.slice(5, 10).map((participant, i_OtherPlayers) => {
                                             return <div className="playerList" key={i_OtherPlayers}>
                                                 <Link to={"/eune/" + participant.player.summonerName.toLowerCase()}>
-                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId]} src={'http://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
+                                                    <img title={champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId]} src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
                                                         + champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId] + '.png'}
                                                         alt={"Champion"} />
                                                     {participant.player.summonerName}

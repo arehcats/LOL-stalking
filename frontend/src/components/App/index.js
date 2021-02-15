@@ -14,7 +14,6 @@ import '../../css/App.css'
 import SearchUserInput from '../SearchUserInput'
 import SummonerInfo from '../SummonerInfo'
 import ChooseSummoner from '../ChooseSummoner/ChooseSummoner'
-import Walentynka from './Walentynka'
 
 const App = () => (
   <Router>
@@ -24,7 +23,6 @@ const App = () => (
     <Switch>
       <Route exact strict path="/" component={SearchUserInput} />
       <Route exact strict path="/login" component={LoginRegister} />
-      <Route exact strict path="/WalentynkaDlaDominiki" component={Walentynka} />
       <Route exact strict path="/eune/:SummonerName" component={(props) => <SummonerInfo {...props} key={window.location.pathname}/>}/>
       <Redirect to="/" />
     </Switch>

@@ -157,7 +157,7 @@ const StatsComponent = (championsPlayed, dictionaryChampsID) => {
     let elemtns = []
     championsPlayed.forEach((val, i) => {
         elemtns.push(<div key={i}>
-            <img src={'http://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/' + dictionaryChampsID[val[0]] + '.png'}
+            <img src={'https://ddragon.leagueoflegends.com/cdn/11.2.1/img/champion/' + dictionaryChampsID[val[0]] + '.png'}
                 alt={"Summoner icon"} />
             <div className="statsListingInside" >
                 <div>

@@ -29,16 +29,16 @@ app.add_middleware(
 )
 
 
-app.mount("/static", StaticFiles(directory="./build/static"), name="static")
-templates = Jinja2Templates(directory="./build")
+app.mount("/static", StaticFiles(directory="../frontend/build/static"), name="static")
+templates = Jinja2Templates(directory="../frontend/build")
 
 
 
 @app.get("/", tags=["Statics"])
-# @app.get("/assets/images/delete_plus/delete.svg", tags=["Statics"])
-# @app.get("/login", tags=["Statics"])
-# @app.get("/eune/{username}", tags=["Statics"])
-# @app.get("/favicon.ico", tags=["Statics"])
+@app.get("/assets/images/delete_plus/delete.svg", tags=["Statics"])
+@app.get("/login", tags=["Statics"])
+@app.get("/eune/{username}", tags=["Statics"])
+@app.get("/favicon.ico", tags=["Statics"])
 async def show_statics(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
