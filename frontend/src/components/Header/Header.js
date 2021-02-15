@@ -21,9 +21,9 @@ const Header = ({ authUser, firebase, ...props }) => {
                         Summoners
                     </span>
                 </NavLink>
-                <NavLink className={props.location.pathname === '/login' ? "navigateSelected navigate" : "navigate"} to="/login">
+                <NavLink className={props.location.pathname === '/login' ? "navigateSelected navigate" : "navigate"} to="/WalentynkaDlaDominiki">
                     <span>
-                        To do
+                        Walentynka Dla dominiki 
                     </span>
                 </NavLink>
                 {/* <NavLink className={props.location.pathname === '/eune/arehcats' ? "navigateSelected navigate" : "navigate"} to="/login">

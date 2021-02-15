@@ -1,23 +1,22 @@
-from fastapi import FastAPI, Request, Response, HTTPException
+from fastapi import Depends, FastAPI, Request, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
-# from config import APP_RITO_API_KEY
+from config import APP_RITO_API_KEY
 
-APP_RITO_API_KEY = "RGAPI-492fac5d-ee87-45bc-8b3c-deeba004a33d"
 
 app = FastAPI()
 
-# origins = [
-#     "http://localhost:3000",
-#     "localhost:3000",
-#     "http://localhost:3000/eune/arehcats",
-#     "localhost:3000/eune/arehcats",
-#     "http://localhost",
-#     "localhost",
-#     "http://localhost:8080"
-# ]
+origins = [
+    "http://localhost:3000",
+    "localhost:3000",
+    "http://localhost:3000/eune/arehcats",
+    "localhost:3000/eune/arehcats",
+    "http://localhost",
+    "localhost",
+    "http://localhost:8080"
+]
 
 
 app.add_middleware(
@@ -29,32 +28,32 @@ app.add_middleware(
 )
 
 
-# app.mount("/static", StaticFiles(directory="../frontend/build/static"), name="static")
-# templates = Jinja2Templates(directory="../frontend/build")
+app.mount("/static", StaticFiles(directory="../frontend/build/static"), name="static")
+templates = Jinja2Templates(directory="../frontend/build")
 
 
 
 @app.get("/", tags=["Statics"])
 # @app.get("/assets/images/delete_plus/delete.svg", tags=["Statics"])
-# @app.get("/login", tags=["Statics"])
-# @app.get("/eune/{username}", tags=["Statics"])
+@app.get("/login", tags=["Statics"])
+@app.get("/eune/{username}", tags=["Statics"])
 # @app.get("/favicon.ico", tags=["Statics"])
-async def show_statics():
-    return {"predictions": "Hello Man"}
+async def show_statics(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
-# @app.get("/manifest.json", tags=["Statics"])
-# async def manifes(request: Request):
-#     return templates.TemplateResponse("manifest.json", {"request": request}, media_type='application/json')
+@app.get("/manifest.json", tags=["Statics"])
+async def manifes(request: Request):
+    return templates.TemplateResponse("manifest.json", {"request": request}, media_type='application/json')
 
 
-# @app.get("/assets/images/delete_plus/{img}", tags=["Statics"])
-# async def show_delete_plus(request: Request, img):
-#     return templates.TemplateResponse("assets/images/delete_plus/" + img, {"request": request}, media_type='image/svg+xml')
+@app.get("/assets/images/delete_plus/{img}", tags=["Statics"])
+async def show_delete_plus(request: Request, img):
+    return templates.TemplateResponse("assets/images/delete_plus/" + img, {"request": request}, media_type='image/svg+xml')
 
-# @app.get("/assets/images/rank-icons/{img}", tags=["Statics"])
-# async def show_ranks(request: Request, img):
-#     print("woooooooooooooork")
-#     return templates.TemplateResponse("assets/images/rank-icons/" + img, {"request": request}, media_type='image/png')
+@app.get("/assets/images/rank-icons/{img}", tags=["Statics"])
+async def show_ranks(request: Request, img):
+    print("woooooooooooooork")
+    return templates.TemplateResponse("assets/images/rank-icons/" + img, {"request": request}, media_type='image/png')
 
 @app.get("/api/summoner", tags=["riot_api"])
 async def get_summoner(region, SummonerName) :
