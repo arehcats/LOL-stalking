@@ -32,14 +32,11 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="../frontend/build/static"), name="static")
 templates = Jinja2Templates(directory="../frontend/build")
 
-
-
 @app.get("/", tags=["Statics"])
-@app.get("/assets/images/delete_plus/delete.svg", tags=["Statics"])
 @app.get("/login", tags=["Statics"])
 @app.get("/eune/{username}", tags=["Statics"])
 @app.get("/favicon.ico", tags=["Statics"])
-@app.get("/manifest.json", tags=["Statics"])
+# @app.get("/manifest.json", tags=["Statics"])
 async def show_statics(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
@@ -48,19 +45,20 @@ async def show_statics(request: Request):
 #     return templates.TemplateResponse("manifest.json", {"request": request}, media_type='application/json')
 
 
-# @app.get("/assets/images/delete_plus/{img}", tags=["Statics"])
+# @app.get("/assets/delete_plus/{img}", tags=["Statics"])
 # async def show_delete_plus(request: Request, img):
-#     return templates.TemplateResponse("assets/images/delete_plus/" + img, {"request": request}, media_type='image/svg+xml')
+#     return templates.TemplateResponse("assets/delete_plus/" + img, {"request": request}, media_type='image/svg+xml')
 
-# @app.get("/assets/images/rank-icons/{img}", tags=["Statics"])
+# @app.get("/assets/rank-icons/{img}", tags=["Statics"])
 # async def show_ranks(request: Request, img):
 #     print("woooooooooooooork")
-#     return templates.TemplateResponse("assets/images/rank-icons/" + img, {"request": request}, media_type='image/png')
+#     return templates.TemplateResponse("assets/rank-icons/" + img, {"request": request}, media_type='image/png')
 
 @app.get("/api/summoner", tags=["riot_api"])
 async def get_summoner(region, SummonerName) :
     response = requests.get("https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + SummonerName + "?api_key=" + APP_RITO_API_KEY)
     responseJSON = response.json()    
+    print("dd")
     if response.status_code != 200:
         raise HTTPException(status_code=responseJSON["status"]["status_code"], detail=responseJSON["status"]["message"])
     return responseJSON

@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 const SummonerRanks = (props) => {
+    let forServer = "/static/media"
+    // forServer = ""
     return <React.Fragment>
         {props.soloRank ?
             <div className="rankSummoner">
                 <div>
-                    <img src={'/assets/rank-icons/' + props.soloRank.tier + '.png'}
+                    <img src={forServer + '/assets/rank-icons/' + props.soloRank.tier + '.png'}
                         alt={props.soloRank.tier} />
                 </div>
                 <div className="soloQandFlexStats">
@@ -21,7 +23,7 @@ const SummonerRanks = (props) => {
             :
             <div className="unranked">
                 <span>SoloQ</span>
-                <img src={'/assets/rank-icons/provisional.png'}
+                <img src={forServer + '/assets/rank-icons/provisional.png'}
                     alt="provisional" />
                 <b>Unranked</b>
             </div>
@@ -30,7 +32,7 @@ const SummonerRanks = (props) => {
         {props.flexRank ?
             <div className="rankSummoner">
                 <div>
-                    <img src={'/assets/rank-icons/' + props.flexRank.tier + '.png'}
+                    <img src={forServer + '/assets//rank-icons/' + props.flexRank.tier + '.png'}
                         alt={props.flexRank.tier} />
                 </div>
                 <div className="soloQandFlexStats">
@@ -44,7 +46,7 @@ const SummonerRanks = (props) => {
             :
             <div className="unranked">
                 <span>Flex</span>
-                <img src={'/assets/rank-icons/provisional.png'}
+                <img src={forServer + '/assets/rank-icons/provisional.png'}
                     alt="provisional" />
                 <b>Unranked</b>
             </div>

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Delete from '../../media/delete_plus/delete.svg';
 
 class ChooseSummonerAuth extends Component {
     constructor(props) {
@@ -72,7 +73,7 @@ class ChooseSummonerAuth extends Component {
                                         </Button>
                                     </div>
                                 </NavLink>
-                                <img className="plusIcon" src={'/assets/delete_plus/delete.svg'} alt={"Summoner icon"}
+                                <img className="plusIcon" src={Delete} alt={"Summoner icon"}
                                     onClick={() => {
                                         this.deleteSummoner(value)
                                     }}

@@ -5,6 +5,7 @@ import { NavLink, Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
+import Add from '../../media/delete_plus/add.svg';
 
 class ChooseSummonerHistory extends Component {
     constructor(props) {
@@ -40,7 +41,7 @@ class ChooseSummonerHistory extends Component {
                                 </div>
                             </NavLink>
                             {this.props.authUser ?
-                                !this.props.favoriteSummoners.includes(value) ? <img className="plusIcon" src={'/assets/delete_plus/add.svg'} alt={"Summoner icon"}
+                                !this.props.favoriteSummoners.includes(value) ? <img className="plusIcon" src={Add} alt={"Summoner icon"}
                                     onClick={() => {
                                         this.addSummoner(value)
                                     }}
@@ -49,7 +50,7 @@ class ChooseSummonerHistory extends Component {
                                     false
                                 :
                                 <Link title="Add to farvorite" className="linkToLoginPage" to={"/login"}>
-                                    <img src={'/assets/delete_plus/add.svg'} alt={"Summoner icon"} />
+                                    <img src={Add} alt={"Summoner icon"} />
                                 </Link>
 
                             }
