@@ -8,7 +8,7 @@ const SummonerRanks = (props) => {
         {props.soloRank ?
             <div className="rankSummoner">
                 <div>
-                    <img src={forServer + '/assets/rank-icons/' + props.soloRank.tier + '.png'}
+                    <img src={forServer + '/assets/rank-icons/' + props.soloRank.tier.toLowerCase() + '.png'}
                         alt={props.soloRank.tier} />
                 </div>
                 <div className="soloQandFlexStats">
@@ -32,7 +32,7 @@ const SummonerRanks = (props) => {
         {props.flexRank ?
             <div className="rankSummoner">
                 <div>
-                    <img src={forServer + '/assets//rank-icons/' + props.flexRank.tier + '.png'}
+                    <img src={forServer + '/assets//rank-icons/' + props.flexRank.tier.toLowerCase() + '.png'}
                         alt={props.flexRank.tier} />
                 </div>
                 <div className="soloQandFlexStats">
