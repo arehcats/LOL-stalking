@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { productionImages } from '../productionVariables.js'
+
 
 const SummonerRanks = (props) => {
-    let forServer = "/static/media"
-    // forServer = ""
+    
     return <React.Fragment>
         {props.soloRank ?
             <div className="rankSummoner">
                 <div>
-                    <img src={forServer + '/assets/rank-icons/' + props.soloRank.tier.toLowerCase() + '.png'}
+                    <img src={productionImages + '/assets/rank-icons/' + props.soloRank.tier.toLowerCase() + '.png'}
                         alt={props.soloRank.tier} />
                 </div>
                 <div className="soloQandFlexStats">
@@ -23,7 +24,7 @@ const SummonerRanks = (props) => {
             :
             <div className="unranked">
                 <span>SoloQ</span>
-                <img src={forServer + '/assets/rank-icons/provisional.png'}
+                <img src={productionImages + '/assets/rank-icons/provisional.png'}
                     alt="provisional" />
                 <b>Unranked</b>
             </div>
@@ -32,7 +33,7 @@ const SummonerRanks = (props) => {
         {props.flexRank ?
             <div className="rankSummoner">
                 <div>
-                    <img src={forServer + '/assets//rank-icons/' + props.flexRank.tier.toLowerCase() + '.png'}
+                    <img src={productionImages + '/assets//rank-icons/' + props.flexRank.tier.toLowerCase() + '.png'}
                         alt={props.flexRank.tier} />
                 </div>
                 <div className="soloQandFlexStats">
@@ -46,7 +47,7 @@ const SummonerRanks = (props) => {
             :
             <div className="unranked">
                 <span>Flex</span>
-                <img src={forServer + '/assets/rank-icons/provisional.png'}
+                <img src={productionImages + '/assets/rank-icons/provisional.png'}
                     alt="provisional" />
                 <b>Unranked</b>
             </div>

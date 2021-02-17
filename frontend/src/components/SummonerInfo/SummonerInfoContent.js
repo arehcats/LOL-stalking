@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import GameHistory from './gameHistory'
 import SummonerRanks from './summonerRanks'
+import { productionFetch } from '../productionVariables.js'
 
 class SearchUserInputContent extends React.Component {
     constructor(props) {
@@ -146,7 +147,7 @@ class SearchUserInputContent extends React.Component {
 
         // const SummonerByName = region + "/lol/summoner/v4/summoners/by-name/" + SummonerName + RiotApiKey
         // const responseSummonerByName = await fetch(cors + SummonerByName)
-        const responseSummonerByName = await fetch("/api/summoner?region=" + region + "&SummonerName=" + SummonerName)
+        const responseSummonerByName = await fetch(productionFetch + "/api/summoner?region=" + region + "&SummonerName=" + SummonerName)
         if (!this._isMounted) return
 
         if (responseSummonerByName.status !== 200) {
@@ -164,7 +165,7 @@ class SearchUserInputContent extends React.Component {
         const SummonerID = jsonSummonerByName.id
         // const SummonerRank = region + "/lol/league/v4/entries/by-summoner/" + SummonerID + RiotApiKey
         // const responseSummonerRank = await fetch(cors + SummonerRank)
-        const responseSummonerRank = await fetch("/api/summonerID?region=" + region + "&SummonerID=" + SummonerID)
+        const responseSummonerRank = await fetch(productionFetch + "/api/summonerID?region=" + region + "&SummonerID=" + SummonerID)
 
         if (!this._isMounted) return
 
@@ -209,7 +210,7 @@ class SearchUserInputContent extends React.Component {
 
         // let last_games_url = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId + RiotApiKey
         // const responsegames = await fetch(cors + last_games_url)
-        const responsegames = await fetch("/api/last100games?region=" + region + "&accountId=" + jsonSummonerByName.accountId)
+        const responsegames = await fetch(productionFetch + "/api/last100games?region=" + region + "&accountId=" + jsonSummonerByName.accountId)
 
         if (responsegames.status === 404) { }
         else if (responsegames.status !== 200) {
@@ -282,7 +283,7 @@ class SearchUserInputContent extends React.Component {
             // let games = region + "/lol/match/v4/matchlists/by-account/" + jsonSummonerByName.accountId +
             //     "?queue=" + gameID + "&beginTime=1610085600000&endIndex=" + endIndex + "&beginIndex=" + beginIndex + RiotApiKey
             // const responsegames = await fetch(cors + games)
-            const responsegames = await fetch("/api/matchlists?region=" + region +
+            const responsegames = await fetch(productionFetch + "/api/matchlists?region=" + region +
                 "&accountId=" + jsonSummonerByName.accountId + "&gameID=" + gameID + "&endIndex=" + endIndex + "&beginIndex=" + beginIndex)
 
             if (responsegames.status === 404) {

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from "react-router-dom";
+import { productionFetch } from '../productionVariables.js'
 
 class GameHistory extends React.Component {
     constructor(props) {
@@ -112,13 +113,13 @@ class GameHistory extends React.Component {
                 }
                 else {
                     // response = await fetch(cors + region + "/lol/match/v4/matches/" + matchID + RiotApiKey)
-                    response = await fetch("/api/match?region=" + region + "&matchID=" + matchID)
+                    response = await fetch(productionFetch + "/api/match?region=" + region + "&matchID=" + matchID)
 
                     if (!this._isMounted) return
 
                     if (response.status !== 200) {
                         console.log("22222");
-                        return ["error", "/api/match?region=" + region + "&matchID=" + matchID]
+                        return ["error", productionFetch + "/api/match?region=" + region + "&matchID=" + matchID]
                     }
                     else {
                         console.log("33333");
