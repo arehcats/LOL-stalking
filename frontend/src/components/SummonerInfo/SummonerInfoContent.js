@@ -51,7 +51,7 @@ class SearchUserInputContent extends React.Component {
         this.props.setChampionsIDs()
 
 
-        this.props.addNewSummoner(this.state.SummonerName)
+        this.props.addNewSummonerHistory(this.state.SummonerName)
 
         let getStorage = JSON.parse(localStorage.getItem(this.state.SummonerName))
         let queuesIDsDictionaryFromStorage = JSON.parse(localStorage.getItem("queuesIDsDictionary"))
@@ -439,7 +439,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: 'PLAYED_SOLO_SET', championsPlayedSolo }),
     setChampionsPlayedAram: championsPlayedAram =>
         dispatch({ type: 'PLAYED_ARAM_SET', championsPlayedAram }),
-    addNewSummoner: newSummoner =>
+    addNewSummonerHistory: newSummoner =>
         dispatch({ type: "ADD_SUMMONER_SET", newSummoner }),
     setQueuesIDsDictionary: queuesIDsDictionary =>
         dispatch({ type: "GAMES_IDs_SET", queuesIDsDictionary }),

@@ -16,7 +16,7 @@ class ChooseSummonerHistory extends Component {
     }
     addSummoner = (value) => {
         console.log(this.props.summoners[0]);
-        this.props.deleteSummoner(value)
+        this.props.applyDeleteSummonerFromHistory(value)
         console.log(this.props);
         this.props.firebase.usersSummonersRef(this.props.firebase.currentUser()).update({
             [value]: value
@@ -27,9 +27,25 @@ class ChooseSummonerHistory extends Component {
     render() {
         return (
             <div className='chooseSummoner' >
-                <div>
+                <div className="FavHistoryTitle" >
                     History:
                 </div>
+                <div className="clearHistory">
+                    <Button type="submit" variant="outlined" color="primary"
+                        onClick={() => {
+                            this.props.applyClearHistory("")
+                        }}
+                    >
+                        Clear
+                    </Button>
+                </div>
+                <NavLink className="newSummoner" to="/" style={{ textDecoration: 'none' }}>
+                    <div className={this.state.setClass[1]}>
+                        <Button type="submit" variant="outlined" color="primary">
+                            New summoner
+                        </Button>
+                    </div>
+                </NavLink>
                 {(Array.isArray(this.props.summoners) && this.props.summoners.length) ? this.props.summoners.map((value, i) => {
                     return (
                         <React.Fragment key={i}>
@@ -63,14 +79,7 @@ class ChooseSummonerHistory extends Component {
 
                     </div>
                 }
-                <NavLink className="newSummoner" to="/" style={{ textDecoration: 'none' }}>
-                    <div className={this.state.setClass[1]}>
-                        <Button type="submit" variant="outlined" color="primary">
-                            New summoner
-                 </Button>
-                    </div>
-                </NavLink>
-                <div className="bottomLine">
+                <div className={"bottomLine"}>
 
                 </div>
             </div>
@@ -86,8 +95,10 @@ const mapStateToProps = state => ({
 
 })
 const mapDispatchToProps = dispatch => ({
-    deleteSummoner: newSummoner =>
+    applyDeleteSummonerFromHistory: newSummoner =>
         dispatch({ type: 'DELETE_SUMMONER_SET', newSummoner }),
+    applyClearHistory: () =>
+        dispatch({ type: 'CLEAR_HISTORY' }),
 });
 
 export default compose(

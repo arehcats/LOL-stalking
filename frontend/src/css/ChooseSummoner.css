@@ -6,11 +6,15 @@
     margin-top: 25px;
     margin-bottom: 30px;
     display: flex;
-    border-bottom: 2px solid rgb(44, 90, 14);
+    /* border: 2px solid rgb(44, 90, 14); */
     flex-wrap: wrap;
+    height: 35px;
 }
-.chooseSummoner div:first-child{
+.FavHistoryTitle{
     min-width: 60px;
+    height: 100%;
+    line-height: 35px;
+    text-align: center;
 }
 .summoner button{
     background-color: rgb(159, 241, 233);
@@ -29,9 +33,28 @@
 }
 .summoner {
     margin-left: 10px;
-    margin-bottom: 3px;
+    margin-top: auto;
+    margin-bottom: auto;
+    
 }
+.clearHistory{
+    margin-left: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 100%;
+}
+.clearHistory button{
+    margin-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: rgb(228, 156, 143);
+    border: 2px solid rgb(124, 122, 122);
+}
+.clearHistory button:hover{
+    background-color: rgb(236, 174, 163);
+    border: 2px solid rgb(124, 122, 122);
 
+}
 
 .selectedSummoner{
     margin-left: 10px;
@@ -79,6 +102,8 @@
 }
 .bottomLine{
     width: 100%;
+    border-bottom: 2px solid rgb(44, 90, 14);
+    margin-top: 3px;
 }
 
 .linkToLoginPage{

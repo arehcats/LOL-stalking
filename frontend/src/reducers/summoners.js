@@ -4,7 +4,7 @@ const INITIAL_STATE = {
 };
 
 
-function applyAddSummoner(state, action) {
+function applyAddSummonerHistory(state, action) {
 
     let currentArray = state.summoners
     let currentFavoriteArray = state.favoriteSummoners
@@ -24,14 +24,14 @@ function applyAddSummoner(state, action) {
 
 }
 
-function applyDeleteSummoner(state, action) {
+function applyDeleteSummonerFromHistory(state, action) {
 
     let currentArray = state.summoners
     let index = currentArray.indexOf(action.newSummoner);
     if (index !== -1) {
         currentArray.splice(index, 1);
     }
-    if (Array.isArray(currentArray) && currentArray.length === 0){
+    if (Array.isArray(currentArray) && currentArray.length === 0) {
         return ({
             ...state,
             summoners: []
@@ -47,15 +47,23 @@ function applyDeleteSummoner(state, action) {
 const applyFavoriteSummoners = (state, action) => ({
     ...state,
     favoriteSummoners: action.favoriteSummoners,
-  });
+});
+
+const applyClearHistory = (state, action) => ({
+    ...state,
+    summoners: [],
+});
 
 function summonersRerucer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case 'ADD_SUMMONER_SET': {
-            return applyAddSummoner(state, action);
+            return applyAddSummonerHistory(state, action);
         }
         case 'DELETE_SUMMONER_SET': {
-            return applyDeleteSummoner(state, action);
+            return applyDeleteSummonerFromHistory(state, action);
+        }
+        case 'CLEAR_HISTORY': {
+            return applyClearHistory(state, action);
         }
         case 'UPDATE_FAVORITE_SUMMONETS': {
             return applyFavoriteSummoners(state, action);

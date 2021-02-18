@@ -31,8 +31,8 @@ class ChooseSummonerAuth extends Component {
                 });
 
                 this.props.setFavoriteSummoners(arrayOfSummoners)
-                
-                if (arrayOfSummoners.includes(this.props.summoners[0])){
+
+                if (arrayOfSummoners.includes(this.props.summoners[0])) {
                     this.props.deleteSummoner(this.props.summoners[0])
                 }
 
@@ -57,7 +57,7 @@ class ChooseSummonerAuth extends Component {
     render() {
         return (
             <div className='chooseSummoner' >
-                <div>
+                <div className="FavHistoryTitle" >
                     Favorite:
                 </div>
                 {this.state.isLodaing ? <div align="center"><CircularProgress /></div>
@@ -82,6 +82,9 @@ class ChooseSummonerAuth extends Component {
                         )
                     })
                 }
+                <div className={"bottomLine"}>
+
+                </div>
             </div>
         );
     }
