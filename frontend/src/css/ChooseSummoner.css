@@ -123,3 +123,11 @@
     background-color: rgb(180, 212, 163);
     transform: scale(1.0);
 }
+
+.playedToghether{
+    display: flex;
+    margin-bottom: 7px;
+}
+.playedToghether div{
+    margin-right: 10px;
+}

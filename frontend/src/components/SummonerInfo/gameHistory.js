@@ -24,6 +24,7 @@ class GameHistory extends React.Component {
             filterHistory: "All games",
             gameTypes: [],
             quueueTypeActiveIndex: 0,
+            allPlayersDisplayedHistory: [],
         };
         this._isMounted = false;
 
@@ -106,7 +107,6 @@ class GameHistory extends React.Component {
         let [...rest] = await Promise.all(
             matchIDs.map(async (matchID) => {
                 getStorageGame = JSON.parse(localStorage.getItem(matchID))
-
                 if (getStorageGame) {
 
                     return getStorageGame
@@ -140,10 +140,35 @@ class GameHistory extends React.Component {
 
         fetchedGames.push(...rest)
 
+        let allPlayersDisplayedHistory = {}
+
+
+        //////// check if player was playing more than 2 times with other players
+        fetchedGames.forEach((game) => {
+            game[0].participantIdentities.forEach((playerValue) => {
+                if (allPlayersDisplayedHistory[playerValue.player.summonerName]) {
+                    allPlayersDisplayedHistory[playerValue.player.summonerName] = allPlayersDisplayedHistory[playerValue.player.summonerName] + 1
+                }
+                else {
+                    allPlayersDisplayedHistory[playerValue.player.summonerName] = 1
+                }
+            })
+        })
+        allPlayersDisplayedHistory[this.props.basicInfoSummoner.name] = 0
+
+        let ArrayallPlayersDisplayedHistory = Object.keys(allPlayersDisplayedHistory).map((key) => [key, allPlayersDisplayedHistory[key]]);
+
+        ArrayallPlayersDisplayedHistory.sort((a, b) => {
+            return b[1] - a[1]
+        })
+        
+
+
         this.setState({
             fetchedGames: fetchedGames,
             displayedGames: displayedGames,
             baisicsGameInfo: baisicsGameInfo,
+            allPlayersDisplayedHistory: ArrayallPlayersDisplayedHistory,
             isLoading: false,
             isDisabled: false,
         })
@@ -200,10 +225,23 @@ class GameHistory extends React.Component {
                         stats history
                     </div> */}
                 </div>
-
                 { this.state.isLoading ? <Loading status={this.state.status} errorMessage={this.state.errorMessage} />
                     :
                     <div>
+                        <div>
+                            {this.state.allPlayersDisplayedHistory.map((summoner, summonerindex) => {
+                                if (summoner[1] <= 1) return []
+
+                                return <div className="playedToghether" key={summonerindex}>
+                                    <div>
+                                        {summoner[0]}: 
+                                    </div>
+                                    <div>
+                                        {summoner[1]}
+                                    </div>
+                                </div>
+                            })}
+                        </div>
                         {this.state.fetchedGames.map((allGameInfo, i) => {
 
 
@@ -521,7 +559,7 @@ class GameHistory extends React.Component {
                                                     <img title={champions[allGameInfo[0].participants[i_OtherPlayers].championId]} src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
                                                         + champions[allGameInfo[0].participants[i_OtherPlayers].championId] + '.png'}
                                                         alt={"Champion"} />
-                                                    {participant.player.summonerName}
+                                                    {(participantId[0] === i_OtherPlayers) ? <b>{participant.player.summonerName}</b> : participant.player.summonerName}
                                                 </Link>
                                             </div>
                                         })}
@@ -533,7 +571,7 @@ class GameHistory extends React.Component {
                                                     <img title={champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId]} src={'https://ddragon.leagueoflegends.com/cdn/' + acutalPatch + '/img/champion/'
                                                         + champions[allGameInfo[0].participants[i_OtherPlayers + 5].championId] + '.png'}
                                                         alt={"Champion"} />
-                                                    {participant.player.summonerName}
+                                                    {(participantId[0] === i_OtherPlayers + 5) ? <b>{participant.player.summonerName}</b> : participant.player.summonerName}
                                                 </Link>
                                             </div>
                                         })}
@@ -591,6 +629,7 @@ const mapStateToProps = state => ({
     queuesIDsDictionary: state.someDataGame.queuesIDsDictionary,
     spellsDictionary: state.someDataGame.spellsDictionary,
     acutalPatch: state.someDataGame.acutalPatch,
+    basicInfoSummoner: state.summonerInfoState.basicInfoSummoner,
 });
 
 export default compose(
