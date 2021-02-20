@@ -1,0 +1,158 @@
+.root_container{
+    min-height: calc(100vh - 205px);
+    box-sizing: border-box;
+    padding-top: 10px;
+}
+.inside_root_container{
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid rgb(121, 119, 119);
+    border-radius: 2%;
+}
+.activeForm {
+    text-align: right;
+    margin-right: 7px;
+    margin-top: 10px;
+}
+.activeForm div:hover{
+    cursor: pointer;
+    background-color: rgb(124, 243, 231);
+    transition: ease 0.15s;
+    transform: scale(1.01);
+    border: 1px solid rgb(87, 86, 86);
+}
+.activeForm div:active{
+    background-color: rgb(100, 226, 214);
+    transition: ease 0.15s;
+    transform: scale(1.01);
+}
+.activeForm div{
+    border: 1px solid rgb(141, 138, 138);
+    background-color: rgb(159, 241, 233);
+    border-radius: 10%;
+    color: rgb(66, 64, 64);
+    display: inline-block;
+    justify-content: right;
+    font-size: 13px;
+    padding: 1px 20px 1px 20px;
+}
+.inactiveForm{
+    text-align: center;
+    font-size: 25px;
+    color: rgb(83, 81, 81);
+    margin-bottom: 10px;
+}
+.formBox{
+    justify-content: center;
+}
+.inputFormDiv{
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.inputFormDiv img{
+    width: 35px;
+    height: 35px;
+    margin-left: 13px;
+}
+.inputFormDiv input{
+    width: 80%;
+    border: 1px solid rgb(99, 95, 95);
+    border-radius: 7px;
+    height: 45px;
+    box-sizing: border-box;
+    padding-left: 10px;
+}
+.inputFormDiv input:hover{
+    border: 1px solid rgb(25, 107, 201);
+}
+.inputFormDiv input:focus{
+    border: 1px solid rgb(75, 201, 25);
+    border-radius: 10px;
+    outline: none;
+}
+.submitButton{
+    display: flex;
+    justify-content: center;
+}
+.submitButton button{
+    width: 125px;
+    padding: 6px;
+    margin-top: 10px;
+    background-color: rgb(159, 241, 233);
+    border: 1px solid rgb(99, 95, 95);
+    border-radius: 7px;
+    outline: none;
+    color: blue;
+    font-weight: 600;
+
+}
+.submitButton button:hover{
+    cursor: pointer;
+    background-color: rgb(124, 243, 231);
+    transition: ease 0.15s;
+    transform: scale(1.001);
+    border: 1px solid rgb(87, 86, 86);
+}
+.submitButton button:disabled{
+    background-color: rgb(159, 241, 233);
+    transform: none;
+    cursor: unset;
+    color: grey;
+    font-weight: 500;
+
+}
+.submitButton button:active{
+    background-color: rgb(100, 226, 214);
+    transition: ease 0.15s;
+    transform: scale(1.01);
+}
+.errorLoginRegister{
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+    height: 20px;
+    margin-bottom: 15px;
+}
+.errorCauseUnlogged{
+    color: red;
+    text-align: center;
+    height: 40px;
+    font-size: 25px;
+}
+
+.withFacebookContainer{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    text-decoration: underline;
+    color: grey;
+}
+.withFacebookContainer:hover{
+    transition: ease 0.15s;
+    color: rgb(97, 97, 97);
+}
+.withFacebookContainer img{
+    width: 30px;
+    /* height: 30px; */
+}
+.flexDisplay{
+    display: flex;
+}
+.ForgotPassword{
+    margin-left: 180px;
+    text-decoration: underline;
+    color: grey;
+    cursor: pointer;
+}
+.ForgotPassword:hover{
+        transition: ease 0.15s;
+        color: rgb(97, 97, 97);
+}

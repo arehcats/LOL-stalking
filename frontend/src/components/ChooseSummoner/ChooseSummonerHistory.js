@@ -65,7 +65,10 @@ class ChooseSummonerHistory extends Component {
                                     :
                                     false
                                 :
-                                <Link title="Add to farvorite" className="linkToLoginPage" to={"/login"}>
+                                <Link onClick={() => {
+                                    this.props.applyUnloggedErrorr(true)
+                                }}
+                                    title="Add to farvorite" className="linkToLoginPage" to={"/login"}>
                                     <img src={Add} alt={"Summoner icon"} />
                                 </Link>
 
@@ -99,6 +102,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: 'DELETE_SUMMONER_SET', newSummoner }),
     applyClearHistory: () =>
         dispatch({ type: 'CLEAR_HISTORY' }),
+    applyUnloggedErrorr: unloggedError =>
+        dispatch({ type: 'UNLOGGED_ERROR_SET', unloggedError }),
 });
 
 export default compose(

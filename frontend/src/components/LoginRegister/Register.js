@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import { compose } from 'recompose';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import "../../css/LoginRegister.css"
+import user from './user.png'
+import lock from './lock.png'
+import key from './key.png'
+import facebook_icon from './facebook_icon.png'
+
 
 const SignUpPage = () => (
   <div>
-    <span id="widht_h1">
-      <h1>Rejestracja</h1>
-    </span>
     <SignUpForm />
   </div>
 );
@@ -31,10 +32,10 @@ class SignUpFormBase extends Component {
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then(()=>{
+      .then(() => {
         this.props.firebase.usersSummonersRef(this.props.firebase.currentUser()).update({
           0: 0
-      })
+        })
       })
       .catch(error => {
         this.setState({ error });
@@ -58,40 +59,43 @@ class SignUpFormBase extends Component {
     const isInvalid = passwordOne !== passwordTwo ||
       passwordOne === '' || email === '';
     return (
-      <form className="form" onSubmit={this.onSubmit}>
-        <div id="emailWidth">
-          <TextField className="outlined-basic" label="Adres e-mail" variant="outlined"
+      <form className="formBox" onSubmit={this.onSubmit}>
+        <div className="inputFormDiv">
+          <input className="inputForm" label="Adress e-mail" variant="outlined"
             name="email"
             value={email}
             onChange={this.onChange}
             type="text"
-            placeholder="Adres e-mail"
+            placeholder="Adress e-mail"
           />
+          <img src={user} alt="User icon" />
         </div>
-        <div id="passwordWidth">
-          <TextField className="outlined-basic" label="Hasło" variant="outlined"
+        <div className="inputFormDiv">
+          <input className="inputForm" label="Password" variant="outlined"
             name="passwordOne"
             value={passwordOne}
             onChange={this.onChange}
             type="password"
-            placeholder="Hasło"
+            placeholder="Password"
           />
+          <img src={lock} alt="Lock icon" />
         </div>
-        <div id="confrimWidth">
-          <TextField className="outlined-basic" label="Potwierdź hasło" variant="outlined"
+        <div className="inputFormDiv">
+          <input className="inputForm" label="Confirm password" variant="outlined"
             name="passwordTwo"
             value={passwordTwo}
             onChange={this.onChange}
             type="password"
-            placeholder="Potwierdź hasło"
+            placeholder="Confirm password"
           />
+          <img src={key} alt="Key icon" />
         </div>
-        <div className="blueBacground">
-          <Button disabled={isInvalid} type="submit" variant="outlined" color="primary">
-            Zarejestruj się!
-           </Button>
+        <div className="submitButton">
+          <button disabled={isInvalid} type="submit">
+            Sign Up
+           </button>
         </div>
-        {error && <p>{error.message}</p>}
+        {error ? <div className="errorLoginRegister">{error.message}</div> : <div className="errorLoginRegister"></div>}
       </form>
     );
   }

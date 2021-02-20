@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import { compose } from 'recompose';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import "../../css/LoginRegister.css"
+import user from './user.png'
+import lock from './lock.png'
+import facebook_icon from './facebook_icon.png'
 
 
 const SignInPage = () => (
   <div>
-    <span id="widht_h1">
-      <h1>Logowanie</h1>
-    </span>
     <SignInForm />
     <SignInFacebook />
   </div>
@@ -48,31 +47,33 @@ class SignInFormBase extends Component {
     const { email, password, error } = this.state;
     const isInvalid = password === '' || email === '';
     return (
-      <form className="form" onSubmit={this.onSubmit}>
-        <div id="emailWidth">
-          <TextField className="outlined-basic" label="Adres e-mail" variant="outlined"
+      <form className="formBox" onSubmit={this.onSubmit}>
+        <div className="inputFormDiv">
+          <input className="inputForm" label="Adress e-mail"
             name="email"
             value={email}
             onChange={this.onChange}
             type="text"
-            placeholder="Adres e-mail"
+            placeholder="Adress e-mail"
           />
+          <img src={user} alt="User icon" />
         </div>
-        <div id="passwordWidth">
-          <TextField className="outlined-basic" label="Hasło" variant="outlined"
+        <div className="inputFormDiv">
+          <input className="inputForm" label="Password" variant="outlined"
             name="password"
             value={password}
             onChange={this.onChange}
             type="password"
-            placeholder="Hasło"
+            placeholder="Password"
           />
+          <img src={lock} alt="Lock icon" />
         </div>
-        <div className="blueBacground">
-          <Button disabled={isInvalid} type="submit" variant="outlined" color="primary">
-            Zaloguj się!
-           </Button>
+        <div className="submitButton">
+          <button disabled={isInvalid} type="submit">
+            Sign In
+           </button>
         </div>
-        {error && <div className="errorLoginRegister">{error.message}</div>}
+        {error ? <div className="errorLoginRegister">{error.message}</div> : <div className="errorLoginRegister"></div>}
       </form>
     );
   }
@@ -124,11 +125,18 @@ class SignInFacebookBase extends Component {
     const { error } = this.state;
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Facebook</button>
-
-        {error && <p>{error.message}</p>}
-      </form>
+      <div>
+        <div className = "flexDisplay">
+          <div className="withFacebookContainer" >
+            <img src={facebook_icon} alt="Facebook icon" />
+            <div onClick={this.onSubmit} className="withFacebook">Sign In with Facebook</div>
+          </div>
+          <div className="ForgotPassword">
+            Forgot password?
+          </div>
+        </div>
+        {error && <div className="errorLoginRegister">{error.message}</div>}
+      </div>
     );
   }
 }
