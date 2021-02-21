@@ -15,6 +15,9 @@ const withAuthentication = Component => {
     componentDidMount() {
       this.listener = this.props.firebase.auth.onAuthStateChanged(
         authUser => {
+          if (!authUser){
+            this.props.setFavoriteSummoners([])
+          }
           // localStorage.setItem('authUser', JSON.stringify(authUser));
           this.props.onSetAuthUser(authUser);
         },
@@ -40,7 +43,10 @@ const withAuthentication = Component => {
   const mapDispatchToProps = dispatch => ({
     onSetAuthUser: authUser =>
       dispatch({ type: 'AUTH_USER_SET', authUser }),
+    setFavoriteSummoners: favoriteSummoners =>
+      dispatch({ type: 'UPDATE_FAVORITE_SUMMONETS', favoriteSummoners }),
   });
+
 
   return compose(
     withFirebase,
