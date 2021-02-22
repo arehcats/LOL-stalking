@@ -107,9 +107,10 @@
 
 }
 
-#championsStats{
+.championsStats{
     border: 2px solid rgb(194, 230, 247);
     box-shadow: 0px 0px 5px 0px rgb(194, 230, 247);
+    margin-bottom: 10px;
 
 }
 
@@ -134,6 +135,7 @@
 #statsSelectGameType > div > button{
     width: 100%;
 }
+
 
 .stats {
     background-color: rgb(124, 243, 231);
@@ -172,6 +174,88 @@
     font-size: 15px;
     color: rgb(85, 85, 87);
 }
+
+/* //////////////    recently played with    /////////////////////////////////////// */
+
+.RecentlyPlayedWith{
+    background-color: rgb(124, 243, 231);
+    border-color: rgb(31, 30, 28);
+    border: 1px solid rgba(63, 81, 181, 0.5);
+    border-radius: 4px;
+    font-size: 20px;
+    text-align: center;
+    padding: 10px;
+    color: rgb(11, 113, 197);
+}
+.tableRoot{
+    border-spacing: 0px;
+    width: 100%;
+    table-layout:fixed;
+}
+.tableRoot tbody tr td {
+    width: 10%;
+}
+.tableRecentlyHead tr th:nth-child(1){
+    width: 40%;
+}
+.tableRecentlyHead tr th:nth-child(2){
+    width: 25%;
+}
+.tableRecentlyHead tr th:nth-child(3){
+    width: 15%;
+}
+.tableRecentlyHead tr th:nth-child(4){
+    width: 20%;
+}
+
+.tableRecentlyHead {
+    background-color: rgb(169, 239, 243);
+    border-right: 1px solid rgba(63, 81, 181, 0.5);
+    border-left: 1px solid rgba(63, 81, 181, 0.5);
+}
+.tableRecentlyHead tr {
+    border-right: 1px solid rgba(63, 81, 181, 0.5);
+    border-left: 1px solid rgba(63, 81, 181, 0.5);
+}
+.tableRecentlyHead tr th{
+    border-right: 1px solid  rgb(243, 169, 169);
+}
+.lastColumn{
+    border-right: none!important;
+}
+.tableRecentlyBody{
+    text-align: center;
+}
+.tableRecentlyBody tr td:first-child{
+    text-align: left;
+    padding-left: 10px;
+}
+
+.tableRecentlyBody tr td{
+    border-bottom: 1px solid rgb(185, 206, 216);
+    height: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
+.recentlyNone{
+    margin: 10px;
+    border-bottom: 1px solid rgb(185, 206, 216);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 #showMore{
     background-color: rgb(159, 241, 233);
 }
@@ -196,3 +280,5 @@
     background-color: rgb(124, 243, 231);
     margin-top: 5px;
 }
+
+

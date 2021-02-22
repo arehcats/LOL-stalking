@@ -2,12 +2,13 @@ import React from 'react';
 import '../../css/SummonerInfo.css'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button'
-import ChampionsStatistic from './championsStatistic'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import GameHistory from './gameHistory'
 import SummonerRanks from './summonerRanks'
 import { productionFetch } from '../productionVariables.js'
+import ChampionsStatistic from './ChampionsHistory'
+import RecentlyPlayedWith from './RecentlyPlayedWith'
 
 class SearchUserInputContent extends React.Component {
     constructor(props) {
@@ -371,8 +372,11 @@ class SearchUserInputContent extends React.Component {
                                 <div>
                                     <SummonerRanks />
                                 </div>
-                                <div id="championsStats">
+                                <div className="championsStats">
                                     <ChampionsStatistic />
+                                </div>
+                                <div className="championsStats">
+                                    <RecentlyPlayedWith />
                                 </div>
                             </div>
                             <div>

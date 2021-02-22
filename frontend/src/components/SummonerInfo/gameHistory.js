@@ -7,6 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from "react-router-dom";
 import { productionFetch } from '../productionVariables.js'
 
+
 class GameHistory extends React.Component {
     constructor(props) {
         super(props);
@@ -24,14 +25,15 @@ class GameHistory extends React.Component {
             filterHistory: "All games",
             gameTypes: [],
             quueueTypeActiveIndex: 0,
-            allPlayersDisplayedHistory: [],
         };
         this._isMounted = false;
 
     };
 
+
     componentDidMount() {
         this._isMounted = true;
+        this.props.setRecentlyPlayedWith([true, []])
         let gameTypes = []
         this.props.last100games.forEach((game) => {
             if (gameTypes.includes(game.queue)) { }
@@ -116,7 +118,6 @@ class GameHistory extends React.Component {
                     response = await fetch(productionFetch + "/api/match?region=" + region + "&matchID=" + matchID)
 
                     if (!this._isMounted) return
-
                     if (response.status !== 200) {
                         console.log("22222");
                         return ["error", productionFetch + "/api/match?region=" + region + "&matchID=" + matchID]
@@ -140,35 +141,16 @@ class GameHistory extends React.Component {
 
         fetchedGames.push(...rest)
 
-        let allPlayersDisplayedHistory = {}
 
 
-        //////// check if player was playing more than 2 times with other players
-        fetchedGames.forEach((game) => {
-            game[0].participantIdentities.forEach((playerValue) => {
-                if (allPlayersDisplayedHistory[playerValue.player.summonerName]) {
-                    allPlayersDisplayedHistory[playerValue.player.summonerName] = allPlayersDisplayedHistory[playerValue.player.summonerName] + 1
-                }
-                else {
-                    allPlayersDisplayedHistory[playerValue.player.summonerName] = 1
-                }
-            })
-        })
-        allPlayersDisplayedHistory[this.props.basicInfoSummoner.name] = 0
-
-        let ArrayallPlayersDisplayedHistory = Object.keys(allPlayersDisplayedHistory).map((key) => [key, allPlayersDisplayedHistory[key]]);
-
-        ArrayallPlayersDisplayedHistory.sort((a, b) => {
-            return b[1] - a[1]
-        })
-        
+        ////// check if player was playing more than 2 times with other players
+        this.recentlyPlayed(this.state.fetchedGames)
 
 
         this.setState({
             fetchedGames: fetchedGames,
             displayedGames: displayedGames,
             baisicsGameInfo: baisicsGameInfo,
-            allPlayersDisplayedHistory: ArrayallPlayersDisplayedHistory,
             isLoading: false,
             isDisabled: false,
         })
@@ -180,6 +162,115 @@ class GameHistory extends React.Component {
             quueueTypeActiveIndex: indexQueue,
         })
     }
+
+
+    recentlyPlayed = (fetchedGames) => {
+        let recentlyPlayedWith = {}
+        let temporaryKeyArray = []
+        let enemyOrAlly = null
+
+        fetchedGames.forEach((game) => {
+            if (game[0] === "error") return
+            game[0].participantIdentities.slice(0, 5).forEach((participant, i_OtherPlayers) => {
+
+                temporaryKeyArray.push(participant.player.summonerName)
+
+                if (recentlyPlayedWith[participant.player.summonerName]) {
+                    let tempArray = recentlyPlayedWith[participant.player.summonerName]
+                    tempArray[0] = tempArray[0] + 1
+                    recentlyPlayedWith[participant.player.summonerName] = tempArray
+                }
+                else {
+                    recentlyPlayedWith[participant.player.summonerName] = [1, 0, 0]
+                }
+
+                if (this.props.basicInfoSummoner.name === participant.player.summonerName) {
+                    enemyOrAlly = true
+                }
+
+                if (i_OtherPlayers === 4) {
+                    if (enemyOrAlly === true) {
+                        temporaryKeyArray.forEach((summName) => {
+                            let tempArrary = recentlyPlayedWith[summName]
+                            tempArrary[1] = parseInt(tempArrary[1]) + 1
+                            recentlyPlayedWith[summName] = tempArrary
+                        })
+                    }
+                    else if (enemyOrAlly === false) {
+                        temporaryKeyArray.forEach((summName) => {
+                            let tempArrary = recentlyPlayedWith[summName]
+                            if (summName === "ArehCats") console.log("1", tempArrary);
+
+                            tempArrary[2] = parseInt(tempArrary[2]) + 1
+                            if (summName === "ArehCats") console.log("2", tempArrary);
+
+                            recentlyPlayedWith[summName] = tempArrary
+                            if (summName === "ArehCats") console.log(recentlyPlayedWith[summName]);
+                        })
+                    }
+                    temporaryKeyArray = []
+                    enemyOrAlly = false
+                }
+
+            })
+
+
+            game[0].participantIdentities.slice(5, 10).forEach((participant, i_OtherPlayers) => {
+
+                temporaryKeyArray.push(participant.player.summonerName)
+
+                if (recentlyPlayedWith[participant.player.summonerName]) {
+                    let tempArray = recentlyPlayedWith[participant.player.summonerName]
+                    tempArray[0] = tempArray[0] + 1
+                    recentlyPlayedWith[participant.player.summonerName] = tempArray
+                }
+                else {
+                    recentlyPlayedWith[participant.player.summonerName] = [1, 0, 0]
+                }
+
+                if (this.props.basicInfoSummoner.name === participant.player.summonerName) {
+                    enemyOrAlly = true
+                }
+
+                if (i_OtherPlayers === 4) {
+                    if (enemyOrAlly === true) {
+                        temporaryKeyArray.forEach((summName) => {
+                            let tempArrary = recentlyPlayedWith[summName]
+                            tempArrary[1] = parseInt(tempArrary[1]) + 1
+                            recentlyPlayedWith[summName] = tempArrary
+                        })
+                    }
+                    else if (enemyOrAlly === false) {
+                        temporaryKeyArray.forEach((summName) => {
+                            let tempArrary = recentlyPlayedWith[summName]
+                            if (summName === "ArehCats") console.log("1", tempArrary);
+
+                            tempArrary[2] = parseInt(tempArrary[2]) + 1
+                            if (summName === "ArehCats") console.log("2", tempArrary);
+
+                            recentlyPlayedWith[summName] = tempArrary
+                            if (summName === "ArehCats") console.log(recentlyPlayedWith[summName]);
+                        })
+                    }
+                    temporaryKeyArray = []
+                    enemyOrAlly = false
+                }
+
+            })
+
+        })
+
+
+        if (recentlyPlayedWith[this.props.basicInfoSummoner.name]) delete recentlyPlayedWith[this.props.basicInfoSummoner.name]
+
+        let ArrayRecentlyPlayedWith = Object.keys(recentlyPlayedWith).map((key) => [key, recentlyPlayedWith[key]]);
+
+        ArrayRecentlyPlayedWith.sort((a, b) => {
+            return b[1][1] - a[1][1]
+        })
+        this.props.setRecentlyPlayedWith([false, ArrayRecentlyPlayedWith])
+    }
+
 
     componentWillUnmount() {
         this._isMounted = false;
@@ -228,22 +319,7 @@ class GameHistory extends React.Component {
                 { this.state.isLoading ? <Loading status={this.state.status} errorMessage={this.state.errorMessage} />
                     :
                     <div>
-                        <div>
-                            {this.state.allPlayersDisplayedHistory.map((summoner, summonerindex) => {
-                                if (summoner[1] <= 1) return []
-
-                                return <div className="playedToghether" key={summonerindex}>
-                                    <div>
-                                        {summoner[0]}: 
-                                    </div>
-                                    <div>
-                                        {summoner[1]}
-                                    </div>
-                                </div>
-                            })}
-                        </div>
                         {this.state.fetchedGames.map((allGameInfo, i) => {
-
 
                             // check if game fetched properly
                             if (allGameInfo[0] === "error") {
@@ -283,6 +359,8 @@ class GameHistory extends React.Component {
                                         this.setState({
                                             fetchedGames: games,
                                             loadAgain: loadAgain,
+                                        }, () => {
+                                            this.recentlyPlayed(this.state.fetchedGames)
                                         })
                                     }
                                 }}>
@@ -322,9 +400,7 @@ class GameHistory extends React.Component {
                             let gameDurationSeconds = (allGameInfo[0].gameDuration) % 60
                             let timeInMs = Date.now();
                             let gameCreation = allGameInfo[0].gameCreation
-                            // console.log(timeInMs - gameCreation);
-                            // console.log((timeInMs - gameCreation)/1000/60);
-                            let timeMinutes = Math.round((timeInMs - gameCreation) / 60000) - 30
+                            let timeMinutes = Math.round((timeInMs - gameCreation) / 60000) -45
                             let timeAgo
                             let minutesAgoString = "minutes ago"
                             if (timeMinutes <= 60) {
@@ -380,6 +456,7 @@ class GameHistory extends React.Component {
                                 classBackround = "gameHistory remakeGame"
                                 ifWin = "Remake"
                             }
+
 
 
                             return <div className={classBackround} key={i}>
@@ -579,13 +656,15 @@ class GameHistory extends React.Component {
                                 </div>
 
 
-
                             </div>
                         })}
                         <div>
                             {this.state.loadMore ?
                                 <Button
                                     onClick={() => {
+
+                                        this.props.setRecentlyPlayedWith([true, []])
+
                                         this.setState({
                                             isDisabled: true,
                                         }, () => {
@@ -632,7 +711,14 @@ const mapStateToProps = state => ({
     basicInfoSummoner: state.summonerInfoState.basicInfoSummoner,
 });
 
+const mapDispatchToProps = dispatch => ({
+    setRecentlyPlayedWith: recentlyPlayedWith =>
+        dispatch({ type: 'RECENTLY_PLAYED_WITH_SET', recentlyPlayedWith }),
+});
+
+
+
+
 export default compose(
-    // withFirebase,
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
 )(GameHistory);

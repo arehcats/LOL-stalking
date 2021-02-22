@@ -6,7 +6,7 @@ import "../../css/LoginRegister.css"
 import user from './user.png'
 import lock from './lock.png'
 import key from './key.png'
-import facebook_icon from './facebook_icon.png'
+// import facebook_icon from './facebook_icon.png'
 
 
 const SignUpPage = () => (

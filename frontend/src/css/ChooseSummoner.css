@@ -124,10 +124,3 @@
     transform: scale(1.0);
 }
 
-.playedToghether{
-    display: flex;
-    margin-bottom: 7px;
-}
-.playedToghether div{
-    margin-right: 10px;
-}
