@@ -298,8 +298,8 @@ class GameHistory extends React.Component {
                                     displayedGames: 0,
                                     fetchedGames: [],
                                     baisicsGameInfo: [],
-                                    loadMore: true
-
+                                    loadMore: true,
+                                    isLoading: true,
                                 }, () => {
                                     this.applyNewClass(indexQueue)
                                     this.fetchInfoAboutGame()
