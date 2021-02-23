@@ -32,7 +32,7 @@ class SearchUserInputContent extends React.Component {
     render() {
         const { nickname, error } = this.state;
 
-        const isInvalid = nickname === '' || nickname.length < 3
+        const isInvalid = nickname === '' || nickname.length < 3 || nickname.length > 20
 
         return (
             <div id="SearchUserInputContent">

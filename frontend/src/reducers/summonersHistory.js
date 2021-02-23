@@ -26,8 +26,9 @@ function applyAddSummonerHistory(state, action) {
 
 function applyDeleteSummonerFromHistory(state, action) {
 
-    let currentArray = state.summoners
+    let currentArray = [...state.summoners]
     let index = currentArray.indexOf(action.newSummoner);
+
     if (index !== -1) {
         currentArray.splice(index, 1);
     }
@@ -37,10 +38,9 @@ function applyDeleteSummonerFromHistory(state, action) {
             summoners: []
         })
     }
-
     return ({
         ...state,
-        summoners: [currentArray]
+        summoners: currentArray
     })
 }
 

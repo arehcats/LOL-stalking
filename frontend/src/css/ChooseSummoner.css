@@ -8,7 +8,7 @@
     display: flex;
     /* border: 2px solid rgb(44, 90, 14); */
     flex-wrap: wrap;
-    height: 35px;
+    min-height: 35px;
 }
 .FavHistoryTitle{
     min-width: 60px;
@@ -33,14 +33,16 @@
 }
 .summoner {
     margin-left: 10px;
+    padding-bottom: 5px;
+    /* background-color: rgb(228, 73, 11); */
     margin-top: auto;
     margin-bottom: auto;
     
 }
 .clearHistory{
     margin-left: 10px;
-    margin-top: auto;
-    margin-bottom: auto;
+    /* margin-top: auto; */
+    /* margin-bottom: auto; */
     height: 100%;
 }
 .clearHistory button{

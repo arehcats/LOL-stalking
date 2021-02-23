@@ -15,11 +15,11 @@ class ChooseSummonerHistory extends Component {
         }
     }
     addSummoner = (value) => {
-        console.log(this.props.summoners[0]);
-        this.props.applyDeleteSummonerFromHistory(value)
-        console.log(this.props);
         this.props.firebase.usersSummonersRef(this.props.firebase.currentUser()).update({
             [value]: value
+        })
+        .then(()=>{
+            this.props.applyDeleteSummonerFromHistory(value)
         })
 
     }
@@ -27,7 +27,11 @@ class ChooseSummonerHistory extends Component {
     render() {
         return (
             <div className='chooseSummoner' >
-                <div className="FavHistoryTitle" >
+                <div className="FavHistoryTitle" 
+                onClick={()=>{
+                    console.log(this.props.summoners);
+                }}
+                >
                     History:
                 </div>
                 <div className="clearHistory">

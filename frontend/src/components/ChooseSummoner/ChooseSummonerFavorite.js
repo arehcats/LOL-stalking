@@ -14,7 +14,6 @@ class ChooseSummonerAuth extends Component {
         this.state = {
             setClass: ["selectedSummoner", "summoner"],
             loading: true,
-            arrayOfSummoners: []
         }
     }
 
@@ -50,8 +49,6 @@ class ChooseSummonerAuth extends Component {
             .catch(error => {
                 alert(error);
             })
-
-        console.log(this.state.arrayOfSummoners);
     }
 
     render() {
