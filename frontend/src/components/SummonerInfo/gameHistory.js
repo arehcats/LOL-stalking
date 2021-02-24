@@ -268,6 +268,13 @@ class GameHistory extends React.Component {
         ArrayRecentlyPlayedWith.sort((a, b) => {
             return b[1][1] - a[1][1]
         })
+
+        if (ArrayRecentlyPlayedWith.length !== 0) {
+            console.log(ArrayRecentlyPlayedWith[1][1][0]);
+            if (ArrayRecentlyPlayedWith[1][1][0] === 1) {
+                ArrayRecentlyPlayedWith = []
+            }
+        }
         this.props.setRecentlyPlayedWith([false, ArrayRecentlyPlayedWith])
     }
 
@@ -400,7 +407,7 @@ class GameHistory extends React.Component {
                             let gameDurationSeconds = (allGameInfo[0].gameDuration) % 60
                             let timeInMs = Date.now();
                             let gameCreation = allGameInfo[0].gameCreation
-                            let timeMinutes = Math.round((timeInMs - gameCreation) / 60000) -45
+                            let timeMinutes = Math.round((timeInMs - gameCreation) / 60000) - 45
                             let timeAgo
                             let minutesAgoString = "minutes ago"
                             if (timeMinutes <= 60) {

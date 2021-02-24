@@ -12,6 +12,9 @@ class RecentlyPlayedWith extends React.Component {
 
         };
     };
+    componentDidMount() {
+        console.log(this.props.recentlyPlayedWith);
+    }
 
     render() {
         return (
@@ -49,7 +52,7 @@ class RecentlyPlayedWith extends React.Component {
                             </table>
                             :
                             <div className="recentlyNone">
-                                You wasn't played with any player more than 1 times
+                                You wasn't played with any player more than 1 time
                             </div>
                         }
                     </div>

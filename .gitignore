@@ -2,3 +2,4 @@ frontend/.eslintcache
 backend/app/__pycache__/api.cpython-38.pyc
 frontend/.firebase/hosting.YnVpbGQ.cache
 backend/config.py
+backend/__pycache__/config.cpython-38.pyc
