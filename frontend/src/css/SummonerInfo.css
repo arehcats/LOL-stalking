@@ -1,0 +1,284 @@
+#topBannerBasicInfo{
+    height: 150px;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    display: flex;
+    margin-bottom: 5px;
+
+}
+#summIcon{
+    width: 170px;
+    /* border: 2px solid rgb(44, 80, 97); */
+    text-align: center;
+
+}
+#summIcon > img{
+    width: 120px;
+    height: 120px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+#summNick{
+    margin-top: 4px;
+    font-size: 34px;
+    font-weight: 600;
+}
+
+#allOderInfo{
+    display: flex;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    align-items: flex-start
+}
+#leftContainer{
+    width: 300px;
+    background-color: rgb(248, 248, 248);
+
+}
+
+.rankSummoner {
+    height: 140px;
+    border: 2px solid rgb(194, 230, 247);
+    box-shadow: 0px 0px 5px 0px rgb(194, 230, 247);
+    margin-bottom: 10px;
+    display: flex;
+}
+.rankSummoner > div:first-child {
+    width: 40%;
+    height: 100%;
+    display: flex;
+}
+.rankSummoner > div > img {
+    width: 95px;
+    height: 95px;
+    display: block;
+    margin: auto;
+}
+.unranked{
+    height: 140px;
+    border: 2px solid rgb(194, 230, 247);
+    box-shadow: 0px 0px 5px 0px rgb(194, 230, 247);
+    margin-bottom: 10px;
+    text-align: center;
+}
+.unranked > img {
+    width: 90px;
+    height: 90px;
+    display: block;
+    margin: 0px;
+    margin-top: -15px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+}
+.unranked > span {
+    display: block;
+    color: rgb(92, 91, 91);
+    margin-top: 10px;
+}
+.soloQandFlexStats > span{
+    display: block;
+    color: rgb(92, 91, 91);
+
+}
+.soloQandFlexStats > span:nth-of-type(1) {
+    font-size: 12px;
+    margin-top: 12px;
+    margin-bottom: 9px;
+}
+.soloQandFlexStats > span:nth-of-type(2) {
+    color: rgb(41, 41, 224);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.soloQandFlexStats > span:nth-of-type(3) {
+    font-weight: 800;
+    color: black;
+    margin-bottom: 7px;
+
+}
+.soloQandFlexStats > span:nth-of-type(4) {
+    margin-bottom: 1px;
+
+}
+
+.championsStats{
+    border: 2px solid rgb(194, 230, 247);
+    box-shadow: 0px 0px 5px 0px rgb(194, 230, 247);
+    margin-bottom: 10px;
+
+}
+
+
+
+
+
+/* /////////////////////      GAME STATS     ////////////////////// */
+
+#statsSelectGameType{
+    display: flex;
+    height: 50px;
+    /* font-size: 13px; */
+}
+#statsSelectGameType > div{
+    /* background-color: turquoise; */
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+#statsSelectGameType > div > button{
+    width: 100%;
+}
+
+
+.stats {
+    background-color: rgb(124, 243, 231);
+    border-color: rgb(31, 30, 28);
+}
+.statsSelected > button{
+    border-bottom: none;
+    background-color: rgb(196, 243, 241);
+    pointer-events: none;
+}
+
+.statsListing > div {
+    display: flex;
+    margin: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgb(185, 206, 216);
+}
+
+.statsListing > div > img{
+    width: 50px;
+    height: 50px;
+}
+.statsListingInside{
+    margin-left: 13px;
+}
+
+#stats{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.boldStats{
+    font-weight: 700;
+    color: rgb(11, 113, 197);
+}
+.fontSizeStats{
+    font-size: 15px;
+    color: rgb(85, 85, 87);
+}
+
+/* //////////////    recently played with    /////////////////////////////////////// */
+
+.RecentlyPlayedWith{
+    background-color: rgb(124, 243, 231);
+    border-color: rgb(31, 30, 28);
+    border: 1px solid rgba(63, 81, 181, 0.5);
+    border-radius: 4px;
+    font-size: 20px;
+    text-align: center;
+    padding: 10px;
+    color: rgb(11, 113, 197);
+}
+.tableRoot{
+    border-spacing: 0px;
+    width: 100%;
+    table-layout:fixed;
+}
+.tableRoot tbody tr td {
+    width: 10%;
+}
+.tableRecentlyHead tr th:nth-child(1){
+    width: 40%;
+}
+.tableRecentlyHead tr th:nth-child(2){
+    width: 25%;
+}
+.tableRecentlyHead tr th:nth-child(3){
+    width: 15%;
+}
+.tableRecentlyHead tr th:nth-child(4){
+    width: 20%;
+}
+
+.tableRecentlyHead {
+    background-color: rgb(169, 239, 243);
+    border-right: 1px solid rgba(63, 81, 181, 0.5);
+    border-left: 1px solid rgba(63, 81, 181, 0.5);
+}
+.tableRecentlyHead tr {
+    border-right: 1px solid rgba(63, 81, 181, 0.5);
+    border-left: 1px solid rgba(63, 81, 181, 0.5);
+}
+.tableRecentlyHead tr th{
+    border-right: 1px solid  rgb(243, 169, 169);
+}
+.lastColumn{
+    border-right: none!important;
+}
+.tableRecentlyBody{
+    text-align: center;
+}
+.tableRecentlyBody tr td:first-child{
+    text-align: left;
+    padding-left: 10px;
+}
+
+.tableRecentlyBody tr td{
+    border-bottom: 1px solid rgb(185, 206, 216);
+    height: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
+.recentlyNone{
+    margin: 10px;
+    border-bottom: 1px solid rgb(185, 206, 216);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+#showMore{
+    background-color: rgb(159, 241, 233);
+}
+.gamesNotFound{
+    display: flex;
+    margin: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgb(185, 206, 216);
+}
+.lastUpdate{
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 3px;
+    margin-top: 5px;
+    color: rgb(124, 122, 122);
+}
+.lastUpdate div span{
+    color: rgb(112, 109, 109);
+    font-weight: 700;
+}
+#update{
+    background-color: rgb(124, 243, 231);
+    margin-top: 5px;
+}
+
+

@@ -1,0 +1,128 @@
+.chooseSummoner{
+    /* border: 3px solid rgb(226, 76, 65); */
+    width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    margin-bottom: 30px;
+    display: flex;
+    /* border: 2px solid rgb(44, 90, 14); */
+    flex-wrap: wrap;
+    min-height: 35px;
+}
+.FavHistoryTitle{
+    min-width: 60px;
+    height: 100%;
+    line-height: 35px;
+    text-align: center;
+}
+.summoner button{
+    background-color: rgb(159, 241, 233);
+    border-color: rgb(31, 30, 28);
+    color: rgb(65, 63, 66);
+    /* margin-left: 15px; */
+    /* margin-bottom: 5px; */
+    border: 1px solid rgb(230, 90, 90);
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+.summoner button:hover{
+    background-color: rgb(196, 243, 241);
+    border: 1px solid rgb(230, 90, 90);
+
+}
+.summoner {
+    margin-left: 10px;
+    padding-bottom: 5px;
+    /* background-color: rgb(228, 73, 11); */
+    margin-top: auto;
+    margin-bottom: auto;
+    
+}
+.clearHistory{
+    margin-left: 10px;
+    /* margin-top: auto; */
+    /* margin-bottom: auto; */
+    height: 100%;
+}
+.clearHistory button{
+    margin-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: rgb(228, 156, 143);
+    border: 2px solid rgb(124, 122, 122);
+}
+.clearHistory button:hover{
+    background-color: rgb(236, 174, 163);
+    border: 2px solid rgb(124, 122, 122);
+
+}
+
+.selectedSummoner{
+    margin-left: 10px;
+    pointer-events: none;
+
+}
+.selectedSummoner div button{
+    background-color: rgb(196, 243, 241);
+    pointer-events: none;
+    /* margin-left: 15px; */
+    color: rgb(37, 146, 209);
+    border: 1px solid rgb(230, 90, 90);
+}
+.plusIcon{
+    width: 25px;
+    height: 25px;
+    margin-left: 4px;
+    border-radius: 20px;
+    margin-top: 3px;
+    transition: transform .1s;
+}
+.plusIcon:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+}
+.plusIcon:active{
+    cursor: pointer;
+    background-color: rgb(180, 212, 163);
+    transform: scale(1.0);
+}
+
+.newSummoner div button{
+    background-color: rgb(95, 95, 95);
+    color: white;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border: 2px solid rgb(90, 162, 230);
+
+
+}
+.newSummoner div button:hover{
+    background-color: rgb(129, 129, 129);
+    border: 2px solid rgb(90, 162, 230);
+
+}
+.bottomLine{
+    width: 100%;
+    border-bottom: 2px solid rgb(44, 90, 14);
+    margin-top: 3px;
+}
+
+.linkToLoginPage{
+    /* border: 3px solid red; */
+    border-radius: 20px;
+    width: 25px;
+    height: 25px;
+    margin-left: 4px;
+    margin-top: 3px;
+}
+.linkToLoginPage:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+}
+.linkToLoginPage:active{
+    cursor: pointer;
+    background-color: rgb(180, 212, 163);
+    transform: scale(1.0);
+}
+
