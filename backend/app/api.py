@@ -3,9 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
-# from config import APP_RITO_API_KEY
+from config import APP_RITO_API_KEY
 
-APP_RITO_API_KEY = "RGAPI-492fac5d-ee87-45bc-8b3c-deeba004a33d"
 
 app = FastAPI()
 
